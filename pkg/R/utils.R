@@ -1,0 +1,306 @@
+# General utility functions
+# 
+# Author: Renaud Gaujoux
+# Creation: 25 Apr 2012
+###############################################################################
+
+#' Get Anywhere
+#' 
+#' Similar to \code{\link{getAnywhere}}, but looks for the value of its argument. 
+#' 
+#' @param x a single character string
+#' 
+#' @export
+cgetAnywhere <- function(x){
+	do.call("getAnywhere", list(x))
+}
+
+#' Silent Require
+#' 
+#' @export
+require.quiet <- function(package, character.only = FALSE, ...){
+	
+	if( !character.only )
+		package <- as.character(substitute(package))
+	utils::capture.output(suppressMessages(suppressWarnings(
+	 res <- do.call('require', 
+			 list(package=package, ..., character.only=TRUE, quietly=TRUE))
+	)))
+	res
+}
+
+#' Require a Package
+#' 
+#' @export
+requirePackage <- function(pkg, ...){
+	
+	if( !require(pkg, character.only=TRUE) ){
+		if( nargs() > 1L ) stop(..., " requires package(s) ", str_out(pkg))
+		else stop("Could not find required package(s) ", str_out(pkg))
+	}
+}
+
+
+#' Testing R Version
+#' 
+#' Compares current R version with a given target version, which may be useful  
+#' for implementing version dependent code. 
+#' 
+#' @param x target version to compare with. 
+#' @param test numeric value that indicates the comparison to be carried out.
+#' The comparison is based on the result from 
+#' \code{utils::compareVersion(R.version, x)}:
+#' \itemize{
+#' \item 1: is R.version > \code{x}?
+#' \item 0: is R.version = \code{x}?
+#' \item -1: is R.version < \code{x}?
+#' } 
+#' 
+#' @return a logical
+#' @examples
+#' 
+#' testRversion("2.14")
+#' testRversion("2.15")
+#' testRversion("2.30")
+#' testRversion("2.30", -1)
+#' testRversion("2")
+#' testRversion(Rversion())
+#' 
+testRversion <- function(x, test=1L){
+	rv <- Rversion()
+	utils::compareVersion(rv, x) == test
+}
+
+#' Complete R version
+#' @export
+Rversion <- function(){
+	paste(R.version$major, R.version$minor, sep='')
+}
+
+as.package2 <- function(x, error=TRUE){
+	
+	res <- tryCatch(devtools::as.package(x), error= function(e) e)
+	if( !is.package(res) ){
+		#str(res)
+		if( error ) stop(res$message)
+		else res <- NULL
+	}
+	res
+}
+
+
+#' Prints formatted list of values given as a character vector for use in show 
+#' methods or error/warning messages.
+#' 
+#' @param x character vector
+#' @param max maximum number of values to appear in the list. If \code{x} has 
+#' more elements than \code{max}, a \code{"..."} suffix is appended.
+#' @param quote a logical indicating whether the values should be quoted with 
+#' single quotes (defaults) or not. 
+#' @param use.names a logical indicating whether names should be added to the 
+#' list as \code{NAME=VAL, ...} or not (default).
+#' 
+#' @return a single character string
+#' 
+#' @examples
+#' 
+#' x <- letters[1:10]
+#' str_out(x)
+#' str_out(x, 8)
+#' str_out(x, Inf)
+#' str_out(x, quote=FALSE)
+#' 
+#' @export
+str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", "){
+	if( isNA(max) ) max <- Inf
+	suffix <- if( length(x) > max ) ", ..."
+	x <- head(x, max)
+	
+	# add quotes if necessary
+	quote <- 
+			if( isTRUE(quote) ) "'"
+			else if( is.character(quote) ) quote
+	if( !is.null(quote) ) x <- unlist(lapply(x, function(v) paste(quote,v,quote, sep='')))
+	# add names if necessary
+	if( use.names && !is.null(names(x)) ) 
+		x <- paste(names(x), '=', x, sep='')
+	paste(paste(x, collapse=sep), suffix, sep='')
+}
+
+#' Builds formatted string from a list of complex values.
+#' 
+#' @param exdent extra indentation passed to str_wrap, and used if the output 
+#' should spread over more than one lines.
+#' 
+#' @rdname str_out
+#' @export
+str_desc <- function(object, exdent=0L){
+	p <- sapply(object, function(x){
+				if( is.vector(x) && length(x) == 1L ) x
+				else paste("<", class(x), ">", sep='')
+			})
+	str_wrap(str_out(p, NA, use.names=TRUE, quote=FALSE), exdent=exdent)
+}
+
+#' Differences between strings
+#' 
+#' Computes which characters differ between two strings.
+#' 
+#' @param x a single string
+#' @param y a single string
+#' @return an integer vector containing the index of the mis-matched character 
+#' @export
+#' 
+#' @examples
+#' 
+#' x <- "once upon a time"
+#' y <- "once upon a time there was"
+#' z <- "once upon two times"
+#' str_diff(x, x)
+#' str_diff(x, y)
+#' str_diff(x, z)
+#' str_diff(y, z)
+#' 
+str_diff <- function(x, y){
+	sx <- strsplit(x,'')[[1]]
+	sy <- strsplit(y,'')[[1]]
+	n <- min(length(sx), length(sy))
+	res <- mapply('!=', head(sx,n), head(sy,n))
+	wres <- which(res)
+	attr(wres, 'str') <- list(x=x,y=y)
+	class(wres) <- 'str_diff'
+	wres
+}
+
+#' @S3method print str_diff
+print.str_diff <- function(x){
+	s <- attr(x, 'str')
+	n <- min(length(s$x), length(s$y))
+	d <- head(s$x,n)
+	d[!res] <- '*'
+	cat(str_c(s$x, collapse=''), "\n")
+	cat(str_c(d, collapse=''), "\n")
+	cat(str_c(s$y, collapse=''), "\n")				
+}
+
+#' Extracting Local Function Definition
+#' 
+#' Extracts local function from wrapper functions of the following type, typically 
+#' used in S4 methods:
+#' \samp{
+#' function(a, b, ...){
+#' 	.local <- function(a, b, c, d, ...){
+#'
+#' 	}
+#'	.local(a, b, ...)
+#' }
+#' }
+#'
+#' @param f definition of the wrapper function
+#' 
+#' @return a function
+#' @export
+#' @rdname formals
+extractLocalFun <- function(f){
+	bf <- body(f)
+	
+	txt <- as.character(bf)[2]
+	# in R-2.14.2 -- at least, as.character does not return the complete body
+	# so some text manipulation is necessary 
+	if( !grepl("\\{", txt) ){
+		sf <- capture.output(print(bf))
+		w <- tail(grep("^\\s*\\.local\\(", sf), 1L)
+		txt <- paste(sf[-w], collapse="\n")
+	}
+	expr <- parse(text=txt)
+	e <- new.env()
+	eval(expr, e)
+} 
+
+#' Extended Formal Extraction
+#'
+#' Works for methods that are created (setMethod) as a wrapper function to an 
+#' internal function named .local.
+#'
+#' @inheritParams extractLocalFun
+#' @return a paired list like the one returned by \code{\link{formals}}. 
+#' 
+#' @export
+#' @rdname formals
+allFormals <- function(f){
+	
+	# look inside method for S4 methods
+	if( is(f, 'MethodDefinition') ){
+		
+		# check if the method is defined as a wrapper function
+		f <- f@.Data
+		lf <- try(codetools::getAssignedVar(body(f)), silent=TRUE)
+		if( !identical(lf, '.local') ) return( formals(f) )
+		# extract arguments from local function
+		lfun <- extractLocalFun(f)
+		res <- formals(lfun)
+		# set default values from the generic, only for arguments that have no 
+		# default values in the method
+		generic_args <- formals(f)
+		meth_no_default <- sapply(res, is.symbol) 
+		gen_no_default <- sapply(generic_args, is.symbol)
+		generic_args <- generic_args[ !gen_no_default ]
+		generic_args <- generic_args[ names(generic_args) %in% names(res[meth_no_default]) ]
+		if( length(generic_args) ){
+			res[names(generic_args)] <- generic_args
+		}
+		# return complete list of arguments
+		res
+		
+	}else if( is.function(f) ) formals(f)
+	
+}
+
+#' Alternative S4 Constructor
+#' 
+#' An alternative version of \code{\link{new}} to create objects based on a list
+#' of values. 
+#' 
+#' @param class Class name to instanciate
+#' @param ... extra arguments from which slot values are extracted by exact 
+#' matching of names.
+#' 
+#' @export
+#' @examples
+#' 
+#' setClass('A', contain='character', representation(x='numeric', y='character'))
+#' 
+#' # identical behaviour with standard calls
+#' identical(new('A'), new2('A'))
+#' identical(new('A', x=1), new2('A', x=1))
+#' 
+#' # but if passing that are names not slots 
+#' identical(new('A'), new2('A', b=1))
+#' identical(new('A', x=1), new2('A', x=1, b=3))
+#' identical(new('A', x=1), new2('A', x=1, b=3))
+#' 
+#' # standard `new` would coerce first unnamed argument into parent of 'A' (i.e. 'character') 
+#' new('A', list(x=1))
+#' new('A', list(x=1, y='other'))
+#' # `new2` rather use it to initialise the slots it can find in the list 
+#' identical(new('A', x=1), new2('A', list(x=1)))
+#' identical(new('A', x=1, y='other'), new2('A', list(x=1, y='other')))
+#' 
+#' 
+new2 <- function(class, ...){
+	sl <- getSlots(class)
+	if( nargs() == 1L ) return( new(class) )
+	
+	dots <- list(...)
+	if( nargs() == 2L && is.null(names(dots)) ){
+		l <- dots[[1]]
+		if( !is.list(l) )
+			stop("Invalid call: single unnamed argument must be a list")
+		dots <- l
+	}
+	
+	if( is.null(names(dots)) || any(names(dots)=='') )
+		stop("Invalid call: all slot arguments must be named")
+	dots <- dots[names(dots) %in% names(sl)]
+	do.call('new', c(list(class), dots))
+}
