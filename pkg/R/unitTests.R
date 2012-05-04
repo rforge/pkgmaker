@@ -134,19 +134,79 @@ writeUnitVignette <- function(pkg, file){
 #' @export
 setGeneric('utest', function(x, ...) standardGeneric('utest'))
 
-utestPattern <- function(framework){
-	list(RUnit = list(filter="^runit.+\\.[rR]$", fun="^test\\.")
-		, testthat = list(filter="^test.*\\.[rR]$"))[[framework]]
-}
+# Unit test frameworks data
+.UFdata <- list(
+	RUnit = list(
+		file_pattern="^runit.*\\.[rR]$"
+		, fun_pattern="^test\\."
+		, check_pattern = "^check.+"
+		, check_functions = c(
+				'checkTrue'
+				, 'checkIdentical'
+				, 'checkEquals'
+				, 'checkEqualsNumeric'
+				, 'checkException'
+		)
+	)
+	, testthat = list(
+		file_pattern="^test.*\\.[rR]$"
+		, check_pattern = "^(expect_.+)|(test_that$)" 
+		, check_functions = c(
+				"test_that"
+				, "expect_equal"
+				, "expect_equivalent"
+				, "expect_error"
+				, "expect_false"
+				, "expect_identical"
+				, "expect_is"
+				, "expect_match"
+				, "expect_message"
+				, "expect_output"
+				, "expect_that"
+				, "expect_true"
+				, "expect_warning"   
+		)
+	)
+)
 
-utestFramework <- function(path){
+#' Inferring Unit Test Framework
+#' 
+#' @param x an filename, a function or the body of a function
+#' @return 
+#' 
+#' @export
+utestFramework <- function(x, eval=FALSE){
 	
+	# check if one should detect within an expression
+	expr <- if( missing(eval) || !eval ) substitute(x) 
+			else if( is.function(x) ) body(x)
+	
+	# walk code using codetools looking up for known test functions
+	if( !is.null(expr) ){
+		cw <- makeCodeWalker(leaf= function(e, w) if( is.symbol(e) ) cat(e, "\n"))
+		s <- str_trim(capture.output(walkCode(expr, cw)))
+		if( length(s) > 1L ){
+			for( f in names(.UFdata) ){
+				if( any(s %in% .UFdata[[f]]$check_functions) ){
+					return(f)
+				}
+			}
+		}
+		# not found without evaluating
+		if( !missing(eval) && !eval ) return()
+		if( missing(eval) ){ # try evaluating
+			return(utestFramework(x, eval=TRUE))
+		}
+	}
+	
+	if( !is.character(x) )
+		stop("Invalid argument `x`: expecting a character string")
+	path <- x
 	framework <- NULL
 	tf <- if( is.dir(path) ) list.files(path, "\\.[rR]$") else path
-	for( f in c('RUnit', 'testthat') ){
-		if( any(grepl(utestPattern(f)$filter, tf)) ){
-			framework <- f
-			break
+	for( f in names(.UFdata) ){
+		if( any(grepl(.UFdata[[f]]$file_pattern, tf)) ){
+			return(f)
 		}
 	}
 	

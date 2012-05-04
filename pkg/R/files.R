@@ -39,3 +39,16 @@ list.libs <- function(dir, ..., all.platforms=FALSE){
 libname <- function(x){
 	sub(str_c("\\", .Platform$dynlib.ext, "$"), "", basename(libs))
 }
+
+
+#' Source Multiple Files
+#' 
+#' Vectorised version of \code{source}.
+#' 
+#' @param x character vector containing filenames
+#' @param ... extra arguments passed to \code{\link{source}}.
+#' 
+#' @export
+source_files <- function(x, ...){
+	invisible(sapply(x, source, ...))
+}
