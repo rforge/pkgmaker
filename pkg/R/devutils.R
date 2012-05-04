@@ -63,16 +63,24 @@ compile_src <- function(pkg, load=TRUE){
 #' Package Development Utilities
 #' 
 #' \code{packageEnv} is a slight modification from \code{\link{topenv}}, which 
-#' returns the caller's top environment, also in the case of development packages
-#' which are wrapped in an environment by \code{\link[devtools]{load_all}}.
+#' returns the caller's top environment, which in the case of development packages
+#' is the environment into which the source files are loaded by 
+#' \code{\link[devtools]{load_all}}.
 #' 
-#' @inheritParams base::topenv
+#' @param pkg package name. If missing the environment of the caller package is returned.
 #' 
 #' @rdname devutils
 #' @return an environment
 #' @export
-packageEnv <- function (envir = parent.frame(), matchThisEnv = getOption("topLevelEnvironment")) 
-{
+packageEnv <- function(pkg){
+	
+	# return package namespace
+	if( !missing(pkg) ){
+		return(as.environment(str_c('package:', pkg)))
+	}
+	
+	envir = parent.frame()
+	matchThisEnv = getOption("topLevelEnvironment") 
 	pkgmakerEnv <- topenv()
 	n <- 1
 	while (!identical(envir, emptyenv())) {
@@ -88,7 +96,13 @@ packageEnv <- function (envir = parent.frame(), matchThisEnv = getOption("topLev
 			if( identical(envir, pkgmakerEnv) ){
 				n <- n + 1
 				envir <- parent.frame(n)
-			}else return(envir)
+			}else if( identical(envir, .BaseNamespaceEnv) ){
+				# this means that top caller is within the pkgmaker package
+				# as it is highly improbable to evaluated within the base namespace
+				# except intentionally as evalq(packageEnv(), .BaseNamespaceEnv) 
+				return(pkgmakerEnv)
+			}else
+				return(envir)
 		
 		}else envir <- parent.env(envir)
 	}

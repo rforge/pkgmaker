@@ -166,7 +166,7 @@ setMethod('utest', 'character',
 			library(pkg, character.only=TRUE)
 			system.file(testdir, PACKAGE=pkg)
 		}else{
-			# try to find a corersponding development package
+			# try to find a corresponding development package
 			if( require.quiet(devtools) 
 				&& is.package(pkg <- as.package2(x, error=FALSE)) ){
 					load_all(pkg, TRUE)
@@ -223,6 +223,78 @@ setMethod('utest', 'character',
 		
 	}
 )
+
+#' Embedded Unit Tests
+#' 
+#' The function \code{unit.test} provides a way to write unit tests embedded within
+#' package source files.
+#' These tests are stored and organised in the package namespace, and can be run using 
+#' the unified interface provided by the function \code{link{utest}}.
+#' Both Runit and testthat tests are supported -- and automatically detected.
+#' 
+#' 
+#' @param x single character string used as test identifier/label
+#' @param expr expression containing the actual test commands.
+#' It is not evaluated, but only stored in the package namespace.
+#' @param framework Unit test framework
+#' @param envir the definition environment of object \code{x}.
+#' 
+#' @return a test function with no arguments that wrapping around \code{expr} 
+#' 
+#' @export
+#' 
+unit.test <- function(x, expr, framework=NULL, envir=parent.frame()){
+	
+	sid <- as.character(deparse(substitute(x)))	
+	hash <- suppressWarnings(digest(x))
+	# get test environment
+	eTest <- packageTestEnv()
+	# wrap test into a function
+	f <- function(){}
+	environment(f) <- eTest
+	body(f) <- substitute({expr})
+	
+	if( !grepl('"', sid) )
+	{
+		lmessage('Creating unit test for object: `', sid, '`')
+		eval(substitute(attr(x, 'test') <- f, list(x=substitute(x), f=f)), envir)
+	}else
+		lmessage('Creating unit test: ', sid)
+	
+	# add the test to the package test environment
+	eTest[[str_c(sid, ':', hash)]] <- list(test=f, name=sid, object=is.name(x))
+	# return the test function
+	f
+}
+
+#' Returns the package internal environment where unit tests are stored.
+#' 
+#' @export
+#'  
+packageTestEnv <- function(pkg){
+	
+	if( !missing(pkg) ){
+		e <- packageEnv(pkg)
+		return( e$.packageTest )
+	}
+	
+	e <- packageEnv()
+	# create test environment if necessary
+	if( is.null(e$.packageTest) )
+		e$.packageTest <- new.env(e)
+	e$.packageTest
+}
+
+
+#' Listing Unit Tests
+#' 
+#'  
+list.tests <- function(x, pattern=NULL){
+	
+}
+
+#unit.test(packageEnv, {print('test for packageEnv')})
+#unit.test('lmlm', {print('test for something else')})
 
 #utest <- function(x, ..., framework="RUnit", PACKAGE=NULL){
 #		

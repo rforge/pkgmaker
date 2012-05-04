@@ -23,15 +23,17 @@ Suggests:
     registry,
     devtools,
     bibtex,
-    RUnit
+    RUnit,
+    testthat
 Collate:
     'utils.R'
     'options.R'
     'registry.R'
     'bibtex.R'
     'namespace.R'
+    'is.R'
     'devutils.R'
     'logging.R'
     'unitTests.R'
     'vignette.R'
-    'is.R'
+    'files.R'
