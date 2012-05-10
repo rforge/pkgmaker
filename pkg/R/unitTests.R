@@ -172,7 +172,9 @@ writeUnitVignette <- function(pkg, file){
 #' Inferring Unit Test Framework
 #' 
 #' @param x an filename, a function or the body of a function
-#' @return 
+#' 
+#' @return the name of the framework as a character string or NULL if
+#' it could not be detected.
 #' 
 #' @export
 utestFramework <- function(x, eval=FALSE){

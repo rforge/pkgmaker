@@ -84,12 +84,17 @@ print.package_metaregistry <- function(x, ...){
 #' @param regobj a \code{\link[=regobj]{registry}} object or a single character 
 #' string that indicates the class of the objects that are stored in the 
 #' sub-registry.
+#' @param ... named values used to set extra information about the new registry, that 
+#' is stored in dedicated fields.
+#' Currently only the field \code{description=character()} is defined.
+#' @param overwrite a logical that indicate if an existing registry with the same 
+#' should be overwritten if it exists.
 #' 
 #' @inheritParams packageRegistry
-#' @rdname regsitry
+#' @rdname registry
 #' @export
 setPackageRegistry <- function(name, regobj, ..., overwrite=TRUE){
-	
+	# TODO: change default of overwrite to FALSE
 	nm <- packageName()
 	# get meta-registry
 	regenv <- packageRegistry()

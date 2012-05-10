@@ -321,3 +321,44 @@ new2 <- function(class, ...){
 	dots <- dots[names(dots) %in% names(sl)]
 	do.call('new', c(list(class), dots))
 }
+
+
+#' One-off Global Variables
+#' 
+#' Defines a function that allow to get/assign a global variable whose value is 
+#' ensured to be reset after each access.
+#'   
+#' @param default default value to which the global variable is reset after each 
+#' access. Default is \code{NULL}.
+#' 
+#' @return a function with one argument (\code{value}) that provides get/set access
+#' to a global variable.
+#' If called with a value, it assigns this value to the global variable.
+#' If called with no argument, it returns the current value of the global variable and 
+#' reset it to its default value -- as defined at its creation. 
+#'
+#' @export
+#' 
+#' @examples
+#' 
+#' x <- oneoffVariable(0)
+#' # returns default value
+#' x()
+#' # assign a value
+#' x(3)
+#' # get the value
+#' x()
+#' # second call returns default value again 
+#' x()
+#'  
+oneoffVariable <- function(default=NULL){
+	.var <- default
+	function(value){
+		if( missing(value) ){
+			res <- .var
+			.var <<- default
+			res
+		}else
+			.var <<- value
+	}
+}

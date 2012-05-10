@@ -34,4 +34,7 @@
 
   Test if an object is a single character string
 }
+\seealso{
+  \code{\link{isTRUE}}
+}
 

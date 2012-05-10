@@ -2,7 +2,7 @@
 \alias{source_files}
 \title{Source Multiple Files}
 \usage{
-  source_files(x, ...)
+  source_files(x, pattern = NULL, ...)
 }
 \arguments{
   \item{x}{character vector containing filenames}
