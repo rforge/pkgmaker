@@ -21,6 +21,7 @@ isNA <- function(x)
 #' Tests if a variable is exactly FALSE
 #' 
 #' @rdname is_something
+#' @seealso \code{\link{isTRUE}}
 #' @export
 isFALSE <- function(x) identical(x, FALSE)
 

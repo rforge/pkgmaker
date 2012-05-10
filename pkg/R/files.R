@@ -49,6 +49,8 @@ libname <- function(x){
 #' @param ... extra arguments passed to \code{\link{source}}.
 #' 
 #' @export
-source_files <- function(x, ...){
+source_files <- function(x, pattern=NULL, ...){
+	if( length(x) == 1L && is.dir(x) )
+		x <- list.files(x, pattern=pattern, full.names=TRUE)
 	invisible(sapply(x, source, ...))
 }

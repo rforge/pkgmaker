@@ -76,7 +76,12 @@ packageEnv <- function(pkg){
 	
 	# return package namespace
 	if( !missing(pkg) ){
-		return(as.environment(str_c('package:', pkg)))
+		# if the package is loaded: use asNamespace because as.environment does not
+		# return a correct environment (don't know why)
+		env <- 
+		if( !is.null(path.package(pkg, quiet=TRUE)) ) asNamespace(pkg)
+		else as.environment(str_c('package:', pkg))
+		return(env)
 	}
 	
 	envir = parent.frame()

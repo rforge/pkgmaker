@@ -5,6 +5,13 @@
 ###############################################################################
 
 
+requireRUnit <- function(...){
+	runit <- 'RUnit'
+	if( length(find.package('RUnitX')) ) runit <- 'RUnitX'
+	else if( length(find.package('svUnit')) ) runit <- 'svUnit'
+	requirePackage(runit, ...)
+}
+
 #' Make Vignette for Unit Tests
 #' 
 #' @param pkg Package name
@@ -22,7 +29,7 @@ makeUnitVignette <- function(pkg, file=paste(pkg, '-unitTests.Rnw', sep='')){
 	require( pkg, character.only = TRUE )
 	
 	## load RUnit
-	runit <- "RUnit" ; require( runit, character.only = TRUE )
+	requireRUnit("Make unit test vignette")
 	if( file.exists( "unitTests-results" ) ){
 		file.remove("unitTests-results") 
 	}
@@ -127,13 +134,6 @@ writeUnitVignette <- function(pkg, file){
 	writeLines(contents, file)
 }
 
-#' Running Unit Tests
-#' 
-#' Run unit tests in a variety of settings.
-#'
-#' @export
-setGeneric('utest', function(x, ...) standardGeneric('utest'))
-
 # Unit test frameworks data
 .UFdata <- list(
 	RUnit = list(
@@ -177,6 +177,7 @@ setGeneric('utest', function(x, ...) standardGeneric('utest'))
 #' @export
 utestFramework <- function(x, eval=FALSE){
 	
+	library(codetools)
 	# check if one should detect within an expression
 	expr <- if( missing(eval) || !eval ) substitute(x) 
 			else if( is.function(x) ) body(x)
@@ -214,75 +215,6 @@ utestFramework <- function(x, eval=FALSE){
 		stop("Could not determine unit test framework used in directory: '", path, "'")
 	framework
 }
-
-setMethod('utest', 'character', 
-	function(x, filter="^runit.+\\.[rR]$", fun="^test\\.", ...
-			, testdir='tests', framework=c('RUnit', 'testthat')){
-		
-		# detect type of input string
-		path <- 
-		if( grepl("^package:", x) ){# installed package
-			pkg <- sub("^package:", "", x)
-			library(pkg, character.only=TRUE)
-			system.file(testdir, PACKAGE=pkg)
-		}else{
-			# try to find a corresponding development package
-			if( require.quiet(devtools) 
-				&& is.package(pkg <- as.package2(x, error=FALSE)) ){
-					load_all(pkg, TRUE)
-					file.path(pkg$path, 'inst', testdir)
-			}else{ # assume x is a path  
-				x
-			}
-		}
-
-		# check that the path exists
-		if( !file.exists(path) )
-			stop("Unit test directory '", path, "' does not exist")
-
-		# detect unit test framework: RUnit or testthat?
-		framework <- 
-		if( missing(framework) ) utestFramework(path)
-		else match.arg(framework)
-		message("Using unit test framework: ", framework)
-
-		# load default patterns
-		up <- utestPattern(framework)
-		if( missing(filter) ) filter <- up$filter
-		if( missing(fun) ) fun <- up$fun
-		
-		# run tests
-		if( is.dir(path) ){ # all tests in a directory
-			if( framework == 'RUnit' ){ # RUnit
-				
-				requirePackage('RUnit', "Running RUnit unit test suites")
-				s <- defineTestSuite(x, path
-							, testFileRegexp=filter
-							, testFuncRegexp=fun, ...)
-				utest(s)
-				
-			}else if( framework == 'testthat' ){ # testthat
-				
-				requirePackage('testthat', "Running testthat unit test suites")
-				test_dir(path, filter=filter, ...)
-				
-			}
-		}else{ # single test file
-			if( framework == 'RUnit' ){ # RUnit
-			
-				requirePackage('RUnit', "Running RUnit unit test file")
-				runTestFile(path, testFuncRegexp=fun, ...)
-			
-			}else if( framework == 'testthat' ){ # testthat
-			
-				requirePackage('testthat', "Running testthat unit test file")
-				test_file(path, ...)
-				
-			}
-		}
-		
-	}
-)
 
 #' Embedded Unit Tests
 #' 
@@ -333,7 +265,7 @@ unit.test <- function(x, expr, framework=NULL, envir=parent.frame()){
 #'  
 packageTestEnv <- function(pkg){
 	
-	if( !missing(pkg) ){
+	if( !missing(pkg) && !is.null(pkg) ){
 		e <- packageEnv(pkg)
 		return( e$.packageTest )
 	}
@@ -376,10 +308,131 @@ list.tests <- function(x, pattern=NULL){
 #	}
 #}
 
+#' Running Unit Tests
+#' 
+#' Run unit tests in a variety of settings.
+#'
+#' @export
+setGeneric('utest', function(x, ...) standardGeneric('utest'))
+
+setMethod('utest', 'function',
+	function(x, run = TRUE){
+		# get actual name of the function
+		sid <- as.character(deparse(substitute(x, parent.frame())))
+		# remove leading namespace specifications
+		sid <- sub("^[^:]+:::?", "", sid)
+		# get the package's  
+		pkg <- attr(x, 'package')
+		eTest <- packageTestEnv(pkg)
+		if( is.null(eTest) ) return()
+		tfun <- ls(eTest, pattern=str_c("^", sid, ":"))		
+	}
+)
+setMethod('utest', 'character', 
+		function(x, filter="^runit.+\\.[rR]$", fun="^test\\.", ...
+				, testdir='tests', framework=c('RUnit', 'testthat')
+				, quiet = Sys.getenv("RCMDCHECK") != "FALSE"){
+			
+			cat("#########################\n")
+			#print(system('env'))
+			# detect type of input string
+			path <- 
+					if( grepl("^package:", x) ){# installed package
+						pkg <- sub("^package:", "", x)
+						if( is.null(path <- path.package(pkg, quiet=TRUE)) ){
+							library(pkg, character.only=TRUE)
+							path <- path.package(pkg)
+						}
+						file.path(path, testdir)
+					}else{
+						# try to find a corresponding development package
+						if( require.quiet(devtools) 
+								&& is.package(pkg <- as.package2(x, error=FALSE)) ){
+							load_all(pkg, TRUE)
+							file.path(pkg$path, 'inst', testdir)
+						}else{ # assume x is a path  
+							x
+						}
+					}
+			
+			# check that the path exists
+			if( !file.exists(path) )
+				stop("Unit test directory '", path, "' does not exist")
+			
+			# detect unit test framework: RUnit or testthat?
+			framework <- 
+					if( missing(framework) ) utestFramework(path)
+					else match.arg(framework)
+			message("Using unit test framework: ", framework)
+			
+			# load default patterns
+			up <- .UFdata[[framework]]
+			if( missing(filter) ) filter <- up$file_pattern
+			if( missing(fun) ) fun <- up$fun_pattern
+			
+			# run tests
+			if( is.dir(path) ){ # all tests in a directory
+				if( framework == 'RUnit' ){ # RUnit
+					
+					requireRUnit("Running RUnit test suites")
+					s <- defineTestSuite(x, path
+							, testFileRegexp=filter
+							, testFuncRegexp=fun, ...)
+					utest(s, quiet=quiet)
+					
+				}else if( framework == 'testthat' ){ # testthat
+					
+					requirePackage('testthat', "Running testthat unit test suites")
+					test_dir(path, filter=filter, ...)
+					
+				}
+			}else{ # single test file
+				if( framework == 'RUnit' ){ # RUnit
+					
+					requireRUnit("Running RUnit unit test file")
+					runTestFile(path, testFuncRegexp=fun, ...)
+					
+				}else if( framework == 'testthat' ){ # testthat
+					
+					requirePackage('testthat', "Running testthat unit test file")
+					test_file(path, ...)
+					
+				}
+			}
+			
+		}
+)
+
 setOldClass('RUnitTestSuite')
 setMethod('utest', 'RUnitTestSuite',
-	function(x, ...){
-		requirePackage('RUnit', "Running RUnit test suites")
-		runTestSuite(x, ...)
+	function(x, ..., quiet=FALSE){
+		requireRUnit("Running RUnit test suites")
+		if( quiet ){
+			suppressWarnings(suppressMessages(out <- capture.output(
+				tests <- runTestSuite(x, ...)
+			)))
+		}else 
+			tests <- runTestSuite(x, ...)
+		
+		pathReport <- str_c("utest.", sub("[:]", "_", x$name))
+		## Report to stdout and text files
+		cat("------------------- UNIT TEST SUMMARY ---------------------\n\n")
+		printTextProtocol(tests, showDetails=FALSE)
+		printTextProtocol(tests, showDetails=FALSE,
+				fileName=paste(pathReport, "Summary.txt", sep=""))
+		printTextProtocol(tests, showDetails=TRUE,
+				fileName=paste(pathReport, ".txt", sep=""))
+		
+		## Report to HTML file
+		printHTMLProtocol(tests, fileName=paste(pathReport, ".html", sep=""))
+		
+		## Return stop() to cause R CMD check stop in case of
+		##  - failures i.e. FALSE to unit tests or
+		##  - errors i.e. R errors
+		tmp <- getErrors(tests)
+		if(tmp$nFail > 0 | tmp$nErr > 0) {
+			stop(paste("\n\nunit testing failed (#test failures: ", tmp$nFail,
+							", #R errors: ",  tmp$nErr, ")\n\n", sep=""))
+		}
 	}
 )
