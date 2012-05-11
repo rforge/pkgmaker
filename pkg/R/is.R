@@ -3,16 +3,20 @@
 # Author: Renaud Gaujoux
 # Creation: 30 Apr 2012
 ###############################################################################
+#' @include unitTests.R
+NULL
 
 #' Testing Object Type 
 #' 
 #' @name is_something
 #' @rdname is_something
+#' 
+#' @return \code{TRUE} or \code{FALSE}
 NULL
 
 #' Tests if a variable is exactly NA (logical, character, numeric or integer)
 #' 
-#' @param an R object
+#' @param x an R object
 #' @rdname is_something
 #' @export
 isNA <- function(x) 
@@ -46,4 +50,34 @@ isInteger <- function(x){
 isString <- function(x) is.character(x) && length(x) == 1L
 
 #' Tests if a filename is a directory
+#' @rdname is_something
+#' @export
 is.dir <- function(x) file_test('-d', x)
+
+#' Tests if an object has names
+#' 
+#' @param all logical that indicates if the object needs all names non empty
+#' @export
+#' 
+#' 
+hasNames <- function(x, all=FALSE){
+	nm <- names(x)
+	if( length(x) == 0L ) TRUE
+	else !is.null(nm) && (!all || !is.element('', nm) )
+}
+
+unit.test(hasNames, {
+			
+	add_names <- function(x) setNames(x, letters[1:length(x)])
+	# vector
+	checkTrue(hasNames( add_names(1:10) ))
+	checkTrue(hasNames( add_names(1:10) , all=TRUE))
+	checkTrue(hasNames( c(add_names(1:10),11) ))
+	checkTrue(!hasNames( c(add_names(1:10),11) , all=TRUE))
+	# list
+	checkTrue(hasNames( add_names(list(1,2,3)) ))
+	checkTrue(hasNames( add_names(list(1,2,3)) , all=TRUE))
+	checkTrue(hasNames( c(add_names(list(1,2,3)),11) ))
+	checkTrue(!hasNames( c(add_names(list(1,2,3)),11) , all=TRUE))
+	
+})

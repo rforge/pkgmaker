@@ -4,11 +4,20 @@
 # Creation: 25 Apr 2012
 ###############################################################################
 
-
+#' Load RUnit Compatible Package
+#' 
+#' Loads the package responsible for the implementation of the RUnit framework,
+#' choosing amongst \sQuote{RUnitX}, \sQuote{svUnit} and \sQuote{RUnit}.
+#' 
+#' @return nothing
+#' @keywords internal
+#' 
 requireRUnit <- function(...){
 	runit <- 'RUnit'
 	if( length(find.package('RUnitX')) ) runit <- 'RUnitX'
 	else if( length(find.package('svUnit')) ) runit <- 'svUnit'
+	if( !is.null(path.package(runit, quiet=TRUE)) )
+		message("Using RUnit framework provider: ", runit)
 	requirePackage(runit, ...)
 }
 

@@ -1,4 +1,5 @@
 \name{is_something}
+\alias{is.dir}
 \alias{isFALSE}
 \alias{isInteger}
 \alias{isNA}
@@ -16,9 +17,14 @@
   isInteger(x)
 
   isString(x)
+
+  is.dir(x)
 }
 \arguments{
-  \item{an}{R object}
+  \item{x}{an R object}
+}
+\value{
+  \code{TRUE} or \code{FALSE}
 }
 \description{
   Testing Object Type
@@ -33,6 +39,8 @@
   Tests if an object is a single integer
 
   Test if an object is a single character string
+
+  Tests if a filename is a directory
 }
 \seealso{
   \code{\link{isTRUE}}

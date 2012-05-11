@@ -5,6 +5,8 @@
 ###############################################################################
 
 #' @include namespace.R
+#' @include unitTests.R
+#' @include logging.R
 NULL
 
 #' Executing R Commands
