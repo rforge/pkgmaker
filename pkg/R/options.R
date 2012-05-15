@@ -24,7 +24,9 @@
 #' it already exists. The default is \code{FALSE} (i.e. no reset), because one 
 #' generally wants to keep options possibly saved in a reloaded workspace.
 #'
-setupPackageOptions <- function(name, parent=NULL, envir=parent.frame(), reset=FALSE){
+#' @export
+setupPackageOptions <- function(name, parent=NULL, default=list(NULL)
+								, envir=parent.frame(), reset=FALSE){
 	
 	if( is.null(parent) ) parent <- packageName()
 	pkg <- parent
@@ -35,17 +37,12 @@ setupPackageOptions <- function(name, parent=NULL, envir=parent.frame(), reset=F
 	if( subset != .pkg )
 		.optset <- paste(.pkg, '#', subset, sep='')
 	
-	# reset the option set if it already exists
-	if( reset && !is.null(opts <- packageOptions(.optset)) ){
-		options(setNames(list(NULL), attr(opts, 'optionset')))
-	}
-	
 	.options <- function(...) packageOptions(.optset, ...)
 	
 	fun <- 
 			list(
-					Options = .options
-					, GetOption=function (x, default = NULL) 
+					options = .options
+					, getOption=function (x, default = NULL) 
 					{
 						if (missing(default)) 
 							return(.options(x)[[1L]])
@@ -53,8 +50,20 @@ setupPackageOptions <- function(name, parent=NULL, envir=parent.frame(), reset=F
 							.options(x)[[1L]]
 						else default
 					}
+					, resetOptions = function(name){
+						opts <- .options()
+						options(setNames(default, attr(opts, 'optionset')))
+					}
 			)
 	
+	opts <- .options()
+	if( is.null(opts) )
+		fun$resetOptions()
+	else if( reset ){ # reset the option set if it already exists
+		options(setNames(list(NULL), attr(opts, 'optionset')))
+		fun$resetOptions()
+	}
+	print(.options())
 	mapply(function(nam, f){assign(nam, f, envir=envir)}
 			, paste(subset, names(fun), sep=''), fun)
 	
@@ -116,7 +125,8 @@ packageOptions <- function(optset=packageName(), ...){
 
 #' Returns the names of all option sets currently defined.
 #' @return a character vector (possibly empty).
-#' 
+#'
+#' @export 
 #' @examples
 #' packageOptionSets()
 #' 
