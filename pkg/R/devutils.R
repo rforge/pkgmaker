@@ -118,16 +118,22 @@ packageEnv <- function(pkg){
 
 #' \code{packageName} returns the current package's name.
 #' 
+#' @param .Global a logical that indicates if calls from the global 
+#' environment should throw an error (\code{FALSE}: default) or the string
+#' \code{'R_GlobalEnv'}.
+#' 
 #' @rdname devutils
 #' @return a character string
-packageName <- function(){
+packageName <- function(.Global=FALSE){
 	
 	# retrieve package environment
 	e <- packageEnv()
 	
 	# try with name from environment
 	nm <- environmentName(e)
-	if( isNamespace(e) ) return(nm)
+	
+	if( identical(e, .GlobalEnv) && .Global ) return(nm)
+	else if( isNamespace(e) ) return(nm)
 	else if( grepl("^package:", nm) ) # should work for devtools packages
 		return(sub("^package:", "", nm))
 	

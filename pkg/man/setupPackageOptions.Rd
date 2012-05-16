@@ -1,9 +1,10 @@
 \name{setupPackageOptions}
 \alias{setupPackageOptions}
-\title{Managing Package Specific Option}
+\title{Package Specific Options}
 \usage{
-  setupPackageOptions(name, parent = NULL,
-    envir = parent.frame(), reset = FALSE)
+  setupPackageOptions(name = NULL, parent = NULL,
+    envir = parent.frame(), defaults = NULL, reset = FALSE,
+    clear = FALSE)
 }
 \arguments{
   \item{name}{Set name}
@@ -22,7 +23,7 @@
   to keep options possibly saved in a reloaded workspace.}
 }
 \description{
-  the following functions to access/set the options from
+  The following functions to access/set the options from
   the set are assigned in \code{envir}: \describe{
   \item{<subset>Options}{} \item{<subset>GetOption}{} }
 }

@@ -42,7 +42,7 @@ is.verbose <- function(){
 #' @rdname lverbose
 #'  
 vmessage <- function(...){
-	lmessage(1L, ...)
+	lmessage(..., level=1L)
 }
 #' Prints out a message (on sdtout) if the verbosity level is greater than a 
 #' given value. 
@@ -57,7 +57,7 @@ vmessage <- function(...){
 #' 
 #' @rdname lverbose
 #' 
-lmessage <- function(level, ..., appendLF=TRUE){
+lmessage <- function(..., level=1L, appendLF=TRUE){
 	l <- lverbose()
 	if( !isNA(l) && l >= level ) cat(..., if(appendLF) "\n", sep='')
 }
