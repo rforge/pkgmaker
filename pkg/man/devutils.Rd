@@ -7,7 +7,7 @@
 \usage{
   packageEnv(pkg)
 
-  packageName()
+  packageName(.Global = FALSE)
 
   packagePath(..., PACKAGE = NULL)
 
@@ -16,6 +16,12 @@
 \arguments{
   \item{pkg}{package name. If missing the environment of
   the caller package is returned.}
+
+  \item{.Global}{a logical that indicates if calls from the
+  global environment should throw an error (\code{FALSE}:
+  default) or the string \code{'R_GlobalEnv'}.}
+
+  \item{PACKAGE}{optional name of an installed package}
 
   \item{...}{arguments passed to \code{\link{file.path}}.}
 }

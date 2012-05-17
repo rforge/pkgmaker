@@ -94,7 +94,16 @@ print.package_options <- function(x, ...){
 	}
 }
 
+#' \code{as.package_options} creates an object such as the 
+#' ones used to stores package specific options.
+#' 
+#' @param x a character string, a list or an object of class 
+#' \code{package_options}.
+#' @param defaults \code{NULL} or a list of default options 
+#' with their values.   
+#'
 #' @export
+#' @rdname options
 as.package_options <- function(x, defaults=NULL){
 	
 	# early exit if already a package_options object
@@ -258,12 +267,15 @@ packageOptions <- function(..., .DATA = packageName()){
 	.options(..., .DATA = optobj)
 }
 
-#' Returns the names of all option sets currently defined.
+#' \code{listPackageOptions} returns the names of all option 
+#' sets currently defined.
+#' 
 #' @return a character vector (possibly empty).
 #'
-#' @export 
+#' @export
+#' @rdname options 
 #' @examples
-#' packageOptionSets()
+#' listPackageOptions()
 #' 
 listPackageOptions <- function(){
 	grep('^package:', names(options()), value=TRUE)

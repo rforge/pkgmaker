@@ -14,7 +14,7 @@
 
   vmessage(...)
 
-  lmessage(level, ..., appendLF = TRUE)
+  lmessage(..., level = 1L, appendLF = TRUE)
 }
 \arguments{
   \item{val}{logical that sets the verbosity level.}

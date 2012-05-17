@@ -10,19 +10,33 @@
 NULL
 
 #' Executing R Commands
+#' 
+#' \code{R.exec} executes R commands.
+#' 
+#' @param ... extra arguments that are concatenated and appended to 
+#' the command. 
+#' 
 #' @export
 R.exec <- function(...){	
 	system(paste(file.path(R.home(), 'bin', 'R'),' ', ..., sep=''))
 }
 
-#' Executes R CMD commands
+#' \code{R.CMD} executes R CMD commands.
+#' 
+#' @param cmd command to run, e.g. \sQuote{check} or \sQuote{INSTALL}.
+#' 
 #' @export
+#' @rdname R.exec
 R.CMD <- function(cmd, ...){
 	R.exec('CMD ', cmd, ' ', ...)
 }
 
-#' Executes R CMD SHLIB commands
+#' \code{R.SHLIB} executes R CMD SHLIB commands.
+#' 
+#' @param libname name of the output compiled library
+#' 
 #' @export
+#' @rdname R.exec
 R.SHLIB <- function(libname, ...){
 	R.CMD('SHLIB', '-o ', libname, .Platform$dynlib.ext, ...)
 }
@@ -155,6 +169,7 @@ packageName <- function(.Global=FALSE){
 #' its installation/loading directory in the case of an installed package, or
 #' its source directory served by devtools. 
 #' 
+#' @param PACKAGE optional name of an installed package 
 #' @param ... arguments passed to \code{\link{file.path}}.
 #' 
 #' @rdname devutils
@@ -195,6 +210,9 @@ packagePath <- function(..., PACKAGE=NULL){
 }
 
 #' Tests if a package is installed
+#' 
+#' @param lib.loc path to a library of R packages where to search the package
+#' 
 #' @rdname devutils
 #' @export
 isPackageInstalled <- function(..., lib.loc=NULL){

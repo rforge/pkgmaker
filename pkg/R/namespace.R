@@ -32,12 +32,16 @@ getLoadingNamespace <- function(env=FALSE, info=FALSE){
 	else NULL
 }
 
-#' Tests if one is loading the calling package's namespace.
+#' Tests if a namespace is being loaded.
+#' 
+#' @param name the name of a namespace whose loading state is tested.
+#' If missing \code{isLoadingNamespace} test if any namespace is being loaded.
 #' 
 #' @rdname namespace
 #' @export
-isLoadingNamespace <- function(){
-	!is.null(getLoadingNamespace())
+isLoadingNamespace <- function(name){
+	ns <- getLoadingNamespace()
+	!is.null(ns) && (missing(name) || ns==name)
 }
 
 #' Tests if a given namespace is loaded, without loading it, contrary to 

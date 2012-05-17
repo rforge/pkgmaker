@@ -14,7 +14,8 @@ Depends:
     methods,
     stats,
     digest,
-    stringr
+    stringr,
+    codetools
 Imports:
     methods,
     stringr,

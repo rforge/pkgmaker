@@ -4,7 +4,13 @@
 \usage{
   requirePackage(pkg, ...)
 }
+\arguments{
+  \item{pkg}{package name as a character string}
+
+  \item{...}{extra arguments concatenated to for the header
+  of the error message}
+}
 \description{
-  Require a Package
+  Require a package with a custom error message
 }
 

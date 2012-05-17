@@ -7,7 +7,7 @@
 \usage{
   getLoadingNamespace(env = FALSE, info = FALSE)
 
-  isLoadingNamespace()
+  isLoadingNamespace(name)
 
   isNamespaceLoaded(name)
 
@@ -20,6 +20,10 @@
 
   \item{info}{logical that indicates that the complete
   information list should be returned}
+
+  \item{name}{the name of a namespace whose loading state
+  is tested. If missing \code{isLoadingNamespace} test if
+  any namespace is being loaded.}
 
   \item{x}{character vector containing the names of R
   objects to export in the loading namespace.}
@@ -36,7 +40,7 @@
   \code{\link{loadingNamespaceInfo}}, that does not throw
   an error.
 
-  Tests if one is loading the calling package's namespace.
+  Tests if a namespace is being loaded.
 
   Tests if a given namespace is loaded, without loading it,
   contrary to \code{\link{isNamespace}}.

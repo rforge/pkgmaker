@@ -9,6 +9,10 @@
 
   \item{...}{extra arguments passed to
   \code{\link{source}}.}
+
+  \item{pattern}{an optional \link{regular expression}.
+  Only file names which match the regular expression will
+  be returned.}
 }
 \description{
   Vectorised version of \code{source}.

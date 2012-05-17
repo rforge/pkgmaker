@@ -17,6 +17,11 @@ cgetAnywhere <- function(x){
 
 #' Silent Require
 #' 
+#' Silently require a package.
+#' 
+#' @inheritParams base::require
+#' @param ... extra arguments passed to \code{\link{require}}.
+#' 
 #' @export
 require.quiet <- function(package, character.only = FALSE, ...){
 	
@@ -30,6 +35,12 @@ require.quiet <- function(package, character.only = FALSE, ...){
 }
 
 #' Require a Package
+#' 
+#' Require a package with a custom error message
+#' 
+#' @param pkg package name as a character string
+#' @param ... extra arguments concatenated to for the header of the 
+#' error message 
 #' 
 #' @export
 requirePackage <- function(pkg, ...){
@@ -57,6 +68,7 @@ requirePackage <- function(pkg, ...){
 #' } 
 #' 
 #' @return a logical
+#' @export
 #' @examples
 #' 
 #' testRversion("2.14")
@@ -72,7 +84,13 @@ testRversion <- function(x, test=1L){
 }
 
 #' Complete R version
+#' 
+#' Returns the complete R version, e.g. 2.15
+#' 
 #' @export
+#' 
+#' Rversion()
+#' 
 Rversion <- function(){
 	paste(R.version$major, R.version$minor, sep='')
 }
@@ -190,11 +208,11 @@ str_diff <- function(x, y){
 }
 
 #' @S3method print str_diff
-print.str_diff <- function(x){
+print.str_diff <- function(x, ...){
 	s <- attr(x, 'str')
 	n <- min(length(s$x), length(s$y))
 	d <- head(s$x,n)
-	d[!res] <- '*'
+	d[!x] <- '*'
 	cat(str_c(s$x, collapse=''), "\n")
 	cat(str_c(d, collapse=''), "\n")
 	cat(str_c(s$y, collapse=''), "\n")				
@@ -243,6 +261,7 @@ extractLocalFun <- function(f){
 #' @return a paired list like the one returned by \code{\link{formals}}. 
 #' 
 #' @export
+#' @importFrom codetools getAssignedVar
 #' @rdname formals
 allFormals <- function(f){
 	

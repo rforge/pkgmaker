@@ -8,7 +8,7 @@
 #' Lists binary library files in a directory
 #' 
 #' @param dir directory
-#' @param all.platform a logical that indicates whether to list library files for 
+#' @param all.platforms a logical that indicates whether to list library files for 
 #' the current platform only (default) or all platforms (Unix, Windows, Mac).
 #' @param ... extra arguments passed to \code{\link{list.files}}.
 #' 
@@ -26,10 +26,14 @@ list.libs <- function(dir, ..., all.platforms=FALSE){
 	list.files(dir, pattern=p, ...)
 }
 
-#' Extract libname from a path, removing the directory part of the path, as 
-#' well as the platform specific library extension.
+#' \code{libname} extracts library names from a path, removing the 
+#' directory part of the path, as well as the platform 
+#' specific library extension.
 #' 
 #' @param x a filename
+#' 
+#' @export
+#' @rdname libutils
 #' 
 #' @examples
 #' 
@@ -37,7 +41,7 @@ list.libs <- function(dir, ..., all.platforms=FALSE){
 #' libname('/some/path/somewhere/mylib.dll') 
 #' 
 libname <- function(x){
-	sub(str_c("\\", .Platform$dynlib.ext, "$"), "", basename(libs))
+	sub(str_c("\\", .Platform$dynlib.ext, "$"), "", basename(x))
 }
 
 
@@ -46,6 +50,7 @@ libname <- function(x){
 #' Vectorised version of \code{source}.
 #' 
 #' @param x character vector containing filenames
+#' @inheritParams base::list.files
 #' @param ... extra arguments passed to \code{\link{source}}.
 #' 
 #' @export

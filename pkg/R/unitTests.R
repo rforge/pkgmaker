@@ -185,17 +185,17 @@ writeUnitVignette <- function(pkg, file){
 #' @return the name of the framework as a character string or NULL if
 #' it could not be detected.
 #' 
+#' @importFrom codetools makeCodeWalker
 #' @export
 utestFramework <- function(x, eval=FALSE){
 	
-	library(codetools)
 	# check if one should detect within an expression
 	expr <- if( missing(eval) || !eval ) substitute(x) 
 			else if( is.function(x) ) body(x)
 	
 	# walk code using codetools looking up for known test functions
 	if( !is.null(expr) ){
-		cw <- makeCodeWalker(leaf= function(e, w) if( is.symbol(e) ) cat(e, "\n"))
+		cw <- codetools::makeCodeWalker(leaf= function(e, w) if( is.symbol(e) ) cat(e, "\n"))
 		s <- str_trim(capture.output(walkCode(expr, cw)))
 		if( length(s) > 1L ){
 			for( f in names(.UFdata) ){
@@ -323,9 +323,10 @@ list.tests <- function(x, pattern=NULL){
 #' 
 #' Run unit tests in a variety of settings.
 #'
+#' @inline
 #' @export
 setGeneric('utest', function(x, ...) standardGeneric('utest'))
-
+#' Run the unit test assoicated to a function. 
 setMethod('utest', 'function',
 	function(x, run = TRUE){
 		# get actual name of the function
@@ -339,6 +340,7 @@ setMethod('utest', 'function',
 		tfun <- ls(eTest, pattern=str_c("^", sid, ":"))		
 	}
 )
+#' Run a package test suite
 setMethod('utest', 'character', 
 		function(x, filter="^runit.+\\.[rR]$", fun="^test\\.", ...
 				, testdir='tests', framework=c('RUnit', 'testthat')
@@ -415,6 +417,7 @@ setMethod('utest', 'character',
 )
 
 setOldClass('RUnitTestSuite')
+#' Runs a RUnit test suite
 setMethod('utest', 'RUnitTestSuite',
 	function(x, ..., quiet=FALSE){
 		requireRUnit("Running RUnit test suites")

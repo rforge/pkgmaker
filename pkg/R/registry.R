@@ -49,7 +49,6 @@ packageRegistry <- function(name, error=TRUE){
 }
 
 
-#' Default format method for package subregistry objects
 #' @S3method format package_subregistry
 format.package_subregistry <- function(x, ...){
 	c(Key = x$key
@@ -57,7 +56,6 @@ format.package_subregistry <- function(x, ...){
 	, Entries = x$regobj$n_of_entries()) 	
 }
 
-#' Default format method for package metaregistry objects
 #' @S3method format package_metaregistry
 format.package_metaregistry <- function(x, ...){
 	rec <- x$get_entries()
