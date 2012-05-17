@@ -156,9 +156,9 @@ as.package_options <- function(x, defaults=NULL){
 		else default
 	}
 	# define newOption
-	.OPTOBJ$newOption <- function(name, value){
-		if( name %in% names(.OPTOBJ$.defaults) )
-			stop("Option '", name, "' is already defined for '", .OPTOBJ$name, "'")
+	.OPTOBJ$newOption <- function(name, value, description=''){
+		if( name %in% names(.OPTOBJ$.defaults) && !identical(.OPTOBJ$.defaults[[name]], value) )
+			stop("Option '", name, "' is already defined for '", .OPTOBJ$name, "' with another default value")
 		.OPTOBJ$.defaults[[name]] <- value
 		.OPTOBJ$.options[[name]] <- value
 	}
