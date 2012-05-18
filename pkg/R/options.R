@@ -50,16 +50,15 @@ setupPackageOptions <- function(..., NAME=NULL, ENVIR=parent.frame(), RESET=FALS
 	
 	# check if options with the same key are not already registered
 	OLD <- getOption(optobj$name)
-	if( is.null(OLD) || RESET ){
-		# register the package_options object in global options
-		message(if( is.null(OLD) ) "Setting" else "Resetting"
-				, " package specific options: ", optobj$name
-				, " (", length(optobj$options())," default option(s))")
-		options(setNames(list(optobj), optobj$name))
-		
-	}else
-		stop("Package specific options '", OLD$name, "' already setup: " 
+	if( !is.null(OLD) && !RESET )
+		stop("Package specific options '", OLD$name, "' already exist: " 
 				, " (", length(OLD$options())," default option(s))")
+	
+	# register the package_options object in global options
+	message(if( is.null(OLD) ) "Setting" else "Resetting"
+			, " package specific options: ", optobj$name
+			, " (", length(optobj$options())," default option(s))")
+	options(setNames(list(optobj), optobj$name))
 	
 	# (re)load registered package_options object from global options
 	optobj <- getOption(optobj$name)
@@ -200,7 +199,7 @@ as.package_options <- function(..., defaults=NULL){
 	
 	if( is.character(x) ){
 		
-		# get the option data from global options
+		# build name as 'package:*'
 		x <- sub("^package:", '', x)
 		.OPTOBJ$name <- paste('package:', x[1L], sep='')
 		
