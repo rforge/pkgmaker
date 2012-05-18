@@ -1,11 +1,13 @@
 \name{utest}
 \alias{utest}
-\alias{utest-methods}
 \title{Running Unit Tests}
-\usage{
-  utest(x, ...)
-}
 \description{
   Run unit tests in a variety of settings.
+
+  Run the unit test assoicated to a function.
+
+  Run a package test suite
+
+  Runs a RUnit test suite
 }
 

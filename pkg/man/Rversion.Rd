@@ -5,6 +5,9 @@
   Rversion()
 }
 \description{
-  Complete R version
+  Returns the complete R version, e.g. 2.15
+}
+\examples{
+Rversion()
 }
 

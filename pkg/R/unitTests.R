@@ -4,6 +4,10 @@
 # Creation: 25 Apr 2012
 ###############################################################################
 
+#' @include utils.R
+#' @include logging.R 
+NULL
+
 #' Load RUnit Compatible Package
 #' 
 #' Loads the package responsible for the implementation of the RUnit framework,

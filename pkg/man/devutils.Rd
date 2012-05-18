@@ -24,6 +24,9 @@
   \item{PACKAGE}{optional name of an installed package}
 
   \item{...}{arguments passed to \code{\link{file.path}}.}
+
+  \item{lib.loc}{path to a library of R packages where to
+  search the package}
 }
 \value{
   an environment

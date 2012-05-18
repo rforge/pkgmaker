@@ -88,7 +88,7 @@ testRversion <- function(x, test=1L){
 #' Returns the complete R version, e.g. 2.15
 #' 
 #' @export
-#' 
+#' @examples
 #' Rversion()
 #' 
 Rversion <- function(){

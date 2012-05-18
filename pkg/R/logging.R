@@ -25,13 +25,13 @@ lverbose <- local({
 #' @rdname lverbose
 lsilent <- function(){
 	l <- lverbose()
-	isNA(l) || l == 0L
+	is.na(l) || l == 0L
 }
 #' Tells if verbosity is on.
 #' @rdname lverbose
 is.verbose <- function(){
 	l <- lverbose()
-	!isNA(l) && l >= 0L
+	!is.na(l) && l >= 0L
 }
 
 #' Prints out a message (on sdtout) if verbose mode is on.
@@ -59,7 +59,7 @@ vmessage <- function(...){
 #' 
 lmessage <- function(..., level=1L, appendLF=TRUE){
 	l <- lverbose()
-	if( !isNA(l) && l >= level ) cat(..., if(appendLF) "\n", sep='')
+	if( !is.na(l) && l >= level ) cat(..., if(appendLF) "\n", sep='')
 }
 
 

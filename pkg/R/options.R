@@ -4,6 +4,9 @@
 # Creation: 25 Apr 2012
 ###############################################################################
 
+#' @include unitTests.R
+#' @include devutils.R
+NULL
 
 #' Package Specific Options
 #' 
@@ -46,26 +49,30 @@ setupPackageOptions <- function(..., NAME=NULL, ENVIR=parent.frame(), RESET=FALS
 	optobj <- as.package_options(optname, defaults=defaults)
 	
 	# check if options with the same key are not already registered
-	oldobj <- getOption(optobj$name)
-	if( is.null(oldobj) || RESET ){
+	OLD <- getOption(optobj$name)
+	if( is.null(OLD) || RESET ){
 		# register the package_options object in global options
-		message(if( is.null(oldobj) ) "Setting" else "Resetting"
+		message(if( is.null(OLD) ) "Setting" else "Resetting"
 				, " package specific options: ", optobj$name
 				, " (", length(optobj$options())," default option(s))")
 		options(setNames(list(optobj), optobj$name))
 		
-	}	
-	# load registered package_options object from global options
+	}else
+		stop("Package specific options '", OLD$name, "' already setup: " 
+				, " (", length(OLD$options())," default option(s))")
+	
+	# (re)load registered package_options object from global options
 	optobj <- getOption(optobj$name)
 	stopifnot( !is.null(optobj) )
 	
 	# define wrapper functions in the supplied environment
 	if( !is.null(ENVIR) ){
 		isfun <- unlist(eapply(optobj, is.function))
-		isfun <- isfun[names(isfun) != 'newOption']
+		isfun <- isfun[names(isfun) != 'newOptions']
 		ifun <- which(isfun)
-		lapply(names(isfun)[ifun], function(x){ 
-				assign(paste(fprefix, x, sep='.'), optobj[[x]], envir=ENVIR)
+		lapply(names(isfun)[ifun], function(x){
+			f <- get(x, envir=optobj)
+			assign(paste(fprefix, x, sep='.'), f, envir=ENVIR)
 		})
 	}
 	
@@ -94,6 +101,68 @@ print.package_options <- function(x, ...){
 	}
 }
 
+
+#' \code{option_symlink} creates a symbolic link to option \code{x}.
+#' 
+#' @export
+#' @rdname options
+option_symlink <- function(x){
+	if( !is.character(x) )
+		stop("Symbolic link options must be character strings")
+	structure(x, class='option_symlink')
+}
+#' \code{is_option_symlink} tests if \code{x} is a symbolic link option.
+#' 
+#' @param opts a list of options
+#' 
+#' @export
+#' @rdname options
+is_option_symlink <- function(x, opts){
+	if( missing(opts) ) is(x, 'option_symlink')
+	else is(opts[[x]], 'option_symlink')
+}
+
+#' \code{option_symlink_target} returns the end target option of a symbolic link 
+#' option \code{x}.
+#' 
+#' @export
+#' @rdname options
+option_symlink_target <- function(x, opts){
+	
+	n <- 0
+	track <- NULL
+	while( is_option_symlink(x, opts) ){
+		if( x %in% track )
+			stop("cycling symbolic link options: ", str_out(c(track, x), Inf, sep=' -> '))
+		track <- c(track, x)
+		x <- opts[[x]]
+		n <- n + 1
+		
+	}
+	x
+	
+}
+
+# unit test for option symbolic links
+unit.test('option_symlink', {
+
+	opt <- setupPackageOptions(a=1,b=2,c=option_symlink('a'),d=4)
+	
+	.test <- function(msg){
+		checkIdentical(names(opt$options('a')), 'a', paste(msg, " - options: name of target is ok"))
+		checkIdentical(names(opt$options('c')), 'c', paste(msg, " - options: name of link is ok"))
+		checkIdentical(opt$options('c'), setNames(opt$options('a'), 'c'), paste(msg, " - options: link ok"))
+		checkIdentical(opt$getOption('a'), opt$getOption('c'), paste(msg, " - getOption: link ok"))
+	}
+	
+	.test('Default')
+	opt$options(a=100)
+	.test('After setting target')
+	opt$options(c=50)
+	.test('After setting link')
+			
+})
+
 #' \code{as.package_options} creates an object such as the 
 #' ones used to stores package specific options.
 #' 
@@ -104,14 +173,20 @@ print.package_options <- function(x, ...){
 #'
 #' @export
 #' @rdname options
-as.package_options <- function(x, defaults=NULL){
+as.package_options <- function(..., defaults=NULL){
+	
+	args <- .list_or_named_dots(...)
+	
+	x <- if( is.null(names(args)) ) args[[1]] 
+	if( !is.null(names(args)) ) defaults <- args
+	if( is.null(x) ) x <- basename(tempfile(''))
 	
 	# early exit if already a package_options object
 	if( is.package_options(x) ){
 		
 		# new defaults?: clone into a new package_options object
 		if( !missing(defaults) && is.list(defaults) ){
-			optname <- tempfile(str_c(x$name, '_'))
+			optname <- basename(tempfile(str_c(x$name, '_')))
 			x <- as.package_options(x$.options, defaults)
 			x$name <- optname
 		}
@@ -127,13 +202,7 @@ as.package_options <- function(x, defaults=NULL){
 		
 		# get the option data from global options
 		x <- sub("^package:", '', x)
-		goptname <- paste('package:', x[1L], sep='')
-		
-		opts <- getOption(goptname)
-		# directly return the registered object if it exists
-		if( !is.null(opts) ) return( opts )
-		
-		.OPTOBJ$name <- goptname
+		.OPTOBJ$name <- paste('package:', x[1L], sep='')
 		
 	}else if( is.list(x) ){
 		.OPTOBJ$name <- tempfile('package:')
@@ -142,7 +211,10 @@ as.package_options <- function(x, defaults=NULL){
 		stop("Invalid argument `x`: must be a character string or a list.")
 	
 	# define options() 
-	.OPTOBJ$options <- function(...) packageOptions(..., .DATA=.OPTOBJ)
+	.OPTOBJ$options <- function(...){
+		# call .options on package_options object
+		.options(..., .DATA=.OPTOBJ)
+	}
 	# define getOption
 	.OPTOBJ$getOption <- function (x, default = NULL) 
 	{
@@ -156,11 +228,22 @@ as.package_options <- function(x, defaults=NULL){
 		else default
 	}
 	# define newOption
-	.OPTOBJ$newOption <- function(name, value, description=''){
-		if( name %in% names(.OPTOBJ$.defaults) && !identical(.OPTOBJ$.defaults[[name]], value) )
-			stop("Option '", name, "' is already defined for '", .OPTOBJ$name, "' with another default value")
-		.OPTOBJ$.defaults[[name]] <- value
-		.OPTOBJ$.options[[name]] <- value
+	.OPTOBJ$newOptions <- function(...){
+		defs <- .list_or_named_dots(..., named.only=TRUE)
+		
+		lapply(seq_along(defs),
+			function(i){
+			name <- names(defs)[i]
+			value <- defs[[i]]
+			# check defaults
+			if( name %in% names(.OPTOBJ$.defaults) && !identical(.OPTOBJ$.defaults[[name]], value) )
+				message("Options ", .OPTOBJ$name, "::`", name, "` not added: already defined with another default value")
+			else{
+				.OPTOBJ$.defaults[[name]] <- value
+				.OPTOBJ$.options[[name]] <- value
+			}
+		})
+		invisible()
 	}
 	# define resetOptions
 	.OPTOBJ$resetOptions <- function(..., ALL=FALSE){
@@ -189,7 +272,26 @@ as.package_options <- function(x, defaults=NULL){
 	.OPTOBJ
 }
 
-.list_or_named_dots <- function(...){
+
+#' The method \code{[[} is equivalent to \code{options()} or \code{getOption(...)}:
+#' e.g. \code{obj[[]]} returns the list of options defined in \code{obj}, and 
+#' \code{obj[['abc']]} returns the value of option \code{'abc'}.
+#' 
+#' @param ... arguments passed to \code{getOption} (only first one is used). 
+#'  
+#' @rdname options 
+#' @S3method [[ package_options
+"[[.package_options" <- function(x, ...){
+	if( missing(..1) ) x$options()
+	else x$getOption(..1)
+}
+
+#' @S3method [[<- package_options
+"[[<-.package_options" <- function(x, i, value){
+	x$.options[[i]] <- value 
+}
+
+.list_or_named_dots <- function(..., named.only=FALSE){
 	
 	dots <- list(...)
 	if( length(dots) == 0L ) return()
@@ -202,6 +304,11 @@ as.package_options <- function(x, defaults=NULL){
 				stop("single list argument must only have named elements")
 		}
 	}
+	if( named.only ){
+		if( is.null(names(params)) || any(names(params)=='') )
+			stop("all arguments be named")
+	}
+	
 	params
 }
 
@@ -226,7 +333,10 @@ as.package_options <- function(x, defaults=NULL){
 		
 		cparams <- c(...)
 		# retrieve options as a list (use sapply to also get non-existing options)
-		res <- sapply(cparams, function(n) opts[[n]], simplify=FALSE)
+		res <- sapply(cparams, function(n){
+					# follow link if necessary
+					opts[[option_symlink_target(n, opts)]]
+				}, simplify=FALSE)
 		return(res)
 	}
 	
@@ -236,7 +346,11 @@ as.package_options <- function(x, defaults=NULL){
 				# assign the new value into the options environment
 				val <- params[[name]]
 				old <- opts[[name]]
-				opts[[name]] <<- val
+				# change value of target if symlink and the new value is not a symlink
+				if( is_option_symlink(old) && !is_option_symlink(val) )
+					opts[[option_symlink_target(name)]] <<- val
+				else
+					opts[[name]] <<- val
 				# return the option's old value
 				old
 			}
@@ -251,24 +365,26 @@ as.package_options <- function(x, defaults=NULL){
 	return( invisible(old) )
 }
 
-#' \code{packageOptions} returns a list of package specific options, and behaves
-#' as the base function \code{\link[base]{options}}.
-#'  
+#' \code{packageOptions} provides access to package specific options from a 
+#' given package that were defined with \code{setupPackageOptions}, and behaves as the base function \code{\link[base]{options}}.
+#' 
+#' @param PACKAGE a package name
+#' @inheritParams base::options 
+#' 
 #' @export
 #' @rdname options
-packageOptions <- function(..., .DATA = packageName()){
+packageOptions <- function(..., PACKAGE = packageName()){
 		
-	narg <- nargs() - !missing(.DATA)
-	
 	# create/retrieve a package_options object from .DATA
-	optobj <- as.package_options(.DATA)
+	optobj <- as.package_options(PACKAGE)
+	optobj <- getOption(optobj$name)
 	
-	# call .options on package_options object
-	.options(..., .DATA = optobj)
+	# call the package_options object's options() function
+	optobj$options(...)
 }
 
 #' \code{listPackageOptions} returns the names of all option 
-#' sets currently defined.
+#' currently defined with \code{setupPackageOptions}.
 #' 
 #' @return a character vector (possibly empty).
 #'

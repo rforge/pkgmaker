@@ -28,13 +28,13 @@ Suggests:
     testthat
 Collate:
     'utils.R'
+    'logging.R'
+    'unitTests.R'
+    'namespace.R'
+    'devutils.R'
     'options.R'
     'registry.R'
     'bibtex.R'
-    'namespace.R'
-    'unitTests.R'
-    'logging.R'
-    'devutils.R'
     'is.R'
     'vignette.R'
     'files.R'
