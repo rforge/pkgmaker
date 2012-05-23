@@ -18,8 +18,31 @@
 
   \S4method{utest}{RUnitTestSuite}(x, ..., quiet = FALSE)
 }
+\arguments{
+  \item{x}{object to which a unit test is attached}
+
+  \item{...}{extra arguments to allow extensions and are
+  passed to the unit framework running funcitons.}
+
+  \item{run}{a lgoical that indicates if the unit test
+  should be run}
+
+  \item{filter}{pattern to match files that contain the
+  definition of the unit tests functions to run.}
+
+  \item{fun}{patter to match the test functions to run.}
+
+  \item{testdir}{directory where to look for the test
+  files}
+
+  \item{framework}{unit test framework}
+
+  \item{quiet}{a logical that indicates if the tests should
+  be run silently}
+}
 \description{
-  Run unit tests in a variety of settings.
+  Run unit tests in a variety of settings. This is still
+  \strong{very} experimental.
 }
 \section{Methods}{
   \describe{

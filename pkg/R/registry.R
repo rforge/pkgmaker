@@ -11,7 +11,7 @@
 #' @param error a logical that indicate whether an error is thrown if the 
 #' sub-registry is not found (default) or just \code{NULL}. 
 #' 
-#' @return a \code{\link[=regobj]{registry}} object or \code{NULL} (see argument 
+#' @return a \code{\link[registry:regobj]{registry}} object or \code{NULL} (see argument 
 #' \code{error}).
 #' 
 #' @rdname registry
@@ -62,7 +62,6 @@ format.package_metaregistry <- function(x, ...){
 	data.frame(t(sapply(rec, base::format, ...))[,-1])	 
 }
 
-#' xtable method for package_metaregistry objects
 #' @S3method xtable package_metaregistry 
 #' @importFrom xtable xtable
 xtable.package_metaregistry <- function(x, ...){
@@ -70,7 +69,6 @@ xtable.package_metaregistry <- function(x, ...){
 	xtable::xtable(d, ...)
 }
 
-#' Print method for package_metaregistry objects
 #' @S3method print package_metaregistry
 print.package_metaregistry <- function(x, ...){	
 	registry:::print.registry(x)
@@ -127,6 +125,16 @@ setPackageRegistry <- function(name, regobj, ..., overwrite=TRUE){
 }
 
 #' Finds an entry in a registry.
+#' 
+#' @param regobj a registry object
+#' @param key a key to match
+#' @param msg a header to use in case of error
+#' @param all logical to indicate if hidden keys (starting with a '.') should be 
+#' returned and output in message.
+#' @param error a logical that indicates if an error should be thrown if the key has no match 
+#' or multiple matches
+#' @param exact a logical that indicates if matching should be exact or partial
+#' @param verbose a logical that indicates if verbosity should be toggle on
 #' 
 #' @export
 regfetch <- function(regobj, key=NULL, msg=NULL, all=FALSE, error=TRUE, exact=FALSE, verbose=FALSE){
@@ -191,6 +199,10 @@ regfetch <- function(regobj, key=NULL, msg=NULL, all=FALSE, error=TRUE, exact=FA
 
 
 #' Automatic S4 Class for Registry Entries
+#' 
+#' @param registry a registry object
+#' @param Class name of the class to generate
+#' @param ... extra arguments passed to \code{\link{setClass}}.
 #' 
 setClassRegistry <- function(registry, Class, ...){
 	

@@ -194,7 +194,8 @@ packagePath <- function(..., PACKAGE=NULL){
 				file.path(info$libname, info$pkgname)
 			else{# we are in dev mode: use devtools
 				library(devtools)
-				p <- as.package(.LOCAL_PKG_NAME)
+#				p <- as.package(.LOCAL_PKG_NAME)
+				p <- as.package()
 				
 				# handle special sub-directories of the package's root directory
 				if( nargs() == 0 || sub("^/?([^/]+).*", "\\1", list(...)[1]) %in% c('tests', 'data','R','src') )

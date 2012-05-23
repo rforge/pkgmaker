@@ -134,6 +134,7 @@ install_alldeps <- function (pkg = NULL)
 #' single quotes (defaults) or not. 
 #' @param use.names a logical indicating whether names should be added to the 
 #' list as \code{NAME=VAL, ...} or not (default).
+#' @param sep separator character
 #' 
 #' @return a single character string
 #' 
@@ -164,6 +165,7 @@ str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", ")
 
 #' Builds formatted string from a list of complex values.
 #' 
+#' @param object an R object
 #' @param exdent extra indentation passed to str_wrap, and used if the output 
 #' should spread over more than one lines.
 #' 
@@ -171,7 +173,7 @@ str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", ")
 #' @export
 str_desc <- function(object, exdent=0L){
 	p <- sapply(object, function(x){
-				if( is.vector(x) && length(x) == 1L ) x
+				if( is.atomic(x) && length(x) == 1L ) x
 				else paste("<", class(x), ">", sep='')
 			})
 	str_wrap(str_out(p, NA, use.names=TRUE, quote=FALSE), exdent=exdent)
@@ -220,15 +222,14 @@ print.str_diff <- function(x, ...){
 
 #' Extracting Local Function Definition
 #' 
-#' Extracts local function from wrapper functions of the following type, typically 
+#' @description
+#' \code{extractLocalFun} Extracts local function from wrapper functions of the following type, typically 
 #' used in S4 methods:
 #' \samp{
-#' function(a, b, ...){
-#' 	.local <- function(a, b, c, d, ...){
-#'
-#' 	}
+#' function(a, b, ...)\{
+#' 	.local <- function(a, b, c, d, ...)\{\}
 #'	.local(a, b, ...)
-#' }
+#' \}
 #' }
 #'
 #' @param f definition of the wrapper function

@@ -23,6 +23,10 @@ methods or error/warning messages.}
   should be added to the list as \code{NAME=VAL, ...} or
   not (default).}
 
+  \item{sep}{separator character}
+
+  \item{object}{an R object}
+
   \item{exdent}{extra indentation passed to str_wrap, and
   used if the output should spread over more than one
   lines.}

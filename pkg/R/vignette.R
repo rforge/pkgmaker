@@ -37,16 +37,18 @@ inSweave <- function(){
 
 #' Generate a Fake Vignette
 #' 
-#' @param template Template file
+#' @param src original Sweave file
+#' @param out output file
+#' @param PACKAGE package name where to look the source vignette
 #' 
-makeFakeVignette <- function(template, out, PACKAGE=NULL){
+makeFakeVignette <- function(src, out, PACKAGE=NULL){
 	
 	# interpret template within the package directory
 	if( !is.null(PACKAGE) ){
-		template <- str_c(, template)
+		src <- str_c(, src)
 	}
 	# read in template file
-	l <- readLines(template)
+	l <- readLines(src)
 	# extract %\Vignette commands
 	vign <- l[grep("^%\\\\Vignette", l)]
 	# write output file

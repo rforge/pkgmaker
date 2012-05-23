@@ -4,6 +4,10 @@
 \usage{
   requireRUnit(...)
 }
+\arguments{
+  \item{...}{arguments passed to
+  \code{\link{requirePackage}}.}
+}
 \value{
   nothing
 }

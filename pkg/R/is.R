@@ -30,10 +30,19 @@ isNA <- function(x)
 isFALSE <- function(x) identical(x, FALSE)
 
 #' Tests if a variable is a single number
+#' 
 #' @rdname is_something
 #' @export
-isNumber <- function(x, int.ok=TRUE){ 
-	is.numeric(x) && length(x) == 1 && (int.ok || !is.integer(x))
+isNumber <- function(x){ 
+	is.numeric(x) && length(x) == 1
+}
+
+#' Tests if a variable is a single real number
+#' 
+#' @rdname is_something
+#' @export
+isReal <- function(x){ 
+	isNumber(x) && !is.integer(x)
 }
 
 #' Tests if an object is a single integer
@@ -57,9 +66,8 @@ is.dir <- function(x) file_test('-d', x)
 #' Tests if an object has names
 #' 
 #' @param all logical that indicates if the object needs all names non empty
+#' @rdname is_something
 #' @export
-#' 
-#' 
 hasNames <- function(x, all=FALSE){
 	nm <- names(x)
 	if( length(x) == 0L ) TRUE

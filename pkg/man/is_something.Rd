@@ -1,9 +1,11 @@
 \name{is_something}
+\alias{hasNames}
 \alias{is.dir}
 \alias{isFALSE}
 \alias{isInteger}
 \alias{isNA}
 \alias{isNumber}
+\alias{isReal}
 \alias{is_something}
 \alias{isString}
 \title{Testing Object Type}
@@ -12,16 +14,23 @@
 
   isFALSE(x)
 
-  isNumber(x, int.ok = TRUE)
+  isNumber(x)
+
+  isReal(x)
 
   isInteger(x)
 
   isString(x)
 
   is.dir(x)
+
+  hasNames(x, all = FALSE)
 }
 \arguments{
   \item{x}{an R object}
+
+  \item{all}{logical that indicates if the object needs all
+  names non empty}
 }
 \value{
   \code{TRUE} or \code{FALSE}
@@ -36,11 +45,15 @@
 
   Tests if a variable is a single number
 
+  Tests if a variable is a single real number
+
   Tests if an object is a single integer
 
   Test if an object is a single character string
 
   Tests if a filename is a directory
+
+  Tests if an object has names
 }
 \seealso{
   \code{\link{isTRUE}}

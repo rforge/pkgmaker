@@ -17,14 +17,12 @@
   \code{\link{formals}}.
 }
 \description{
-  Extracts local function from wrapper functions of the
-  following type, typically used in S4 methods: \samp{
-  function(a, b, ...){ .local <- function(a, b, c, d, ...){
+  \code{extractLocalFun} Extracts local function from
+  wrapper functions of the following type, typically used
+  in S4 methods: \samp{ function(a, b, ...)\{ .local <-
+  function(a, b, c, d, ...)\{\} .local(a, b, ...) \} }
 
   Works for methods that are created (setMethod) as a
   wrapper function to an internal function named .local.
-}
-\details{
-  } .local(a, b, ...) } }
 }
 

@@ -2,10 +2,15 @@
 \alias{makeFakeVignette}
 \title{Generate a Fake Vignette}
 \usage{
-  makeFakeVignette(template, out, PACKAGE = NULL)
+  makeFakeVignette(src, out, PACKAGE = NULL)
 }
 \arguments{
-  \item{template}{Template file}
+  \item{src}{original Sweave file}
+
+  \item{out}{output file}
+
+  \item{PACKAGE}{package name where to look the source
+  vignette}
 }
 \description{
   Generate a Fake Vignette

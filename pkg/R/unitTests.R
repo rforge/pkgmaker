@@ -13,6 +13,8 @@ NULL
 #' Loads the package responsible for the implementation of the RUnit framework,
 #' choosing amongst \sQuote{RUnitX}, \sQuote{svUnit} and \sQuote{RUnit}.
 #' 
+#' @param ... arguments passed to \code{\link{requirePackage}}.
+#' 
 #' @return nothing
 #' @keywords internal
 #' 
@@ -185,6 +187,7 @@ writeUnitVignette <- function(pkg, file){
 #' Inferring Unit Test Framework
 #' 
 #' @param x an filename, a function or the body of a function
+#' @param eval a logical that indicates if the value of \code{x} should be used.
 #' 
 #' @return the name of the framework as a character string or NULL if
 #' it could not be detected.
@@ -276,8 +279,10 @@ unit.test <- function(x, expr, framework=NULL, envir=parent.frame()){
 
 #' Returns the package internal environment where unit tests are stored.
 #' 
+#' @param pkg package name.
+#' If missing the caller's package is assumed. 
+#' 
 #' @export
-#'  
 packageTestEnv <- function(pkg){
 	
 	if( !missing(pkg) && !is.null(pkg) ){
@@ -293,9 +298,6 @@ packageTestEnv <- function(pkg){
 }
 
 
-#' Listing Unit Tests
-#' 
-#'  
 list.tests <- function(x, pattern=NULL){
 	
 }
@@ -326,11 +328,18 @@ list.tests <- function(x, pattern=NULL){
 #' Running Unit Tests
 #' 
 #' Run unit tests in a variety of settings.
+#' This is still \strong{very} experimental.
+#' 
+#' @param x object to which a unit test is attached
+#' @param ... extra arguments to allow extensions and are passed to 
+#' the unit framework running funcitons. 
 #'
 #' @inline
 #' @export
 setGeneric('utest', function(x, ...) standardGeneric('utest'))
 #' Run the unit test assoicated to a function. 
+#' 
+#' @param run a lgoical that indicates if the unit test should be run
 setMethod('utest', 'function',
 	function(x, run = TRUE){
 		# get actual name of the function
@@ -345,6 +354,14 @@ setMethod('utest', 'function',
 	}
 )
 #' Run a package test suite
+#' 
+#' @param filter pattern to match files that contain the definition of 
+#' the unit tests functions to run.
+#' @param fun patter to match the test functions to run.
+#' @param testdir directory where to look for the test files
+#' @param framework unit test framework
+#' @param quiet a logical that indicates if the tests should be run silently
+#'  
 setMethod('utest', 'character', 
 		function(x, filter="^runit.+\\.[rR]$", fun="^test\\.", ...
 				, testdir='tests', framework=c('RUnit', 'testthat')

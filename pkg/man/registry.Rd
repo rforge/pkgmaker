@@ -28,8 +28,8 @@
   exists.}
 }
 \value{
-  a \code{\link[=regobj]{registry}} object or \code{NULL}
-  (see argument \code{error}).
+  a \code{\link[registry:regobj]{registry}} object or
+  \code{NULL} (see argument \code{error}).
 }
 \description{
   Package Registry
