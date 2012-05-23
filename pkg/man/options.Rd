@@ -16,7 +16,7 @@
 
   as.package_options(..., defaults = NULL)
 
-  [[.package_options(x, ...)
+  \method{[[}{package_options} (x, ...)
 
   packageOptions(..., PACKAGE = packageName())
 

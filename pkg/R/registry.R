@@ -77,7 +77,7 @@ print.package_metaregistry <- function(x, ...){
 
 #' Adds a registry to the package 
 #' 
-#' @param regobj a \code{\link[=regobj]{registry}} object or a single character 
+#' @param regobj a \code{\link[registry:regobj]{registry}} object or a single character 
 #' string that indicates the class of the objects that are stored in the 
 #' sub-registry.
 #' @param ... named values used to set extra information about the new registry, that 
