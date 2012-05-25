@@ -128,6 +128,9 @@ is_option_symlink <- function(x, opts){
 #' @rdname options
 option_symlink_target <- function(x, opts){
 	
+	if( !is.list(opts) )
+		stop("invalid argument `opts`: must be a list object")
+	
 	n <- 0
 	track <- NULL
 	while( is_option_symlink(x, opts) ){
@@ -290,6 +293,27 @@ as.package_options <- function(..., defaults=NULL){
 	x$.options[[i]] <- value 
 }
 
+
+##' @S3method [[ package_options
+#`[[.package_options` <- function(x, ..., follow=FALSE){
+#	
+#	if( missing(..1) ) as.list(x$.options)
+#	else if( follow ){
+#		x$.options[[option_symlink_target(..1, x)]]
+#	}else x$.options[[..1]]
+#}
+#
+##' @S3method [[<- package_options
+#`[[<-.package_options` <- function(x, i, ..., value){
+#	
+#	follow <- if( missing(..1) ) FALSE else ..1 
+#	if( follow ){
+#		old <- x[[i]]
+#		if( is_option_symlink(old) && !is_option_symlink(value) )
+#			x$.options[[option_symlink_target(i, x)]] <- value
+#	}else x$.options[[i]] <- value
+#}
+
 .list_or_named_dots <- function(..., named.only=FALSE){
 	
 	dots <- list(...)
@@ -347,7 +371,7 @@ as.package_options <- function(..., defaults=NULL){
 				old <- opts[[name]]
 				# change value of target if symlink and the new value is not a symlink
 				if( is_option_symlink(old) && !is_option_symlink(val) )
-					opts[[option_symlink_target(name)]] <<- val
+					opts[[option_symlink_target(name, opts)]] <<- val
 				else
 					opts[[name]] <<- val
 				# return the option's old value

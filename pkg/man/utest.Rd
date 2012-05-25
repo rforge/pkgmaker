@@ -12,7 +12,7 @@
   \S4method{utest}{function}(x, run = TRUE)
 
   \S4method{utest}{character}(x,
-    filter = "^runit.+\\.[rR]$", fun = "^test\\.", ...,
+    filter = "^runit.+\\\\.[rR]$", fun = "^test\\\\.", ...,
     testdir = "tests", framework = c("RUnit", "testthat"),
     quiet = Sys.getenv("RCMDCHECK") != "FALSE")
 

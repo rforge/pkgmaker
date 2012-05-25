@@ -14,9 +14,10 @@
   thrown if the sub-registry is not found (default) or just
   \code{NULL}.}
 
-  \item{regobj}{a \code{\link[=regobj]{registry}} object or
-  a single character string that indicates the class of the
-  objects that are stored in the sub-registry.}
+  \item{regobj}{a \code{\link[registry:regobj]{registry}}
+  object or a single character string that indicates the
+  class of the objects that are stored in the
+  sub-registry.}
 
   \item{...}{named values used to set extra information
   about the new registry, that is stored in dedicated
