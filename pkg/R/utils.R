@@ -161,8 +161,10 @@ str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", ")
 			else if( is.character(quote) ) quote
 	if( !is.null(quote) ) x <- unlist(lapply(x, function(v) paste(quote,v,quote, sep='')))
 	# add names if necessary
-	if( use.names && !is.null(names(x)) ) 
-		x <- paste(names(x), '=', x, sep='')
+	if( use.names && !is.null(names(x)) ){
+		nm <- str_c(names(x),'=')
+		x <- paste(ifelse(nm=='=',NULL,nm), x, sep='')
+	}
 	paste(paste(x, collapse=sep), suffix, sep='')
 }
 

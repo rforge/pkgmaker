@@ -27,6 +27,20 @@ requireRUnit <- function(...){
 	requirePackage(runit, ...)
 }
 
+#' Plot in Unit Tests
+#' 
+#' @param .... any arguments
+#' 
+#' @export
+#' @keywords internal
+checkPlot <- function(...){
+	if( require.quiet('RUnitX', character.only = TRUE) ){
+		f <- getFunction('checkPlot', where=asNamespace('RUnitX'))
+		return( f(...) )
+	}
+	TRUE	
+}
+
 #' Make Vignette for Unit Tests
 #' 
 #' @param pkg Package name

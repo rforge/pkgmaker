@@ -5,10 +5,10 @@ Version: 0.1
 Date: 2012-05-23
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
-Description: This package provides some low-level utilities to use for package 
-	development. 
-	It is still under heavy development and changes in the interface are more 
-	than likely.
+Description: This package provides some low-level utilities to use for package
+    development.
+    It is still under heavy development and changes in the interface are more
+    than likely.
 License: GPL (>=2)
 URL: http://pkgmaker.r-forge.r-project.org
 LazyLoad: yes
