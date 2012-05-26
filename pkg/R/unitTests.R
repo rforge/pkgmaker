@@ -19,12 +19,22 @@ NULL
 #' @keywords internal
 #' 
 requireRUnit <- function(...){
-	runit <- 'RUnit'
-	if( length(find.package('RUnitX')) ) runit <- 'RUnitX'
-	else if( length(find.package('svUnit')) ) runit <- 'svUnit'
-	if( !is.null(path.package(runit, quiet=TRUE)) )
-		message("Using RUnit framework provider: ", runit)
-	requirePackage(runit, ...)
+	
+	has_pkg <- function(x) length(find.package(x, quiet=TRUE)) > 0L
+	
+	ruf <- c('RUnitX', 'RUnit', 'svUnit')
+	for( pkg in ruf){
+		if( require.quiet(pkg, character.only=TRUE) ){
+			break
+		}
+	}
+	
+	if( is.null(runit) )
+		stop("Cannot find any package providing RUnit framework.")
+	message("Using RUnit framework provider: ", pkg)
+	
+	# return name of the loaded framework 
+	pkg
 }
 
 #' Plot in Unit Tests
