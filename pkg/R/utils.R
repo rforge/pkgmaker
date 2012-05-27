@@ -387,3 +387,128 @@ oneoffVariable <- function(default=NULL){
 			.var <<- value
 	}
 }
+
+
+##  Exit Error Checker
+##  
+##  This function defines a function that checks if an error has been 
+##  thrown after its definition.
+##  It may be used to perform tasks on function exit depending on 
+##  how the function exit (normal return or with an error).
+##  
+##  The function \code{errorCheck} itself is meant to be called at 
+##  the beginning of functions that use \code{\link{on.exit}} to 
+##  perform tasks when exiting.
+##  The error checker function returned, when used in \code{on.exit} 
+##  expressions, enables to distinguish between a normal exit and 
+##  an exit due to an error, allowing is to perform tasks specific 
+##  to each scenario.
+##  
+##  IMPORTANT: this function is not 100\% perfect in the sense that 
+##  it will detect an error as soon as one has been thrown, even it 
+##  is catched before the exit -- with \code{\link{try}} or 
+##  \code{\link{tryCatch}}.
+##  
+##  @export
+##  @examples 
+##  
+##  # define some function
+##  f <- function(err){
+##  
+##   # initialise an error checker
+##  	isError <- errorCheck()
+##  
+##   # do something on exit that depends on the error status
+##  	on.exit({
+##  		if(isError()) cat("with error: cleanup\n") 
+##  		else cat("no error: do nothing\n") 
+##  	})
+##  	
+##   # throw an error here
+##  	if( err ) stop('There is an error')
+##   
+##  	1+1
+##  }
+##  
+##  # without error
+##  f(FALSE)
+##  # with error
+##  try( f(TRUE) )
+##  
+errorCheck <- function(){
+	
+	# initialise with unique error message
+	.err <- tryCatch(stop('ERROR_CHECK:', digest(tempfile())), error=function(e) conditionMessage(e))
+	tb_digest <- function() digest(capture.output(traceback(max.lines=NULL)))
+	.traceback <- tb_digest()
+	
+	function(){
+		# error message is different
+		# tb_digest() != .traceback
+		length(grep(.err, msg, fixed=TRUE, invert=TRUE)) == 1L
+	}
+}
+
+
+# Static Variable
+sVariable <- function(default=NULL){
+	.val <- default
+	function(value){
+		if( missing(value) ) .val
+		else{
+			old <- .val
+			.val <<- value
+			old
+		}
+	}
+}
+
+#' Exit Error Checks
+#' 
+#' \code{exitCheck} provides a mechanism to distinguish the exit status
+#' in \code{\link{on.exit}} expressions.
+#' 
+#' It generates a function that is used wihtin a function's body to 
+#' "flag" normal exits and in its \code{\link{on.exit}} expression
+#' to check the exit status of a function.
+#' Note that it will correctly detect errors only if all normal exit 
+#' are wrapped into a call to it. 
+#' 
+#' @export
+#' 
+#' @examples
+#' 
+#' define some function
+#' f <- function(err){
+#' 
+#'  initialise an error checker
+#' 	success <- exitCheck()
+#' 
+#'  do something on exit that depends on the error status
+#' 	on.exit({
+#' 		if(success()) cat("no error: do nothing\n") 
+#' 		else cat("error: cleqnup mess\n") 
+#' 	})
+#' 	
+#'  throw an error here
+#' 	if( err ) stop('There is an error')
+#'  
+#' 	success(1+1)
+#' }
+#' 
+#' without error
+#' f(FALSE)
+#' with error
+#' try( f(TRUE) )
+#' 
+exitCheck <- function(){
+	
+	.success <- FALSE
+	function(x){
+		if( nargs() == 0L ) .success
+		else{
+			.success <<- TRUE
+			x
+		}
+	}
+}
