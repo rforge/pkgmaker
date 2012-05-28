@@ -18,39 +18,175 @@ NULL
 #' @return nothing
 #' @keywords internal
 #' 
-requireRUnit <- function(...){
-	
-	has_pkg <- function(x) length(find.package(x, quiet=TRUE)) > 0L
-	
-	ruf <- c('RUnitX', 'RUnit', 'svUnit')
-	runit <- NULL
-	for( pkg in ruf){
-		if( require.quiet(pkg, character.only=TRUE) ){
-			runit <- pkg
-			break
+requireRUnit <- local({
+			
+	.cache <- NULL
+	function(...){
+		
+		if( !is.null(.cache) ) return(.cache)
+		
+		has_pkg <- function(x) length(find.package(x, quiet=TRUE)) > 0L
+		
+		ruf <- c('RUnit', 'svUnit')
+		runit <- NULL
+		for( pkg in ruf){
+			if( require.quiet(pkg, character.only=TRUE) ){
+				runit <- pkg
+				break
+			}
 		}
+		
+		if( is.null(runit) )
+			stop("Cannot find any package providing RUnit framework.")
+		message("Using RUnit framework provider: ", runit)
+		
+		.cache <<- runit
+		# return name of the loaded framework 
+		invisible(runit)
 	}
 	
-	if( is.null(runit) )
-		stop("Cannot find any package providing RUnit framework.")
-	message("Using RUnit framework provider: ", runit)
+})
+
+#' Enhancing RUnit Logger
+#' 
+#' Adds a function or a local variable to RUnit global logger.
+#' 
+#' @param logger global logger object (i.e. object \code{.testLogger} in the 
+#' global environment \code{.GlobalEnv})
+#' @param
+#' 
+addToLogger <- function(name, value, logger=NULL){
 	
-	# return name of the loaded framework 
-	invisible(runit)
+	if( RUnit:::.existsTestLogger() ){
+		
+		if( is.null(logger) ) 
+			logger <- get('.testLogger', logger, envir=.GlobalEnv)
+		
+		if( is.function(value) ){# add function to logger
+			if( is.null(logger[[name]]) ){
+				environment(value) <- environment(logger$incrementCheckNum) 
+				logger[[name]] <- value
+				# update global logger
+				assign('.testLogger', logger, envir=.GlobalEnv)
+			}
+		}else{ # assign object in logger's local environment if not already there
+			e <- environment(logger$incrementCheckNum)
+			if( !exists(name, envir=e) )
+				assign(name, value, envir=e)
+		}
+		
+		logger		
+	}
 }
 
 #' Plot in Unit Tests
 #' 
-#' @param .... any arguments
+#' Saves a plot in a PNG file that will be included in unit test HTML reports.
+#' 
+#' @param expr expression that generate th eplot
+#' @param width plot width
+#' @param height plot height (not used)  
+#' @param msg plot msg explaining the plot . It will be used as the caption
 #' 
 #' @export
 #' @keywords internal
-checkPlot <- function(...){
-	if( require.quiet('RUnitX', character.only = TRUE) ){
-		f <- getFunction('checkPlot', where=asNamespace('RUnitX'))
-		return( f(...) )
+checkPlot <- function(expr, msg=NULL, width=1000, height=NULL){
+	
+	# get stuff from RUnit
+	uf <- requireRUnit()
+	if( is.null(uf) || uf != 'RUnit' ) return(TRUE)
+	.existsTestLogger <- RUnit:::.existsTestLogger	
+	.testLogger <- if( .existsTestLogger() ) .GlobalEnv$.testLogger
+	
+	if (missing(expr)) {
+		stop("'expr' is missing.")
 	}
-	TRUE	
+	
+	
+	plotfile <- 
+	if (.existsTestLogger()) {
+		
+		.testLogger$incrementCheckNum()
+		
+		if( is.null(.testLogger$setPlot) ){
+			# add .plot list to logger environment
+			addToLogger('.plots', NULL)
+			
+			# add function setPlot to logger
+			addToLogger('setPlot', 
+				function(name, msg=''){
+					##@bdescr
+					## add a plot to a test function.
+					##@edescr
+					##@in testFuncName : [character] name of test function
+					##@in name : [character] filename
+					##@in msg : [character] message string
+					##@edescr	
+					
+					if( is.null(.plots) ) .plots <<- list()
+					.plots[[name]] <<- msg
+				}
+			)
+			
+			# add function setPlot to logger
+			addToLogger('getPlotfile', 
+				function(name, msg=''){
+					
+					td <- .getTestData()
+					# TODO from test function name
+					#fname <- tail(names(td[[.currentTestSuiteName]]$sourceFileResults[[.currentSourceFileName]]), 1L)
+					fname <- basename(tempfile(str_c(.currentTestSuiteName, '_', .currentSourceFileName, '_')))
+					paste(fname, .getCheckNum(), sep='_')
+					
+				}
+			)
+			
+			# update local object with modified global logger
+			.testLogger <- .GlobalEnv$.testLogger
+		}
+		
+		.testLogger$getPlotfile()
+	}
+	else tempfile(tmpdir='.')
+	
+	# add extension to plot file
+	plotfile <- paste(plotfile, 'png', sep='.')
+	
+	# reset the msg if none was provided
+	if( is.null(msg) ) msg <- plotfile
+
+	#plot in the PNG file
+	png(file=plotfile, width=width)
+	
+	# evaluate the expression that generates the plot
+	res <- try( eval(expr, envir = parent.frame()) )
+	# close the graphic device
+	dev.off()
+	
+	# test if everything went alright
+	fileinfo <- file.info(plotfile)	
+	if( inherits(res, "try-error") || is.na(fileinfo$size[1]) || fileinfo$size[1] == 0 ){
+		#make sure the plot file is removed
+		unlink(plotfile)
+		
+		if (.existsTestLogger()) {
+			.testLogger$setFailure()
+		}
+		stop("Problem when generating plot:", res, msg)
+	}
+	
+	if (.existsTestLogger()) {
+		.testLogger$setPlot(plotfile, msg)
+	}
+	return(TRUE)
+	
+}
+
+if( FALSE ){
+	
+	library(NMF, lib='build/lib')
+	utest('pkg/inst/tests/runit.algorithms.r', fun='test.brunet', framework='RUnit')
+	
 }
 
 #' Extra Check Functions for RUnit
@@ -75,8 +211,8 @@ checkPlot <- function(...){
 #' 
 checkWarning <- function(expr, expected=NULL, msg=NULL){
 	
-	
 	# get stuff from RUnit
+	uf <- requireRUnit()
 	.existsTestLogger <- RUnit:::.existsTestLogger	
 	.testLogger <- if( .existsTestLogger() ) .GlobalEnv$.testLogger
 	
@@ -92,29 +228,34 @@ checkWarning <- function(expr, expected=NULL, msg=NULL){
 		.testLogger$incrementCheckNum()
 	}
 	
-	ok <- FALSE 
 	pf <- parent.frame()
+	warns <- NULL
 	withCallingHandlers(eval(expr, envir = pf)
 		, warning = function(w){
-			
-			ok <<- TRUE
-			if( is.null(expected) ) return(TRUE)
-			if( grepl(expected, w$message) ) return(TRUE)
-			# throw error
-			if (.existsTestLogger()) {
-				.testLogger$setFailure()
-			}
-			stop("Warning does not match expected pattern:\n"
-					, "- Message: '", w$message,"'\n  - Pattern: '", expected,"'\n"
-					, msg)
+			warns <<- c(warns, w$message)
 		}
 	)
-	if( !ok ){
+	
+	# check that some warning was thrown
+	if( length(warns) == 0L ){
 		if (.existsTestLogger()) {
 			.testLogger$setFailure()
 		}
 		stop("Warning not generated as expected\n", msg)
 	}
+	
+	# check warnings
+	if( is.null(expected) ) return(TRUE)
+	if( any(grepl(expected, warns)) ) return(TRUE)
+	
+	# throw error
+	if (.existsTestLogger()) {
+		.testLogger$setFailure()
+	}
+	stop("Warning does not match expected pattern:\n"
+		, "  - Warning(s): ", if(length(warns)>1)"\n    * ",  str_out(warns, sep="\n    * ") ,"\n"
+		, "  - Pattern: '", expected,"'\n"
+		, msg)
 	
 	TRUE
 }
