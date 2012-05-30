@@ -53,30 +53,48 @@ requireRUnit <- local({
 #' 
 #' @param logger global logger object (i.e. object \code{.testLogger} in the 
 #' global environment \code{.GlobalEnv})
-#' @param
+#' @param value object to append to the logger.
+#' If \code{value} is a function it is added to the list and is accessible via 
+#' \code{.testLogger$name}.
+#' If \code{value} is a variable it is added to the local environment and is 
+#' therefore accessible in all logging functions.
+#' @param logger an optional logger object
+#' 
+#' @return the modified logger object. Note that the global object is also 
+#' modified if \code{logger} is \code{NULL}.
 #' 
 addToLogger <- function(name, value, logger=NULL){
 	
-	if( RUnit:::.existsTestLogger() ){
-		
-		if( is.null(logger) ) 
-			logger <- get('.testLogger', logger, envir=.GlobalEnv)
-		
-		if( is.function(value) ){# add function to logger
-			if( is.null(logger[[name]]) ){
-				environment(value) <- environment(logger$incrementCheckNum) 
-				logger[[name]] <- value
-				# update global logger
-				assign('.testLogger', logger, envir=.GlobalEnv)
-			}
-		}else{ # assign object in logger's local environment if not already there
-			e <- environment(logger$incrementCheckNum)
-			if( !exists(name, envir=e) )
-				assign(name, value, envir=e)
+	
+	logobj <- 
+		if( !is.null(logger) ) logger
+		else{
+			if( !RUnit:::.existsTestLogger() )
+				stop("No global logger exists")
+			
+			get('.testLogger', envir=.GlobalEnv)
 		}
-		
-		logger		
+	
+	# get local logger environment
+	logenv <- environment(logobj$incrementCheckNum)
+
+	if( is.function(value) ){# add function to logger
+		if( is.null(logger[[name]]) ){
+			environment(value) <- logenv 
+			logobj[[name]] <- value
+			
+			# update global logger if necessary
+			if( is.null(logger) ){
+				assign('.testLogger', logobj, envir=.GlobalEnv)
+			}
+		}
+	}else{ # assign object in logger's local environment if not already there
+		if( !exists(name, envir=logenv) )
+			assign(name, value, envir=logenv)
 	}
+	
+	# return modified logger object
+	logobj
 }
 
 #' Plot in Unit Tests
