@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Package Development Utilities. pkgmaker </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">pkgmaker </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Package Development Utilities</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='devutils.html'>packageEnv</a></span><span class="keyword">(</span><span class="symbol">pkg</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='devutils.html'>packageName</a></span><span class="keyword">(</span><span class="argument">.Global</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='devutils.html'>packagePath</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">PACKAGE</span> <span class="argument">=</span> NULL<span class="keyword">)</span>
+
+<span class="functioncall"><a href='devutils.html'>isPackageInstalled</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">lib.loc</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>pkg</dt>
+            <dd>package name. If missing the environment of
+  the caller package is returned.</dd>
+            <dt>.Global</dt>
+            <dd>a logical that indicates if calls from the
+  global environment should throw an error (<code>FALSE</code>:
+  default) or the string <code>'R_GlobalEnv'</code>.</dd>
+            <dt>PACKAGE</dt>
+            <dd>optional name of an installed package</dd>
+            <dt>...</dt>
+            <dd>arguments passed to <code><a href='NA'>file.path</a></code>.</dd>
+            <dt>lib.loc</dt>
+            <dd>path to a library of R packages where to
+  search the package</dd>
+          </dl>
+          
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>an environment</p>
+        
+            <p>a character string</p>
+        
+            <p>a character string</p>
+        
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p><code>packageEnv</code> is a slight modification from
+  <code><a href='NA'>topenv</a></code>, which returns the caller's top
+  environment, which in the case of development packages is
+  the environment into which the source files are loaded by
+  <code><a href='http://www.inside-r.org/r-doc/devtools/load_all'>load_all</a></code>.</p>
+        
+            <p><code>packageName</code> returns the current package's name.</p>
+        
+            <p><code>packagePath</code> returns the current package's root
+  directory, which is its installation/loading directory in
+  the case of an installed package, or its source directory
+  served by devtools.</p>
+        
+            <p>Tests if a package is installed</p>
+        
+          </div>
+      
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>isPackageInstalled</li><li>packageEnv</li><li>packageName</li><li>packagePath</li>
+          </ul>
+          <ul>
+            
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

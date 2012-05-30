@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Running Unit Tests. pkgmaker </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">pkgmaker </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Running Unit Tests</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">run</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">filter</span> <span class="argument">=</span> <span class="string">"^runit.+\\.[rR]$"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="string">"^test\\."</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">testdir</span> <span class="argument">=</span> <span class="string">"tests"</span><span class="keyword">,</span> <span class="argument">framework</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"RUnit"</span><span class="keyword">,</span>
+  <span class="string">"testthat"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>Sys.getenv</a></span><span class="keyword">(</span><span class="string">"RCMDCHECK"</span><span class="keyword">)</span> <span class="keyword">!=</span> <span class="string">"FALSE"</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>x</dt>
+            <dd>object to which a unit test is attached</dd>
+            <dt>...</dt>
+            <dd>extra arguments to allow extensions and are
+  passed to the unit framework running funcitons.</dd>
+            <dt>run</dt>
+            <dd>a lgoical that indicates if the unit test
+  should be run</dd>
+            <dt>filter</dt>
+            <dd>pattern to match files that contain the
+  definition of the unit tests functions to run.</dd>
+            <dt>fun</dt>
+            <dd>patter to match the test functions to run.</dd>
+            <dt>testdir</dt>
+            <dd>directory where to look for the test
+  files</dd>
+            <dt>framework</dt>
+            <dd>unit test framework</dd>
+            <dt>quiet</dt>
+            <dd>a logical that indicates if the tests should
+  be run silently</dd>
+          </dl>
+          
+          <div class="Running Unit Tests">
+            <h2>Running Unit Tests</h2>
+            
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>Run unit tests in a variety of settings. This is still
+  <strong>very</strong> experimental.</p>
+        
+          </div>
+
+          <div class="Methods">
+            <h2>Methods</h2>
+            
+            <p><span class='describe'></p>
+        
+            <p>utest<code>signature(x = "function")</code>: Run the
+  unit test assoicated to a function.</p>
+        
+            <p>utest<code>signature(x = "character")</code>: Run a
+  package test suite</p>
+        
+            <p>utest<code>signature(x = "RUnitTestSuite")</code>: Runs
+  a RUnit test suite</p>
+        
+            <p></span></p>
+        
+          </div>
+      
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>utest</li><li>utest,character-method</li><li>utest,function-method</li><li>utest-methods</li><li>utest,RUnitTestSuite-method</li>
+          </ul>
+          <ul>
+            <li>methods</li>
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

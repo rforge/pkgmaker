@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Namespace Development Functions. pkgmaker </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">pkgmaker </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Namespace Development Functions</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='namespace.html'>getLoadingNamespace</a></span><span class="keyword">(</span><span class="argument">env</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">info</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='namespace.html'>isLoadingNamespace</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='namespace.html'>isNamespaceLoaded</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='namespace.html'>addNamespaceExport</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>env</dt>
+            <dd>logical that indicates that the namespace's
+  environment (i.e. the namespace itself) should be
+  returned.</dd>
+            <dt>info</dt>
+            <dd>logical that indicates that the complete
+  information list should be returned</dd>
+            <dt>name</dt>
+            <dd>the name of a namespace whose loading state
+  is tested. If missing <code>isLoadingNamespace</code> test if
+  any namespace is being loaded.</dd>
+            <dt>x</dt>
+            <dd>character vector containing the names of R
+  objects to export in the loading namespace.</dd>
+          </dl>
+          
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>the name of the loading namespace if <code>env</code> and
+  <code>info</code> are <code>FALSE</code>, an environment if
+  <code>env=TRUE</code>, a list with elements <code>pkgname</code> and
+  <code>libname</code> if <code>info=TRUE</code>.</p>
+        
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p><code>getLoadingNamespace</code> returns information about the
+  loading namespace. It is a wrapper to
+  <code><a href='NA'>loadingNamespaceInfo</a></code>, that does not throw
+  an error.</p>
+        
+            <p>Tests if a namespace is being loaded.</p>
+        
+            <p>Tests if a given namespace is loaded, without loading it,
+  contrary to <code><a href='NA'>isNamespace</a></code>.</p>
+        
+            <p>Dynamically adds exported objects into the loading
+  namespace.</p>
+        
+          </div>
+      
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>addNamespaceExport</li><li>getLoadingNamespace</li><li>isLoadingNamespace</li><li>isNamespaceLoaded</li>
+          </ul>
+          <ul>
+            
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

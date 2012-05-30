@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Prints formatted list of values given as a character vector for use in show
+methods or error/warning messages.. pkgmaker </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">pkgmaker </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Prints formatted list of values given as a character vector for use in show
+methods or error/warning messages.</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='str_out.html'>str_out</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">max</span> <span class="argument">=</span> <span class="number">3L</span><span class="keyword">,</span> <span class="argument">quote</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>is.character</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">use.names</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">", "</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='str_out.html'>str_desc</a></span><span class="keyword">(</span><span class="symbol">object</span><span class="keyword">,</span> <span class="argument">exdent</span> <span class="argument">=</span> <span class="number">0L</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>x</dt>
+            <dd>character vector</dd>
+            <dt>max</dt>
+            <dd>maximum number of values to appear in the
+  list. If <code>x</code> has more elements than <code>max</code>, a
+  <code>"..."</code> suffix is appended.</dd>
+            <dt>quote</dt>
+            <dd>a logical indicating whether the values
+  should be quoted with single quotes (defaults) or not.</dd>
+            <dt>use.names</dt>
+            <dd>a logical indicating whether names
+  should be added to the list as <code>NAME=VAL, ...</code> or
+  not (default).</dd>
+            <dt>sep</dt>
+            <dd>separator character</dd>
+            <dt>object</dt>
+            <dd>an R object</dd>
+            <dt>exdent</dt>
+            <dd>extra indentation passed to str_wrap, and
+  used if the output should spread over more than one
+  lines.</dd>
+          </dl>
+          
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>a single character string</p>
+        
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>Prints formatted list of values given as a character
+  vector for use in show methods or error/warning messages.</p>
+        
+            <p>Builds formatted string from a list of complex values.</p>
+        
+          </div>
+      
+          <h2 id="examples">Examples</h2>
+          <pre class="examples"><div class='input'><span class="symbol">x</span> <span class="assignement">&lt;-</span> <span class="symbol">letters</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">]</span>
+<span class="functioncall"><a href='str_out.html'>str_out</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span></div>
+<div class='output'>[1] "'a', 'b', 'c', ..."
+</div>
+<div class='input'><span class="functioncall"><a href='str_out.html'>str_out</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="number">8</span><span class="keyword">)</span></div>
+<div class='output'>[1] "'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', ..."
+</div>
+<div class='input'><span class="functioncall"><a href='str_out.html'>str_out</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="number">Inf</span><span class="keyword">)</span></div>
+<div class='output'>[1] "'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'"
+</div>
+<div class='input'><span class="functioncall"><a href='str_out.html'>str_out</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">quote</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">)</span></div>
+<div class='output'>[1] "a, b, c, ..."
+</div></pre>
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>str_desc</li><li>str_out</li>
+          </ul>
+          <ul>
+            
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>
