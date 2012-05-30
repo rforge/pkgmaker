@@ -51,14 +51,15 @@ requireRUnit <- local({
 #' 
 #' Adds a function or a local variable to RUnit global logger.
 #' 
-#' @param logger global logger object (i.e. object \code{.testLogger} in the 
-#' global environment \code{.GlobalEnv})
+#' @param name name of the function or variable to add 
 #' @param value object to append to the logger.
 #' If \code{value} is a function it is added to the list and is accessible via 
 #' \code{.testLogger$name}.
 #' If \code{value} is a variable it is added to the local environment and is 
 #' therefore accessible in all logging functions.
-#' @param logger an optional logger object
+#' @param logger an optional RUnit logger object. 
+#' If missing or \code{NULL}, the object \code{.testLogger} is searched in  
+#' \code{.GlobalEnv} -- and an error is thrown if it does not exist. 
 #' 
 #' @return the modified logger object. Note that the global object is also 
 #' modified if \code{logger} is \code{NULL}.
@@ -130,7 +131,9 @@ checkPlot <- function(expr, msg=NULL, width=1000, height=NULL){
 			# add .plot list to logger environment
 			addToLogger('.plots', NULL)
 			
+			
 			# add function setPlot to logger
+			.plots <- NULL # to trick R CMD check 
 			addToLogger('setPlot', 
 				function(name, msg=''){
 					##@bdescr
@@ -147,6 +150,10 @@ checkPlot <- function(expr, msg=NULL, width=1000, height=NULL){
 			)
 			
 			# add function setPlot to logger
+			.getTestData <- 
+				.currentTestSuiteName <- 
+				.currentSourceFileName <- 
+				.getCheckNum <- NULL # to trick R CMD check
 			addToLogger('getPlotfile', 
 				function(name, msg=''){
 					
@@ -174,7 +181,7 @@ checkPlot <- function(expr, msg=NULL, width=1000, height=NULL){
 	if( is.null(msg) ) msg <- plotfile
 
 	#plot in the PNG file
-	png(file=plotfile, width=width)
+	png(filename=plotfile, width=width)
 	
 	# evaluate the expression that generates the plot
 	res <- try( eval(expr, envir = parent.frame()) )

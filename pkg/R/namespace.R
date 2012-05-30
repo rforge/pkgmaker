@@ -50,7 +50,7 @@ isLoadingNamespace <- function(name){
 #' @rdname namespace
 #' @export
 isNamespaceLoaded <- function(name){
-	!is.null(.Internal(getRegisteredNamespace(as.name(name))))
+	name %in% loadedNamespaces()
 }
 
 

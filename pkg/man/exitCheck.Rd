@@ -16,27 +16,27 @@
   only if all normal exit are wrapped into a call to it.
 }
 \examples{
-define some function
+# define some function
 f <- function(err){
 
- initialise an error checker
+ # initialise an error checker
 	success <- exitCheck()
 
- do something on exit that depends on the error status
+ # do something on exit that depends on the error status
 	on.exit({
 		if(success()) cat("no error: do nothing\\n")
 		else cat("error: cleqnup mess\\n")
 	})
 
- throw an error here
+ # throw an error here
 	if( err ) stop('There is an error')
 
 	success(1+1)
 }
 
-without error
+# without error
 f(FALSE)
-with error
+# with error
 try( f(TRUE) )
 }
 

@@ -5,9 +5,7 @@
   addToLogger(name, value, logger = NULL)
 }
 \arguments{
-  \item{logger}{global logger object (i.e. object
-  \code{.testLogger} in the global environment
-  \code{.GlobalEnv})}
+  \item{name}{name of the function or variable to add}
 
   \item{value}{object to append to the logger. If
   \code{value} is a function it is added to the list and is
@@ -15,7 +13,10 @@
   is a variable it is added to the local environment and is
   therefore accessible in all logging functions.}
 
-  \item{logger}{an optional logger object}
+  \item{logger}{an optional RUnit logger object. If missing
+  or \code{NULL}, the object \code{.testLogger} is searched
+  in \code{.GlobalEnv} -- and an error is thrown if it does
+  not exist.}
 }
 \value{
   the modified logger object. Note that the global object

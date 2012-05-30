@@ -435,19 +435,19 @@ oneoffVariable <- function(default=NULL){
 ##  # with error
 ##  try( f(TRUE) )
 ##  
-errorCheck <- function(){
-	
-	# initialise with unique error message
-	.err <- tryCatch(stop('ERROR_CHECK:', digest(tempfile())), error=function(e) conditionMessage(e))
-	tb_digest <- function() digest(capture.output(traceback(max.lines=NULL)))
-	.traceback <- tb_digest()
-	
-	function(){
-		# error message is different
-		# tb_digest() != .traceback
-		length(grep(.err, msg, fixed=TRUE, invert=TRUE)) == 1L
-	}
-}
+#errorCheck <- function(){
+#	
+#	# initialise with unique error message
+#	.err <- tryCatch(stop('ERROR_CHECK:', digest(tempfile())), error=function(e) conditionMessage(e))
+#	tb_digest <- function() digest(capture.output(traceback(max.lines=NULL)))
+#	.traceback <- tb_digest()
+#	
+#	function(){
+#		# error message is different
+#		# tb_digest() != .traceback
+#		length(grep(.err, msg, fixed=TRUE, invert=TRUE)) == 1L
+#	}
+#}
 
 
 # Static Variable
@@ -478,27 +478,27 @@ sVariable <- function(default=NULL){
 #' 
 #' @examples
 #' 
-#' define some function
+#' # define some function
 #' f <- function(err){
 #' 
-#'  initialise an error checker
+#'  # initialise an error checker
 #' 	success <- exitCheck()
 #' 
-#'  do something on exit that depends on the error status
+#'  # do something on exit that depends on the error status
 #' 	on.exit({
 #' 		if(success()) cat("no error: do nothing\n") 
 #' 		else cat("error: cleqnup mess\n") 
 #' 	})
 #' 	
-#'  throw an error here
+#'  # throw an error here
 #' 	if( err ) stop('There is an error')
 #'  
 #' 	success(1+1)
 #' }
 #' 
-#' without error
+#' # without error
 #' f(FALSE)
-#' with error
+#' # with error
 #' try( f(TRUE) )
 #' 
 exitCheck <- function(){
