@@ -107,11 +107,11 @@ packageEnv <- function(pkg){
 	while (!identical(envir, emptyenv())) {
 		nm <- attributes(envir)[["names", exact = TRUE]]
 		nm2 <- environmentName(envir)
-		if ((is.character(nm) && length(grep("^package:", nm))) ||
-				length(grep("^package:", nm2)) ||
-				identical(envir, matchThisEnv) || identical(envir, 
-						.GlobalEnv) || identical(envir, baseenv()) || .Internal(isNamespaceEnv(envir)) || 
-				exists(".packageName", envir = envir, inherits = FALSE)){
+		if ((is.character(nm) && length(grep("^package:", nm)))
+				|| length(grep("^package:", nm2))
+				|| identical(envir, matchThisEnv) || identical(envir, .GlobalEnv) 
+				|| identical(envir, baseenv()) || isNamespace(envir) 
+				|| exists(".packageName", envir = envir, inherits = FALSE)){
 		
 			# go through pkgmaker frames
 			if( identical(envir, pkgmakerEnv) ){
