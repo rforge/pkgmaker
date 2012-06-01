@@ -150,7 +150,7 @@ write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose 
 #' @return a character string containing the text formated BibTex entries 
 #' @keywords internal
 packageReference <- function(key, short=FALSE){
-	bibs <- bibtex::read.bib(file=packagePath('REFERENCES.bib'))
+	bibs <- bibtex::read.bib(file=packageReferenceFile())
 	k <- sapply(bibs, function(x) x$key)
 	sel <- k %in% key
 	if( sum(sel) == 0L ) return("")
@@ -206,4 +206,32 @@ cite <- function(key, bibentry, ...){
 	# only include \cite{key} if running Sweave
 	if( inSweave() ) paste("\\cite{", k, "}", sep='')
 	else paste(format(bibs[k %in% key], ...), collapse="\n\n")
+}
+
+
+#' Bibtex Utilities
+#' 
+#' \code{packageReferenceFile} returns the path to a package REFERENCES.bib file.
+#' 
+#' @rdname bibtex
+packageReferenceFile <- function(PACKAGE=NULL) packagePath('REFERENCES.bib', PACKAGE=PACKAGE)
+
+#' \code{latex_bibliography} prints or return a LaTeX command that includes a 
+#' package bibliography file if it exists.
+#' 
+#' @param PACKAGE package name
+#' @param file connection where to print
+#' 
+#' @export
+#' @rdname bibtex
+#' 
+latex_bibliography <- function(PACKAGE, file=''){
+	
+	# get REFERENCES.bib file
+	reffile <- packageReferenceFile(PACKAGE=PACKAGE)
+	if( !is.file(reffile) ) return()
+	
+	cmd <- paste("\\bibliography{", gsub("\\.bib$", "", reffile), "}\n", sep='')
+	if( !is.null(file) ) cat(cmd, file=file)
+	else cmd
 }

@@ -41,6 +41,7 @@ inSweave <- function(){
 #' @param out output file
 #' @param PACKAGE package name where to look the source vignette
 #' 
+#' @export
 makeFakeVignette <- function(src, out, PACKAGE=NULL){
 	
 	# interpret template within the package directory
