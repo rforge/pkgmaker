@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Alternative S4 Constructor. pkgmaker 0.5.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand" href="index.html">pkgmaker 0.5.1</a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Alternative S4 Constructor</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="symbol">class</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>class</dt>
+            <dd>Class name to instanciate</dd>
+            <dt>...</dt>
+            <dd>extra arguments from which slot values are
+  extracted by exact matching of names.</dd>
+          </dl>
+          
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>An alternative version of <code><a href='NA'>new</a></code> to create
+  objects based on a list of values.</p>
+        
+          </div>
+      
+          <h2 id="examples">Examples</h2>
+          <pre class="examples"><div class='input'><span class="functioncall"><a href='NA'>setClass</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">contain</span><span class="argument">=</span><span class="string">'character'</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>representation</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="string">'numeric'</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'character'</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="comment"># identical behaviour with standard calls</span>
+<span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'>
+<span class="comment"># but if passing that are names not slots</span>
+<span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">b</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">b</span><span class="argument">=</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">b</span><span class="argument">=</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'>
+<span class="comment"># standard `new` would coerce first unnamed argument into parent of 'A' (i.e. 'character')</span>
+<span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>An object of class "A"
+[1] "1"
+Slot "x":
+numeric(0)
+
+Slot "y":
+character(0)
+
+</div>
+<div class='input'><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'other'</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>An object of class "A"
+[1] "1"     "other"
+Slot "x":
+numeric(0)
+
+Slot "y":
+character(0)
+
+</div>
+<div class='input'><span class="comment"># `new2` rather use it to initialise the slots it can find in the list</span>
+<span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='NA'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'other'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'other'</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div></pre>
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>new2</li>
+          </ul>
+          <ul>
+            
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

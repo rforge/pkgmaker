@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Package Registry. pkgmaker 0.5.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand" href="index.html">pkgmaker 0.5.1</a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Package Registry</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='registry.html'>packageRegistry</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="argument">error</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='registry.html'>setPackageRegistry</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">,</span> <span class="symbol">regobj</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">overwrite</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>name</dt>
+            <dd>Name of a sub-registry</dd>
+            <dt>error</dt>
+            <dd>a logical that indicate whether an error is
+  thrown if the sub-registry is not found (default) or just
+  <code>NULL</code>.</dd>
+            <dt>regobj</dt>
+            <dd>a <code><a href='http://www.inside-r.org/r-doc/registry/regobj'>registry</a></code>
+  object or a single character string that indicates the
+  class of the objects that are stored in the
+  sub-registry.</dd>
+            <dt>...</dt>
+            <dd>named values used to set extra information
+  about the new registry, that is stored in dedicated
+  fields. Currently only the field
+  <code>description=character()</code> is defined.</dd>
+            <dt>overwrite</dt>
+            <dd>a logical that indicate if an existing
+  registry with the same should be overwritten if it
+  exists.</dd>
+          </dl>
+          
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>a <code><a href='http://www.inside-r.org/r-doc/registry/regobj'>registry</a></code> object or
+  <code>NULL</code> (see argument <code>error</code>).</p>
+        
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>Package Registry</p>
+        
+            <p>Adds a registry to the package</p>
+        
+          </div>
+      
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>packageRegistry</li><li>setPackageRegistry</li>
+          </ul>
+          <ul>
+            
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>
