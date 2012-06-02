@@ -213,25 +213,8 @@ cite <- function(key, bibentry, ...){
 #' 
 #' \code{packageReferenceFile} returns the path to a package REFERENCES.bib file.
 #' 
+#' @param PACKAGE package name
+#' 
 #' @rdname bibtex
 packageReferenceFile <- function(PACKAGE=NULL) packagePath('REFERENCES.bib', PACKAGE=PACKAGE)
 
-#' \code{latex_bibliography} prints or return a LaTeX command that includes a 
-#' package bibliography file if it exists.
-#' 
-#' @param PACKAGE package name
-#' @param file connection where to print
-#' 
-#' @export
-#' @rdname bibtex
-#' 
-latex_bibliography <- function(PACKAGE, file=''){
-	
-	# get REFERENCES.bib file
-	reffile <- packageReferenceFile(PACKAGE=PACKAGE)
-	if( !is.file(reffile) ) return()
-	
-	cmd <- paste("\\bibliography{", gsub("\\.bib$", "", reffile), "}\n", sep='')
-	if( !is.null(file) ) cat(cmd, file=file)
-	else cmd
-}

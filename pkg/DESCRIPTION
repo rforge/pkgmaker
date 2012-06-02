@@ -25,7 +25,6 @@ Depends:
     codetools
 Imports:
     methods,
-    stringr,
     xtable
 Suggests:
     registry,

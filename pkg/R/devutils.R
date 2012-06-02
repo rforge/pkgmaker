@@ -179,7 +179,7 @@ packagePath <- function(..., PACKAGE=NULL){
 	# try to find the path from the package's environment (namespace)
 	path <- 
 		if( !is.null(PACKAGE) )	system.file(package=PACKAGE)
-		else if( exists('.packageName', packageEnv()) && .packageName != 'datasets' ){
+		else if( (pname <- packageName()) != 'datasets' ){
 			# get the path from installation
 			system.file(package=.packageName)		
 		}
