@@ -4,6 +4,8 @@
 # Creation: 25 Apr 2012
 ###############################################################################
 
+rnw_message <- function(...) message("# ", ...)
+
 #' Identifying Sweave Run
 #' 
 #' Tells if the current code is being executed within a Sweave document.
@@ -167,3 +169,175 @@ latex_bibliography <- function(PACKAGE, file=''){
 	if( !is.null(file) ) cat(cmd, file=file)
 	else cmd
 }
+
+
+is.rnw <- function(x){
+	is(x, 'rnw')
+}
+
+#' Utilities for Vignettes
+#' 
+#' \code{rnw} provides a unified interface to run vignettes that detects
+#' the type of vignette (Sweave or \code{\link[knitr]{knitr}}), and which Sweave driver 
+#' to use (either automatically or from an embedded command \code{\\VignetteDriver} 
+#' command).
+#' 
+#' @param x vignette source file specification as a path or a \code{rnw} object.
+#' @param file output file
+#' @param ... extra arguments passed to \code{as.rnw} that can be used to force 
+#' certain building parameters.
+#'  
+#' @rdname vignette
+#' @export
+rnw <- function(x, file=NULL, ...){
+	x <- as.rnw(x, ...)	
+	driver <- x$driver
+	
+	x$compiler(x, file, driver=driver, ...)
+	
+}
+
+checkFile <- function(x, msg="file '%s' does not exist."){
+	if( !is.file(x) ) stop(sprintf(msg, x))
+	TRUE
+}
+
+checkRnwFile <- function(x){
+	if( is.rnw(x) ) x <- x$file
+	checkFile(x, msg="Vignette file '%s' does not exist.")
+}
+
+#' \code{as.rnw} creates a S3 \code{rnw} object that contains information
+#' about a vignette, e.g., source filename, driver, fixed included files, etc..  
+#' 
+#' @rdname vignette
+#' @export
+as.rnw <- function(x, ...){
+	
+	if( is.rnw(x) ) return(x)
+	
+	checkRnwFile(x)
+	# initialise 'rnw' object
+	obj <- list()
+	class(obj) <- 'rnw'
+	
+	# store source full path
+	obj$file <- normalizePath(x)
+	obj$line <- NA
+	# detect compiler
+	obj$compiler <- rnwCompiler(obj)
+	# detect driver
+	obj$driver <- rnwDriver(obj)
+	# detect fixed included images
+	obj$includes <- rnwIncludes(obj)
+	# detect children vignettes
+	obj$children <- rnwChildren(obj)
+	
+	# override with passed extra arguments
+	if( nargs() > 1L ){
+		dots <- list(...)
+		obj[names(dots)] <- dots
+	}
+	
+	# return object
+	obj
+} 
+
+
+#' \code{rnwDriver} tries to detect the vignette compiler to use on a vignette
+#' source file, e.g., \code{\link{Sweave}} or \code{\link[knitr]{knitr}}.
+#' 
+#' @rdname vignette
+#' @export
+rnwCompiler <- function(x){
+	
+	x <- as.rnw(x)
+	checkRnwFile(x)
+	# read all lines in
+	l <- readLines(x$file)
+	
+	# identify driver
+	dr <- str_match(l, "^\\s*%%\\s*\\\\VignetteCompiler\\{([^}]*)\\}")
+	w <- which(!is.na(dr[,1L]))
+	if( length(w) > 0L ){
+		s <- dr[w[1L],2L]
+		rnw_message("Detected Vignette compiler: '", str_trim(s), "'")
+		s
+	}
+	
+}  
+
+
+#' \code{rnwDriver} tries to detect Sweave driver to use on a vignette source 
+#' file, e.g., \code{SweaveCache}, \code{highlight}, etc..
+#' 
+#' @rdname vignette
+#' @export
+rnwDriver <- function(x){
+	
+	x <- as.rnw(x)
+	checkRnwFile(x)
+	# read all lines in
+	l <- readLines(x$file)
+	
+	# identify driver
+	dr <- str_match(l, "^\\s*%%\\s*\\\\VignetteDriver\\{([^}]*)\\}")
+	w <- which(!is.na(dr[,1L]))
+	if( length(w) > 0L ){
+		s <- dr[w[1L],2L]
+		rnw_message("Detected Vignette driver: '", str_trim(s), "'")
+		# eval text
+		eval(parse(text=s))
+	}
+	
+}  
+
+#' \code{rnwIncludes} detects fixed includes, e.g., image or pdf files, that are 
+#' required to build the final document.  
+#' 
+#' @rdname vignette
+#' @export
+rnwIncludes <- function(x){
+	
+	x <- as.rnw(x)
+	checkRnwFile(x)
+	# read all lines in
+	l <- readLines(x$file)
+	
+	# identify driver
+	dr <- suppressWarnings(str_match(l, "^\\s*\\\\((include)|(includegraphics)|(input))\\{([^}]*)\\}"))
+	w <- which(!is.na(dr[,1L]))
+	rnw_message("Detected includes: ", appendLF=FALSE)
+	if( length(w) > 0L ){
+		inc <- dr[w,6L]
+		message(str_out(inc))
+		inc
+	}else
+		message("NONE")
+	
+}
+
+#' \code{rnwChildren} detects included vignette documents and return them as a 
+#' list of vignette objects.  
+#'  
+#' @rdname vignette
+#' @export
+rnwChildren <- function(x){
+	
+	x <- as.rnw(x)
+	checkRnwFile(x)
+	# read all lines in
+	l <- readLines(x$file)
+	
+	# identify driver
+	dr <- str_match(l, "^\\s*\\\\SweaveInput\\{([^}]*)\\}")
+	w <- which(!is.na(dr[,1L]))
+	if( length(w) > 0L ){
+		inc <- dr[w,2L]
+		rnw_message("Detected children: ", str_out(inc, Inf))
+		owd <- setwd(dirname(x$file))
+		on.exit( setwd(owd) )
+		mapply(as.rnw, inc, line=w, SIMPLIFY=FALSE)
+	}
+	
+}  

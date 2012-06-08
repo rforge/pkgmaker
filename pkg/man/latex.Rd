@@ -48,6 +48,7 @@
 \examples{
 latex_preamble()
 latex_preamble(R=TRUE, only=TRUE)
-latex_preamble(R=TRUE, only=TRUE)
+latex_preamble(R=FALSE, CRAN=FALSE, GEO=FALSE)
+latex_preamble(GEO=TRUE, only=TRUE)
 }
 

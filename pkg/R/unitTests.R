@@ -639,7 +639,7 @@ setMethod('utest', 'character',
 					}else{
 						# try to find a corresponding development package
 						if( require.quiet(devtools) 
-								&& is.package(pkg <- as.package2(x, error=FALSE)) ){
+								&& is.package(pkg <- as.package(x, quiet=TRUE)) ){
 							load_all(pkg, TRUE)
 							file.path(pkg$path, 'inst', testdir)
 						}else{ # assume x is a path  

@@ -98,35 +98,6 @@ Rversion <- function(){
 	paste(R.version$major, R.version$minor, sep='')
 }
 
-as.package2 <- function(x, error=TRUE){
-	
-	res <- tryCatch(devtools::as.package(x), error= function(e) e)
-	if( !is.package(res) ){
-		#str(res)
-		if( error ) stop(res$message)
-		return()
-	}
-	res
-}
-
-# taken from devtools:::install_deps but add field Suggests
-install_alldeps <- function (pkg = NULL) 
-{
-	pkg <- as.package(pkg)
-	parse_deps <- devtools:::parse_deps
-	deps <- c(parse_deps(pkg$depends), parse_deps(pkg$imports), 
-			parse_deps(pkg$linkingto), parse_deps(pkg$suggests))
-	not.installed <- function(x) length(find.package(x, quiet = TRUE)) == 
-				0
-	deps <- Filter(not.installed, deps)
-	if (length(deps) == 0) 
-		return(invisible())
-	message("Installing dependencies for ", pkg$package, ":\n", 
-			paste(deps, collapse = ", "))
-	install.packages(deps)
-	invisible(deps)
-}
-
 #' Prints formatted list of values given as a character vector for use in show 
 #' methods or error/warning messages.
 #' 
