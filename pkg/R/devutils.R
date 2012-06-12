@@ -280,7 +280,7 @@ packageDependencies <- function(x, recursive=FALSE){
 }
 
 # taken from devtools:::install_deps but add field Suggests
-install_alldeps <- function (pkg = NULL) 
+install_alldeps <- function (pkg = NULL, ...) 
 {
 	pkg <- as.package(pkg)
 	#parse_deps <- devtools:::parse_deps
@@ -293,7 +293,7 @@ install_alldeps <- function (pkg = NULL)
 		return(invisible())
 	message("Installing dependencies for ", pkg$package, ":\n", 
 			paste(deps, collapse = ", "))
-	install.packages(deps)
+	install.packages(deps, ...)
 	invisible(deps)
 }
 
