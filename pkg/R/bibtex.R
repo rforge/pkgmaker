@@ -175,39 +175,77 @@ packageReference <- function(key, short=FALSE){
 #' directory (i.e. inst/ in development mode).
 #'  
 #' @param key character vector of BibTex keys
-#' @return a character string containing the text formated BibTex entries 
-#' @keywords internal
-cite <- function(key, bibentry, ...){
+#' @param ... extra arguments passed to \code{format.bibentry}.
+#' @param REFERENCES package or bibentry specification
+#' @return a character string containing the text formated BibTex entries
+#'  
+#' @export
+#' 
+cite <- local({
 	
-	# detect package name if necessary
-	if( missing(bibentry) ){
-		pkg <- Sys.getenv('R_PACKAGE_NAME')
-		if( is.null(pkg) )
-			pkg <- Sys.getenv('R_INSTALL_PKG')
-		if( is.null(pkg) )
-			stop("Could not identify package")
-		bibentry <- paste('package:', pkg, sep='')
+	.init <- list(REFERENCES=NULL, KEYS=NULL) 
+	.cache <- .init
+	function(key, ..., REFERENCES=NULL){
+		 
+		# detect package name if necessary
+		if( is.null(REFERENCES) ){
+			# reset if explicitly passed NULL
+			if( hasArg(REFERENCES) ) .cache <<- .init
+			
+			if( is.null(.cache$REFERENCES) ){
+				pkg <- Sys.getenv('R_PACKAGE_NAME')
+				if( !nchar(pkg) )
+					pkg <- Sys.getenv('R_INSTALL_PKG')
+				if( !nchar(pkg) )
+					pkg <- Sys.getenv('MAKE_R_PACKAGE')
+				if( !nchar(pkg) )
+					stop("Could not identify package")
+				# load REFERENCES from detected package
+				.cache$REFERENCES <<- bibtex::read.bib(package=pkg)
+			}
+			REFERENCES <- .cache$REFERENCES
+		}
+		
+		# load relevant Bibtex file
+		REFERENCES <- if( is(REFERENCES, 'bibentry') ) REFERENCES
+				else if( is.character(REFERENCES) ){
+					p <- str_match(REFERENCES, "^package:(.*)")[,2]
+					if( is.na(p) ) bibtex::read.bib(file=REFERENCES)
+					else bibtex::read.bib(package=p)
+				}else
+					stop("Invalid argument `REFERENCES`: expected bibentry object or character string [", class(REFERENCES), "]")
+		
+		# update the cache if no keys are provided
+		if( missing(key) ){
+			.cache$REFERENCES <<- REFERENCES
+			if( hasArg(REFERENCES) ) return(invisible(.cache$KEYS))
+			else return(.cache$KEYS)
+		}
+		
+		# check key type
+		if( !is.character(key) )
+			stop("Invalid argument `key`: must be a character vector.")
+		
+		# extract the Bibtex keys
+		refkey <- sapply(REFERENCES, function(x) x$key)
+		pkgs <- str_match(key, "^package:(.*)")[,2]
+		nokey <- !key %in% refkey
+		i_pkgs <- which(nokey && !is.na(pkgs))
+		if( length(i_pkgs) > 0L ){
+			# only include \cite{key} if running Sweave
+			.cache$KEYS <<- unique(c(.cache$KEYS, key[i_pkgs]))
+			key[i_pkgs] <- pkgs[i_pkgs] 
+		}
+		paste("\\cite{", key, "}", sep='')
+#		if( inSweave() ) paste("\\cite{", k, "}", sep='')
+#		else paste(format(REFERENCES[k %in% key], ...), collapse="\n\n")
 	}
-	
-	# load relevant Bibtex file
-	bibs <- if( is(bibentry, 'bibentry') ) bibentry
-			else if( is.character(bibentry) ){
-				p <- str_match(bibentry, "^package:(.*)")[,2]
-				if( is.na(p) ) bibtex::read.bib(file=bibentry)
-				else bibtex::read.bib(package=p)
-			}else
-				stop("Invalid argument `bibentry`: expected bibentry object or character string [", class(bibentry), "]")
-	
-	if( !is.character(key) )
-		stop("Invalid argument `key`: must be a character vector.")
-	
-	# extract the Bibtex keys
-	k <- sapply(bibs, function(x) x$key)	
-	# only include \cite{key} if running Sweave
-	if( inSweave() ) paste("\\cite{", k, "}", sep='')
-	else paste(format(bibs[k %in% key], ...), collapse="\n\n")
-}
+})
 
+
+citepkg <- function(key, ...){
+	cite(str_c('package:', key), ...)
+}
 
 #' Bibtex Utilities
 #' 

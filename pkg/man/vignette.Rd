@@ -7,9 +7,10 @@
 \alias{rnwIncludes}
 \title{Utilities for Vignettes}
 \usage{
-  rnw(x, file = NULL, ...)
+  rnw(x, file = NULL, ..., fig.path = TRUE,
+    cache.path = TRUE)
 
-  as.rnw(x, ...)
+  as.rnw(x, ..., load = TRUE)
 
   rnwCompiler(x)
 
@@ -27,6 +28,14 @@
 
   \item{...}{extra arguments passed to \code{as.rnw} that
   can be used to force certain building parameters.}
+
+  \item{fig.path}{specification for the figure path.}
+
+  \item{cache.path}{specification for the cache path.}
+
+  \item{load}{logical to indicate if all the object's
+  properties should loaded, which is done by parsing the
+  file and look up for specific tags.}
 }
 \description{
   \code{rnw} provides a unified interface to run vignettes

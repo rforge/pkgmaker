@@ -107,7 +107,7 @@ latex_preamble <- function(R=TRUE, CRAN=TRUE, Bioconductor=TRUE
 \\let\\proglang=\\textit
 \\let\\code=\\texttt 
 \\newcommand{\\Rcode}{\\code}
-\\newcommand{\\pkgname}[1]{\\textit{#1}}
+\\newcommand{\\pkgname}[1]{\\textit{#1}\\xspace}
 \\newcommand{\\Rpkg}[1]{\\pkgname{#1} package\\xspace}
 ")
 
@@ -170,7 +170,7 @@ latex_bibliography <- function(PACKAGE, file=''){
 	else cmd
 }
 
-
+#' @importFrom methods is
 is.rnw <- function(x){
 	is(x, 'rnw')
 }
@@ -186,15 +186,57 @@ is.rnw <- function(x){
 #' @param file output file
 #' @param ... extra arguments passed to \code{as.rnw} that can be used to force 
 #' certain building parameters.
+#' @param fig.path specification for the figure path. 
+#' @param cache.path specification for the cache path.
 #'  
 #' @rdname vignette
 #' @export
-rnw <- function(x, file=NULL, ...){
+rnw <- function(x, file=NULL, ..., fig.path=TRUE, cache.path=TRUE){
 	x <- as.rnw(x, ...)	
 	driver <- x$driver
 	
-	x$compiler(x, file, driver=driver, ...)
+	comp <- x$compiler
+	res <- 
+	if( comp == 'knitr' ){ # compile with knitr
+		library(knitr)
+		# expand path to cache to fix issue in knitr
+		bname <- sub("\\..{3}$", '', basename(x$file))
+		
+		# cache.path
+		if( !isFALSE(cache.path) ){
+			if( isTRUE(cache.path) ){
+				cache.path <- file.path(getwd(), 'cache', bname, '/')
+			}
+			opts_chunk$set(cache.path=cache.path)	
+		}
+		# fig.path
+		if( !isFALSE(fig.path) ){
+			if( isTRUE(fig.path) ){
+				fig.path <- file.path(getwd(), 'figure', str_c(bname,'-'))
+			}
+			opts_chunk$set(fig.path=fig.path)	
+		}
+		
+		# set other options
+		opts_chunk$set(...)
+		
+		# run knitr
+		knit(x$file, file)
+		
+	}else{ # compile with Sweave
+		Sweave(x$file, driver=x$driver, ...)
+	}
+
+	# Package citations
+	if( !is.null(keys <- x$cite) ){
+		message("# Writing package bibtex file [", length(keys)," key(s)] ... ", appendLF=FALSE)
+		write.bib(keys, file='Rpackages.bib', verbose=FALSE)
+		message('OK')
+	}
+	#
 	
+	#x$compiler(x, file, ...)
+	invisible(res)
 }
 
 checkFile <- function(x, msg="file '%s' does not exist."){
@@ -208,11 +250,14 @@ checkRnwFile <- function(x){
 }
 
 #' \code{as.rnw} creates a S3 \code{rnw} object that contains information
-#' about a vignette, e.g., source filename, driver, fixed included files, etc..  
+#' about a vignette, e.g., source filename, driver, fixed included files, etc..
+#' 
+#' @param load logical to indicate if all the object's properties should loaded, 
+#' which is done by parsing the file and look up for specific tags. 
 #' 
 #' @rdname vignette
 #' @export
-as.rnw <- function(x, ...){
+as.rnw <- function(x, ..., load = TRUE){
 	
 	if( is.rnw(x) ) return(x)
 	
@@ -224,14 +269,18 @@ as.rnw <- function(x, ...){
 	# store source full path
 	obj$file <- normalizePath(x)
 	obj$line <- NA
+	if( !load ) return(obj)
+	
 	# detect compiler
-	obj$compiler <- rnwCompiler(obj)
+	obj$compiler <- rnwCompiler(obj) %||% 'Sweave'
 	# detect driver
-	obj$driver <- rnwDriver(obj)
+	obj$driver <- rnwDriver(obj) %||% RweaveLatex()
 	# detect fixed included images
 	obj$includes <- rnwIncludes(obj)
 	# detect children vignettes
 	obj$children <- rnwChildren(obj)
+	# detect package citations
+	obj$cite <- rnwCite(obj)
 	
 	# override with passed extra arguments
 	if( nargs() > 1L ){
@@ -243,6 +292,7 @@ as.rnw <- function(x, ...){
 	obj
 } 
 
+rnwObject <- function(...) as.rnw(..., load=FALSE)
 
 #' \code{rnwDriver} tries to detect the vignette compiler to use on a vignette
 #' source file, e.g., \code{\link{Sweave}} or \code{\link[knitr]{knitr}}.
@@ -251,17 +301,17 @@ as.rnw <- function(x, ...){
 #' @export
 rnwCompiler <- function(x){
 	
-	x <- as.rnw(x)
-	checkRnwFile(x)
+	x <- rnwObject(x)
+	
 	# read all lines in
 	l <- readLines(x$file)
 	
 	# identify driver
-	dr <- str_match(l, "^\\s*%%\\s*\\\\VignetteCompiler\\{([^}]*)\\}")
+	dr <- str_match(l, "^\\s*%\\s*\\\\VignetteCompiler\\{([^}]*)\\}")
 	w <- which(!is.na(dr[,1L]))
 	if( length(w) > 0L ){
-		s <- dr[w[1L],2L]
-		rnw_message("Detected Vignette compiler: '", str_trim(s), "'")
+		s <- str_trim(dr[w[1L],2L])
+		rnw_message("Detected compiler: '", s, "'")
 		s
 	}
 	
@@ -275,13 +325,13 @@ rnwCompiler <- function(x){
 #' @export
 rnwDriver <- function(x){
 	
-	x <- as.rnw(x)
-	checkRnwFile(x)
+	x <- rnwObject(x)
+	
 	# read all lines in
 	l <- readLines(x$file)
 	
 	# identify driver
-	dr <- str_match(l, "^\\s*%%\\s*\\\\VignetteDriver\\{([^}]*)\\}")
+	dr <- str_match(l, "^\\s*%\\s*\\\\VignetteDriver\\{([^}]*)\\}")
 	w <- which(!is.na(dr[,1L]))
 	if( length(w) > 0L ){
 		s <- dr[w[1L],2L]
@@ -299,8 +349,8 @@ rnwDriver <- function(x){
 #' @export
 rnwIncludes <- function(x){
 	
-	x <- as.rnw(x)
-	checkRnwFile(x)
+	x <- rnwObject(x)
+	
 	# read all lines in
 	l <- readLines(x$file)
 	
@@ -309,7 +359,7 @@ rnwIncludes <- function(x){
 	w <- which(!is.na(dr[,1L]))
 	rnw_message("Detected includes: ", appendLF=FALSE)
 	if( length(w) > 0L ){
-		inc <- dr[w,6L]
+		inc <- str_trim(dr[w,6L])
 		message(str_out(inc))
 		inc
 	}else
@@ -324,8 +374,8 @@ rnwIncludes <- function(x){
 #' @export
 rnwChildren <- function(x){
 	
-	x <- as.rnw(x)
-	checkRnwFile(x)
+	x <- rnwObject(x)
+	
 	# read all lines in
 	l <- readLines(x$file)
 	
@@ -341,3 +391,22 @@ rnwChildren <- function(x){
 	}
 	
 }  
+
+rnwCite <- function(x){
+	
+	x <- rnwObject(x)
+	
+	# read all lines in
+	l <- readLines(x$file)
+	
+	# identify driver
+	dr <- str_match(l, "\\\\cite((CRAN)|(citeBioC)|(citeBioCAnn))pkg\\{([^}]*)\\}")
+	w <- which(!is.na(dr[,6L]))
+	rnw_message("Detected package citation: ", appendLF=FALSE)
+	if( length(w) > 0L ){
+		inc <- unique(str_trim(dr[w,6L]))
+		message(str_out(inc))
+		inc
+	}else
+		message("NONE")
+}

@@ -1,7 +1,7 @@
 Package: pkgmaker
 Type: Package
 Title: Package development utilities
-Version: 0.5.4
+Version: 0.6
 Date: 2012-05-23
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
@@ -31,7 +31,8 @@ Suggests:
     devtools,
     bibtex,
     RUnit,
-    testthat
+    testthat,
+    knitr
 Collate:
     'utils.R'
     'logging.R'

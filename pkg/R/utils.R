@@ -4,7 +4,7 @@
 # Creation: 25 Apr 2012
 ###############################################################################
 
-# or-NULL operator
+# or-NULL operator (borrowed from Hadley Wickham)
 '%||%' <- function(x, y) if( !is.null(x) ) x else y
 
 #' Get Anywhere
