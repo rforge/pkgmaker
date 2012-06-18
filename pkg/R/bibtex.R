@@ -43,9 +43,9 @@
 #' @export
 #' @examples
 #' 
-#' library(bibtex)
+#' #library(bibtex)
 #' write.bib(c('bibtex', 'utils', 'tools'), file='references')
-#' bibs <- read.bib('references.bib')
+#' bibs <- bibtex::read.bib('references.bib')
 #' write.bib(bibs, 'references2.bib')
 #' md5 <- tools::md5sum(c('references.bib', 'references2.bib'))
 #' md5[1] == md5[2]
@@ -53,6 +53,8 @@
 #' 
 #' # write to stdout()
 #' write.bib(c('bibtex', 'utils', 'tools'), file=NULL)
+#' 
+#' \dontshow{ unlink(c('references.bib', 'references2.bib'))}
 #' 
 write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose = TRUE)
 {
@@ -115,11 +117,13 @@ write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose 
 	}
 	
 	## write everything to the .bib file
+	not_anonymous <- !identical(file,'')
 	fh <- if( is.character(file) ){
-				if( !grepl("\\.bib$", file) ) # add .bib extension if necessary 
+				if( not_anonymous && !grepl("\\.bib$", file) ) # add .bib extension if necessary 
 					file <- paste(file, '.bib', sep='')
-				fh <- file(file, open = if(append) "a+" else "w+" )
-				on.exit( if( isOpen(fh) ) close(fh) )
+				fh <- file(file, open = if(append && not_anonymous) "a+" else "w+" )
+				if( not_anonymous )
+					on.exit( if( isOpen(fh) ) close(fh) )
 				fh
 			} else if( is(file, 'connection') )
 				file
@@ -135,6 +139,7 @@ write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose 
 	if(verbose) message("OK\nResults written to file '", file.desc, "'")
 	
 	## return Bibtex items invisibly
+	if( !not_anonymous ) attr(bibs, 'connection') <- fh 
 	invisible(bibs)
 }
 

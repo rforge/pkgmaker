@@ -109,12 +109,19 @@ latex_preamble <- function(R=TRUE, CRAN=TRUE, Bioconductor=TRUE
 \\newcommand{\\Rcode}{\\code}
 \\newcommand{\\pkgname}[1]{\\textit{#1}\\xspace}
 \\newcommand{\\Rpkg}[1]{\\pkgname{#1} package\\xspace}
+\\newcommand{\\citepkg}[1]{\\cite{#1}}
 ")
 
 	if( inc(CRAN) )  cmd <- c(cmd,
 "% CRAN
 \\newcommand{\\CRANurl}[1]{\\url{http://cran.r-project.org/package=#1}}
-\\newcommand{\\CRANpkg}[1]{\\href{http://cran.r-project.org/package=#1}{\\pkgname{#1}} package\\footnote{\\CRANurl{#1}}}
+%% CRANpkg
+\\makeatletter
+\\def\\CRANpkg{\\@ifstar\\@CRANpkg\\@@CRANpkg}
+\\def\\@CRANpkg#1{\\href{http://cran.r-project.org/package=#1}{\\pkgname{#1}}\\footnote{\\CRANurl{#1}}}
+\\def\\@@CRANpkg#1{\\href{http://cran.r-project.org/package=#1}{\\pkgname{#1}} package\\footnote{\\CRANurl{#1}}}
+\\makeatother
+%% citeCRANpkg
 \\newcommand{\\citeCRANpkg}[1]{\\CRANpkg{#1}~\\cite{#1}}
 \\newcommand{\\CRANnmf}{\\href{http://cran.r-project.org/package=NMF}{CRAN}}
 \\newcommand{\\CRANnmfURL}{\\url{http://cran.r-project.org/package=NMF}}
