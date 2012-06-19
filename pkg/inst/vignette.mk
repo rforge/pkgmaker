@@ -158,25 +158,15 @@ endif
 	$(RSCRIPT) --vanilla -e "pkgmaker::makeFakeVignette('${SRC_DIR}/$*.Rnw', '$*.Rnw')"
 	$(update_inst_doc)
 
-ifneq ("$(wildcard ../tests)","")
-%-unitTests.pdf: ../tests/doUnit.R
+%-unitTests.pdf:
 	$(do_install)
 	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	# Generating vignette for unit tests: $@
 	# Using R_LIBS: $(R_LIBS)
-	# Cleanup unit test result directory and sweave source
-	if -e $(MAKE_R_PACKAGE)-unitTests.Rnw; then rm $(MAKE_R_PACKAGE)-unitTests.Rnw; fi
-	rm -fr unitTests-results/*
-	# Run unit test file: 'unitTests/doUnit.R'
-	$(RSCRIPT) --vanilla -e "source('unitTests/doUnit.R'); doUnit('$(MAKE_R_PACKAGE)', '$(MAKE_R_PACKAGE)-unitTests.Rnw');" >> unitTests.log
-	# Sweave generated file: $(MAKE_R_PACKAGE)-unitTests.Rnw
-	$(RPROG) CMD Sweave $(MAKE_R_PACKAGE)-unitTests.Rnw
-	# Run texi2dvi on $(MAKE_R_PACKAGE)-unitTests.tex
-	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$(MAKE_R_PACKAGE)-unitTests.tex', pdf = TRUE, clean = TRUE )"
+	# Make test vignette
+	$(RSCRIPT) --vanilla -e "pkgmaker::makeUnitVignette('$(MAKE_R_PACKAGE)')" >> unitTests.log
 ifndef LOCAL_MODE
 	# Cleanup latex file $(MAKE_R_PACKAGE)-unitTests.tex
 	rm -fr $(MAKE_R_PACKAGE)-unitTests.tex
 endif
 	$(update_inst_doc)
-	
-endif

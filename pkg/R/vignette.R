@@ -232,6 +232,9 @@ rnw <- function(x, file=NULL, ..., fig.path=TRUE, cache.path=TRUE){
 		
 	}else{ # compile with Sweave
 		Sweave(x$file, driver=x$driver, ...)
+		# move output file
+		if( !is.null(file) )
+			file.rename(file_extension(x$file, 'tex'), file)
 	}
 
 	# Package citations
