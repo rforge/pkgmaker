@@ -417,3 +417,30 @@ rnwCite <- function(x){
 	}else
 		message("NONE")
 }
+
+#' \code{vignetteMakefile} returns the path to a generic makefile used to make 
+#' vignettes.
+#' 
+#' @param package package name
+#' @param user username of the package's author. It is used to compile the 
+#' vignette differently when called locally or on CRAN check machines.  
+#' @param print logical that specifies if the path should be printed or
+#' only returned.  
+#' 
+#' @rdname vignette
+#' @export
+vignetteMakefile <- function(user, package, print=TRUE){
+	
+	# create makefile from template
+	p <- packagePath('vignette.mk', package='pkgmaker')
+	l <- paste(readLines(p), collapse="\n") 
+	l <- sub('#%AUTHOR_USER%#', str_c('AUTHOR_USER=', user), l, fixed=TRUE)
+	l <- sub('#%MAKE_R_PACKAGE%#', str_c('MAKE_R_PACKAGE=', package), l, fixed=TRUE)
+	
+	mk <- tempfile('vignette_', tmpdir='.', fileext='.mk')
+	cat(l, file=mk)
+	if ( print ){
+		cat(mk)
+	}
+	invisible(l)
+}

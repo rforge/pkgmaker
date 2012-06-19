@@ -10,7 +10,7 @@
 
   packageName(.Global = FALSE)
 
-  packagePath(..., PACKAGE = NULL)
+  packagePath(..., package = NULL)
 
   isPackageInstalled(..., lib.loc = NULL)
 
@@ -24,7 +24,7 @@
   global environment should throw an error (\code{FALSE}:
   default) or the string \code{'R_GlobalEnv'}.}
 
-  \item{PACKAGE}{optional name of an installed package}
+  \item{package}{optional name of an installed package}
 
   \item{...}{arguments passed to \code{\link{file.path}}.}
 

@@ -259,5 +259,5 @@ citepkg <- function(key, ...){
 #' @param PACKAGE package name
 #' 
 #' @rdname bibtex
-packageReferenceFile <- function(PACKAGE=NULL) packagePath('REFERENCES.bib', PACKAGE=PACKAGE)
+packageReferenceFile <- function(PACKAGE=NULL) packagePath('REFERENCES.bib', package=PACKAGE)
 

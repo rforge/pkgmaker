@@ -5,6 +5,7 @@
 \alias{rnwCompiler}
 \alias{rnwDriver}
 \alias{rnwIncludes}
+\alias{vignetteMakefile}
 \title{Utilities for Vignettes}
 \usage{
   rnw(x, file = NULL, ..., fig.path = TRUE,
@@ -19,6 +20,8 @@
   rnwIncludes(x)
 
   rnwChildren(x)
+
+  vignetteMakefile(user, package, print = TRUE)
 }
 \arguments{
   \item{x}{vignette source file specification as a path or
@@ -36,6 +39,15 @@
   \item{load}{logical to indicate if all the object's
   properties should loaded, which is done by parsing the
   file and look up for specific tags.}
+
+  \item{package}{package name}
+
+  \item{user}{username of the package's author. It is used
+  to compile the vignette differently when called locally
+  or on CRAN check machines.}
+
+  \item{print}{logical that specifies if the path should be
+  printed or only returned.}
 }
 \description{
   \code{rnw} provides a unified interface to run vignettes
@@ -61,5 +73,8 @@
 
   \code{rnwChildren} detects included vignette documents
   and return them as a list of vignette objects.
+
+  \code{vignetteMakefile} returns the path to a generic
+  makefile used to make vignettes.
 }
 

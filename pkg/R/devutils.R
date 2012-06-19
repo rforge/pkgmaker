@@ -170,16 +170,16 @@ packageName <- function(.Global=FALSE){
 #' its installation/loading directory in the case of an installed package, or
 #' its source directory served by devtools. 
 #' 
-#' @param PACKAGE optional name of an installed package 
+#' @param package optional name of an installed package 
 #' @param ... arguments passed to \code{\link{file.path}}.
 #' 
 #' @rdname devutils
 #' @return a character string
 #' @export
-packagePath <- function(..., PACKAGE=NULL){
+packagePath <- function(..., package=NULL){
 	
 	# try to find the path from the package's environment (namespace)
-	pname <- if( !is.null(PACKAGE) ) PACKAGE else packageName()
+	pname <- if( !is.null(package) ) package else packageName()
 	# try installed package
 	path <- system.file(package=pname)		
 
