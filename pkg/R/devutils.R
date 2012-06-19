@@ -136,6 +136,7 @@ packageEnv <- function(pkg){
 #' environment should throw an error (\code{FALSE}: default) or the string
 #' \code{'R_GlobalEnv'}.
 #' 
+#' @export
 #' @rdname devutils
 #' @return a character string
 packageName <- function(.Global=FALSE){
@@ -174,15 +175,13 @@ packageName <- function(.Global=FALSE){
 #' 
 #' @rdname devutils
 #' @return a character string
+#' @export
 packagePath <- function(..., PACKAGE=NULL){
 	
 	# try to find the path from the package's environment (namespace)
-	path <- 
-		if( !is.null(PACKAGE) )	system.file(package=PACKAGE)
-		else if( (pname <- packageName()) != 'datasets' ){
-			# get the path from installation
-			system.file(package=.packageName)		
-		}
+	pname <- if( !is.null(PACKAGE) ) PACKAGE else packageName()
+	# try installed package
+	path <- system.file(package=pname)		
 
 	# somehow this fails when loading an installed package but is works 
 	# when loading a package during the post-install check
@@ -194,8 +193,7 @@ packagePath <- function(..., PACKAGE=NULL){
 				file.path(info$libname, info$pkgname)
 			else{# we are in dev mode: use devtools
 				library(devtools)
-#				p <- as.package(.LOCAL_PKG_NAME)
-				p <- as.package()
+				p <- as.package(pname)
 				
 				# handle special sub-directories of the package's root directory
 				if( nargs() == 0 || sub("^/?([^/]+).*", "\\1", list(...)[1]) %in% c('tests', 'data','R','src') )
