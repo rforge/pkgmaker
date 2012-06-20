@@ -88,14 +88,14 @@ testRversion <- function(x, test=1L){
 
 #' Complete R version
 #' 
-#' Returns the complete R version, e.g. 2.15
+#' Returns the complete R version, e.g. 2.15.0
 #' 
 #' @export
 #' @examples
 #' Rversion()
 #' 
 Rversion <- function(){
-	paste(R.version$major, R.version$minor, sep='')
+	paste(R.version$major, R.version$minor, sep='.')
 }
 
 #' Prints formatted list of values given as a character vector for use in show 
