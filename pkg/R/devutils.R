@@ -49,15 +49,15 @@ R.SHLIB <- function(libname, ...){
 #' 
 #' @return None
 #' @export
-compile_src <- function(pkg, load=TRUE){
+compile_src <- function(pkg=NULL, load=TRUE){
 	
-	if( !missing(pkg) ){
+	if( !is.null(pkg) ){
 		library(devtools)
 		p <- as.package(pkg)
 		path <- p$path
 	}else{
 		pkg <- packageName()
-		path <- packagePath()
+		path <- packagePath(lib=NA) # do not look installed packages
 	}
 	
 	owd <- getwd()
@@ -65,12 +65,16 @@ compile_src <- function(pkg, load=TRUE){
 	
 	# Compile code in /src
 	srcdir <- file.path(path, 'src')
-	if( file.exists(srcdir) ){
-		cat("# DEVMODE: Compiling src/ ... ")		
+	message("# Checking '", srcdir, "' ... ", appendLF=FALSE)
+	if( !file.exists(srcdir) ){
+		message("NO")
+	} else {
+		message("YES")
+		message("## Compiling '",srcdir,"' ##")
 		setwd(srcdir)
 		Sys.setenv(R_PACKAGE_DIR=path)
 		R.SHLIB(pkg, " *.cpp ")
-		cat("OK\n")
+		message("## DONE")
 		if( load )
 			load_c(pkg)
 	}
@@ -171,17 +175,19 @@ packageName <- function(.Global=FALSE){
 #' its source directory served by devtools. 
 #' 
 #' @param package optional name of an installed package 
+#' @param lib path to a package library where to look. If \code{NA}, then only 
+#' development packages are looked up.
 #' @param ... arguments passed to \code{\link{file.path}}.
 #' 
 #' @rdname devutils
 #' @return a character string
 #' @export
-packagePath <- function(..., package=NULL){
+packagePath <- function(..., package=NULL, lib=NULL){
 	
 	# try to find the path from the package's environment (namespace)
 	pname <- if( !is.null(package) ) package else packageName()
 	# try installed package
-	path <- system.file(package=pname)		
+	path <- if( !isNA(lib) ) system.file(package=pname, lib.loc=lib)		
 
 	# somehow this fails when loading an installed package but is works 
 	# when loading a package during the post-install check
@@ -196,7 +202,11 @@ packagePath <- function(..., package=NULL){
 				p <- as.package(pname)
 				
 				# handle special sub-directories of the package's root directory
-				if( nargs() == 0 || sub("^/?([^/]+).*", "\\1", list(...)[1]) %in% c('tests', 'data','R','src') )
+				dots <- list(...)
+				Rdirs <- c('data', 'R', 'src', 'exec', 'tests', 'demo'
+							, 'exec', 'libs', 'man', 'help', 'html'
+							, 'Meta')
+				if( length(dots) == 0L || sub("^/?([^/]+).*", "\\1", ..1) %in%  Rdirs)
 					p$path
 				else file.path(p$path,'inst')
 				

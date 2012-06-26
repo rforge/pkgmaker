@@ -1,7 +1,7 @@
 Package: pkgmaker
 Type: Package
 Title: Package development utilities
-Version: 0.6.5
+Version: 0.6.6
 Date: 2012-05-23
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
@@ -40,6 +40,7 @@ Collate:
     'data.R'
     'namespace.R'
     'devutils.R'
+    'package.R'
     'options.R'
     'registry.R'
     'bibtex.R'

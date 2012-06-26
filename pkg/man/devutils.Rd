@@ -10,7 +10,7 @@
 
   packageName(.Global = FALSE)
 
-  packagePath(..., package = NULL)
+  packagePath(..., package = NULL, lib = NULL)
 
   isPackageInstalled(..., lib.loc = NULL)
 
@@ -25,6 +25,9 @@
   default) or the string \code{'R_GlobalEnv'}.}
 
   \item{package}{optional name of an installed package}
+
+  \item{lib}{path to a package library where to look. If
+  \code{NA}, then only development packages are looked up.}
 
   \item{...}{arguments passed to \code{\link{file.path}}.}
 

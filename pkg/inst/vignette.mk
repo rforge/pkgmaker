@@ -51,7 +51,7 @@ endif
 ifeq (${R_HOME},)
 NOT_CHECKING=1
 TMP_INSTALL_DIR := $(shell mktemp -d)
-export R_LIBS=$(shell pwd)/../../../lib
+export R_LIBS=$(shell pwd)/../../lib
 export MAKE_R_PACKAGE
 endif
 
