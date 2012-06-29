@@ -636,11 +636,14 @@ setMethod('utest', 'function',
 #' @param testdir directory where to look for the test files
 #' @param framework unit test framework
 #' @param quiet a logical that indicates if the tests should be run silently
+#' @param lib.loc path to a library where installed packages are searched for.
+#' Used is of the form \code{x='package:*'}.
 #'  
 setMethod('utest', 'character', 
 		function(x, filter="^runit.+\\.[rR]$", fun="^test\\.", ...
 				, testdir='tests', framework=c('RUnit', 'testthat')
-				, quiet = Sys.getenv("RCMDCHECK") != "FALSE"){
+				, quiet = Sys.getenv("RCMDCHECK") != "FALSE"
+				, lib.loc = NULL){
 			
 			cat("#########################\n")
 			#print(system('env'))
@@ -649,7 +652,7 @@ setMethod('utest', 'character',
 					if( grepl("^package:", x) ){# installed package
 						pkg <- sub("^package:", "", x)
 						if( is.null(path <- path.package(pkg, quiet=TRUE)) ){
-							library(pkg, character.only=TRUE)
+							library(pkg, character.only=TRUE, lib.loc=lib.loc)
 							path <- path.package(pkg)
 						}
 						file.path(path, testdir)

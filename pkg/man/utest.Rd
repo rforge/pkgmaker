@@ -14,7 +14,8 @@
   \S4method{utest}{character}(x,
     filter = "^runit.+\\\\.[rR]$", fun = "^test\\\\.", ...,
     testdir = "tests", framework = c("RUnit", "testthat"),
-    quiet = Sys.getenv("RCMDCHECK") != "FALSE")
+    quiet = Sys.getenv("RCMDCHECK") != "FALSE",
+    lib.loc = NULL)
 
   \S4method{utest}{RUnitTestSuite}(x, ..., quiet = FALSE)
 }
@@ -39,6 +40,10 @@
 
   \item{quiet}{a logical that indicates if the tests should
   be run silently}
+
+  \item{lib.loc}{path to a library where installed packages
+  are searched for. Used is of the form
+  \code{x='package:*'}.}
 }
 \description{
   Run unit tests in a variety of settings. This is still
