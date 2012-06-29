@@ -293,29 +293,26 @@ checkWarning <- function(expr, expected=NULL, msg=NULL){
 #'  
 #' @export
 #' 
-makeUnitVignette <- function(pkg, file=paste(pkg, '-unitTests.pdf', sep='')){
+makeUnitVignette <- function(pkg, file=paste(pkg, '-unitTests.pdf', sep=''), ...){
 	
+	package <- pkg
+	pkg <- sub("^package:", "", pkg)
 	# generate the vignette for unit test on exit
 	if( !is.null(file) )
 		on.exit( writeUnitVignette(pkg, file) )
 	# load this package
-	require( pkg, character.only = TRUE )
+	if( !require(pkg, character.only = TRUE ) ){
+		stop("Could not load package '", pkg, "' for testing [libPath= ", str_out(.libPaths(), Inf), "]")
+	}
 	
-	## load RUnit
-	requireRUnit("Make unit test vignette")
+	# create output directory
 	if( file.exists( "unitTests-results" ) ){
 		file.remove("unitTests-results") 
 	}
 	dir.create( "unitTests-results" )
 	
-	path <- system.file("unitTests", package = pkg)
-	testSuite <- defineTestSuite(name=paste(pkg, "unit testing")
-			, dirs = path
-			, rngKind = "default",
-			, rngNormalKind = "default")
-	tests <- runTestSuite(testSuite)
-	printHTMLProtocol(tests, fileName= sprintf( "unitTests-results/%s-unitTests.html" , pkg ) )
-	printTextProtocol(tests, fileName= sprintf( "unitTests-results/%s-unitTests.txt"  , pkg ) )
+	# run unit tests
+	tests <- utest(package, ...)
 	
 	# check for errors
 	err <- getErrors(tests)
@@ -669,13 +666,14 @@ setMethod('utest', 'character',
 			
 			# check that the path exists
 			if( !file.exists(path) ){
-				if( !hasArg(testdir) ){
+				if( !hasArg(testdir) ){ # try another default
 					path <- file.path(dirname(path), 'unitTests')
 				}
 				if( !file.exists(path) )
 					stop("Unit test directory '", path, "' does not exist")
 			}
 			
+			message("Running unit tests in: '", path, "'")
 			# detect unit test framework: RUnit or testthat?
 			framework <- 
 					if( missing(framework) ) utestFramework(path)
@@ -695,6 +693,7 @@ setMethod('utest', 'character',
 					s <- defineTestSuite(x, path
 							, testFileRegexp=filter
 							, testFuncRegexp=fun, ...)
+					str(s)
 					utest(s, quiet=quiet)
 					
 				}else if( framework == 'testthat' ){ # testthat
@@ -752,5 +751,7 @@ setMethod('utest', 'RUnitTestSuite',
 			stop(paste("\n\nunit testing failed (#test failures: ", tmp$nFail,
 							", #R errors: ",  tmp$nErr, ")\n\n", sep=""))
 		}
+		
+		tests
 	}
 )

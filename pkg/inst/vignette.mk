@@ -164,7 +164,7 @@ endif
 	# Generating vignette for unit tests: $@
 	# Using R_LIBS: $(R_LIBS)
 	# Make test vignette
-	$(RSCRIPT) --vanilla -e "pkgmaker::makeUnitVignette('$(MAKE_R_PACKAGE)')" >> unitTests.log
+	$(RSCRIPT) --vanilla -e "pkgmaker::makeUnitVignette('package:$(MAKE_R_PACKAGE)')" >> unitTests.log
 ifndef LOCAL_MODE
 	# Cleanup latex file $(MAKE_R_PACKAGE)-unitTests.tex
 	rm -fr $(MAKE_R_PACKAGE)-unitTests.tex
