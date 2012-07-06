@@ -67,7 +67,7 @@ endif
 ifdef NOT_CHECKING
 define do_install
 	# Installing the package in temporary library directory $(TMP_INSTALL_DIR)
-	-$(RPROG) CMD INSTALL -l "$(TMP_INSTALL_DIR)" ../. >> Rinstall.log 2>> Rinstall.err
+	-$(RPROG) CMD INSTALL --fake -l "$(TMP_INSTALL_DIR)" ../. >> Rinstall.log 2>> Rinstall.err
 	@if test ! -d "$(TMP_INSTALL_DIR)/$(MAKE_R_PACKAGE)"; then \
 	echo "ERROR: Temporary installation failed: see Rinstall.log"; \
 	echo "# Removing temporary library directory $(TMP_INSTALL_DIR)"; \

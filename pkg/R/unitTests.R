@@ -287,8 +287,12 @@ checkWarning <- function(expr, expected=NULL, msg=NULL){
 
 #' Make Vignette for Unit Tests
 #' 
+#' Builds a vignette for unit tests in a package using the \code{\link{utest}} 
+#' and a template vignette file. 
+#' 
 #' @param pkg Package name
 #' @param file Output file (.Rnw, .tex, or .pdf)
+#' @param ... extra arguments passed to \code{\link{utest}}.
 #' @return Result of running unit test suite
 #'  
 #' @export

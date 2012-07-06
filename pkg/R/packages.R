@@ -79,7 +79,7 @@ getBiocRepos <- function(url='http://www.bioconductor.org', version=NULL){
 #' 
 #' @rdname mirrors
 #' @export
-setCRANMirror <- function(url='http://cran.r-project.org', unique=TRUE){
+setCRANMirror <- function(url=CRAN, unique=TRUE){
 	
 	repos <- c(CRAN=url, getOption('repos'))
 	if( unique ){
@@ -88,3 +88,16 @@ setCRANMirror <- function(url='http://cran.r-project.org', unique=TRUE){
 	}
     options(repos=repos)
 }
+
+#' \code{CRAN} simply contains the url of CRAN main mirror 
+#' (\url{http://cran.r-project.org}), and aims at simplifying its use, e.g., in 
+#' calls to \code{\link{install.packages}}.
+#' 
+#' @rdname mirrors
+#' @export
+#' 
+#' @examples
+#' \dontrun{
+#' install.packages('pkgmaker', repos=CRAN)
+#' }
+CRAN <- 'http://cran.r-project.org'

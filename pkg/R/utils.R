@@ -134,7 +134,7 @@ str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", ")
 	# add names if necessary
 	if( use.names && !is.null(names(x)) ){
 		nm <- str_c(names(x),'=')
-		x <- paste(ifelse(nm=='=',NULL,nm), x, sep='')
+		x <- paste(ifelse(nm=='=','',nm), x, sep='')
 	}
 	paste(paste(x, collapse=sep), suffix, sep='')
 }
