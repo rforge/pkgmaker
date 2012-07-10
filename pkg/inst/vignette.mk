@@ -35,13 +35,15 @@ endif
 
 SRC_DIR=src
 whoami=$(shell whoami)
-RNW_SRCS = $(notdir $(wildcard src/*.Rnw))
+RNW_SRCS = #%RNW_SRCS%#
 PDF_OBJS=$(RNW_SRCS:.Rnw=.pdf)
 
 # add unit tests if necessary
-ifneq ("$(wildcard ../tests)","")
-PDF_OBJS:=$(MAKE_R_PACKAGE)-unitTests.pdf $(PDF_OBJS)
-endif
+#ifneq ("$(wildcard ../tests)","")
+#PDF_OBJS:=$(MAKE_R_PACKAGE)-unitTests.pdf $(PDF_OBJS)
+#endif
+
+TEX_OBJS=$(PDF_OBJS:.pdf=.tex)
 
 ifneq (,$(findstring $(AUTHOR_USER),$(whoami)))
 LOCAL_MODE=1
@@ -67,7 +69,7 @@ endif
 ifdef NOT_CHECKING
 define do_install
 	# Installing the package in temporary library directory $(TMP_INSTALL_DIR)
-	-$(RPROG) CMD INSTALL --fake -l "$(TMP_INSTALL_DIR)" ../. >> Rinstall.log 2>> Rinstall.err
+	-$(RPROG) CMD INSTALL -l "$(TMP_INSTALL_DIR)" ../. >> Rinstall.log 2>> Rinstall.err
 	@if test ! -d "$(TMP_INSTALL_DIR)/$(MAKE_R_PACKAGE)"; then \
 	echo "ERROR: Temporary installation failed: see Rinstall.log"; \
 	echo "# Removing temporary library directory $(TMP_INSTALL_DIR)"; \
@@ -107,11 +109,11 @@ endif
 clean:
 	rm -fr *.bbl *.run.xml *.blg *.aux *.out *.log *.err *-blx.bib unitTests-results vignette_*.mk
 ifndef LOCAL_MODE
-	rm *.tex
+	rm -f $(TEX_OBJS)
 endif
 
 clean-all: clean
-	rm -fr *.tex $(PDF_OBJS) $(RNW_SRCS)
+	rm -fr $(TEX_OBJS) $(PDF_OBJS) $(RNW_SRCS)
 
 setvars:
 ifeq (${R_HOME},)
@@ -120,19 +122,20 @@ endif
 RPROG=	$(R_HOME)/bin/R
 RSCRIPT=$(R_HOME)/bin/Rscript
 
-.SECONDARY:
+.SECONDARY: %.tex
 
 do_clean:
 	# Removing temporary install directory '$(TMP_INSTALL_DIR)'
 	@-rm -rf $(TMP_INSTALL_DIR);
 
-# Generate .pdf from .tex
+# Generate .pdf from .Rnw
 %.pdf: ${SRC_DIR}/%.Rnw
 	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	$(do_install)
 	# Generating vignette $@ from ${SRC_DIR}/$*.Rnw
 	# Using R_LIBS: $(R_LIBS)
 	$(RSCRIPT) --vanilla -e "pkgmaker::rnw('${SRC_DIR}/$*.Rnw', '$*.tex');"
+		
 	# Generating pdf $@ from $*.tex
 ifdef MAKEPDF
 ifdef USE_PDFLATEX

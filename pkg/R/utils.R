@@ -155,6 +155,14 @@ str_desc <- function(object, exdent=0L){
 	str_wrap(str_out(p, NA, use.names=TRUE, quote=FALSE), exdent=exdent)
 }
 
+# From example in ?toupper
+capwords <- function(s, strict = FALSE) {
+    cap <- function(s) paste(toupper(substring(s,1,1)),
+                {s <- substring(s,2); if(strict) tolower(s) else s},
+                sep = "", collapse = " " )
+    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+}
+
 #' Differences between strings
 #' 
 #' Computes which characters differ between two strings.
