@@ -57,6 +57,10 @@ ifdef LOCAL_MODE
 MAKEPDF=1
 endif
 
+ifdef QUICK
+NO_INSTALL=1
+endif
+
 ifeq (${R_HOME},)
 NOT_CHECKING=1
 
@@ -64,6 +68,12 @@ NOT_CHECKING=1
 ifdef LOCAL_MODE
 USE_PDFLATEX=1
 endif
+
+# should the package be installed from source?
+ifndef NO_INSTALL
+DO_INSTALL=1
+endif
+
 TMP_INSTALL_DIR := $(shell mktemp -d)
 export R_LIBS=$(shell pwd)/../../lib
 export MAKE_R_PACKAGE
@@ -72,7 +82,7 @@ endif
 
 # Define command for temporary installation (used when make is directly called,
 # i.e. when not in check/build/INSTALL)
-ifdef NOT_CHECKING
+ifdef DO_INSTALL
 define do_install
 	# Installing the package in temporary library directory $(TMP_INSTALL_DIR)
 	-$(RPROG) CMD INSTALL -l "$(TMP_INSTALL_DIR)" ../. >> Rinstall.log 2>> Rinstall.err
@@ -151,13 +161,15 @@ ifdef USE_PDFLATEX
 	-bibtex $(VIGNETTE_BASENAME)
 	@pdflatex $(VIGNETTE_BASENAME) >> $(VIGNETTE_BASENAME)-pdflatex.log
 	@pdflatex $(VIGNETTE_BASENAME) >> $(VIGNETTE_BASENAME)-pdflatex.log
+ifndef QUICK
 	# Compact vignettes
-	$(RSCRIPT) -e "tools::compactPDF('$(VIGNETTE_BASENAME).pdf')"
+	$(RSCRIPT) --vanilla -e "tools::compactPDF('$(VIGNETTE_BASENAME).pdf')"
+endif
 else
 	# Using tools::texi2dvi
-	$(RSCRIPT) -e "tools::texi2dvi( '$(VIGNETTE_BASENAME).tex', pdf = TRUE, clean = FALSE )"
+	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$(VIGNETTE_BASENAME).tex', pdf = TRUE, clean = FALSE )"
 	-bibtex $(VIGNETTE_BASENAME)
-	$(RSCRIPT) -e "tools::texi2dvi( '$(VIGNETTE_BASENAME).tex', pdf = TRUE, clean = TRUE )"
+	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$(VIGNETTE_BASENAME).tex', pdf = TRUE, clean = TRUE )"
 endif
 endif	
 	# Remove temporary LaTeX files (but keep the .tex)
