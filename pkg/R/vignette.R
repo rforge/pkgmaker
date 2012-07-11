@@ -460,7 +460,7 @@ subMakeVar <- function(var, value, text){
 #' 
 #' @rdname vignette
 #' @export
-vignetteMakefile <- function(user, package=NULL, skip=NULL
+vignetteMakefile <- function(user=NULL, package=NULL, skip=NULL
 							, print=TRUE, template=NULL){
 	
 	## create makefile from template
@@ -469,8 +469,15 @@ vignetteMakefile <- function(user, package=NULL, skip=NULL
 		template <- packagePath('vignette.mk', package='pkgmaker')
 	
 	l <- paste(readLines(template), collapse="\n")
-    # Author
-	l <- subMakeVar('AUTHOR_USER', str_c('AUTHOR_USER=', user), l)
+    # Check user: LOCAL_MODE if in declared user
+	if( !is.null(user) ){
+		l <- subMakeVar('USER', str_c(user, collapse=', '), l)
+		if( (cuser <- Sys.info()["user"]) %in% user ){
+			l <- subMakeVar('LOCAL_MODE', str_c('LOCAL_MODE=', cuser), l)
+		}
+	}else{
+		l <- subMakeVar('USER', '-', l)
+	}
 	# Package name
 	if( is.null(package) ){
 		df <- file.path(getwd(), '..', 'DESCRIPTION')

@@ -18,9 +18,9 @@
 ifndef MAKE_R_PACKAGE
 $(error Required make variable 'MAKE_R_PACKAGE' is not defined.)
 endif
-ifndef AUTHOR_USER
-$(error Required make variable 'AUTHOR_USER' is not defined.)
-endif
+#ifndef AUTHOR_USER
+#$(error Required make variable 'AUTHOR_USER' is not defined.)
+#endif
 ifndef MAKEPDF
 MAKEPDF=1
 endif
@@ -45,22 +45,28 @@ PDF_OBJS=$(RNW_SRCS:.Rnw=.pdf)
 
 TEX_OBJS=$(PDF_OBJS:.pdf=.tex)
 
-ifneq (,$(findstring $(AUTHOR_USER),$(whoami)))
-LOCAL_MODE=1
+# Enabling local mode
+#%LOCAL_MODE%#
+
+#ifneq (,$(findstring $(AUTHOR_USER),$(whoami)))
+#LOCAL_MODE=1
+#MAKEPDF=1
+#endif
+
+ifdef LOCAL_MODE
 MAKEPDF=1
 endif
 
 ifeq (${R_HOME},)
 NOT_CHECKING=1
+
+# in local mode: use pdflatex
+ifdef LOCAL_MODE
+USE_PDFLATEX=1
+endif
 TMP_INSTALL_DIR := $(shell mktemp -d)
 export R_LIBS=$(shell pwd)/../../lib
 export MAKE_R_PACKAGE
-endif
-
-ifdef LOCAL_MODE
-ifdef NOT_CHECKING
-USE_PDFLATEX=1
-endif
 endif
 
 
@@ -99,12 +105,13 @@ all: init $(PDF_OBJS) do_clean
 
 init:
 	# Generating vignettes for package $(MAKE_R_PACKAGE)
-	# Detected vignettes: $(PDF_OBJS)
+	# Maintainer(s): #%USER%#
 ifdef LOCAL_MODE
-	# Mode: Local Development
+	# Mode: Local Development [$(LOCAL_MODE)]
 else
 	# Mode: Production
 endif
+	# Detected vignettes: $(PDF_OBJS)
 
 clean:
 	rm -fr *.bbl *.run.xml *.blg *.aux *.out *.log *.err *-blx.bib unitTests-results vignette_*.mk

@@ -24,8 +24,8 @@
 
   rnwChildren(x)
 
-  vignetteMakefile(user, package = NULL, skip = NULL,
-    print = TRUE, template = NULL)
+  vignetteMakefile(user = NULL, package = NULL,
+    skip = NULL, print = TRUE, template = NULL)
 }
 \arguments{
   \item{x}{vignette source file specification as a path or
