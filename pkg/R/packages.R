@@ -4,6 +4,57 @@
 # Creation: 29 Jun 2012
 ###############################################################################
 
+#' Require a Package
+#' 
+#' Require a package with a custom error message
+#' 
+#' @param pkg package name as a character string
+#' @param ... extra arguments concatenated to for the header of the 
+#' error message 
+#' 
+#' @export
+requirePackage <- function(pkg, ...){
+	
+	if( !require(pkg, character.only=TRUE) ){
+		if( nargs() > 1L ) stop(..., " requires package(s) ", str_out(pkg))
+		else stop("Could not find required package(s) ", str_out(pkg))
+	}
+}
+
+parse_deps <- function (string) 
+{
+	if (is.null(string)) 
+		return()
+	string <- gsub("\\s*\\(.*?\\)", "", string)
+	pieces <- strsplit(string, ",")[[1]]
+	pieces <- gsub("^\\s+|\\s+$", "", pieces)
+	pieces[pieces != "R"]
+}
+
+packageDependencies <- function(x, recursive=FALSE){
+	x <- as.package(x)
+	d <- lapply(x[c('depends', 'imports', 'linkingto', 'suggests')], parse_deps)
+	unlist(d)
+}
+
+# taken from devtools:::install_deps but add field Suggests
+install_alldeps <- function (pkg = NULL, ...) 
+{
+	pkg <- as.package(pkg)
+	#parse_deps <- devtools:::parse_deps
+	deps <- c(parse_deps(pkg$depends), parse_deps(pkg$imports), 
+			parse_deps(pkg$linkingto), parse_deps(pkg$suggests))
+	not.installed <- function(x) length(find.package(x, quiet = TRUE)) == 
+				0
+	deps <- Filter(not.installed, deps)
+	if (length(deps) == 0) 
+		return(invisible())
+	message("Installing dependencies for ", pkg$package, ":\n", 
+			paste(deps, collapse = ", "))
+	install.packages(deps, ...)
+	invisible(deps)
+}
+
 
 #' Setting Mirrors and Repositories
 #' 

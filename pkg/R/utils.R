@@ -37,23 +37,6 @@ require.quiet <- function(package, character.only = FALSE, ...){
 	res
 }
 
-#' Require a Package
-#' 
-#' Require a package with a custom error message
-#' 
-#' @param pkg package name as a character string
-#' @param ... extra arguments concatenated to for the header of the 
-#' error message 
-#' 
-#' @export
-requirePackage <- function(pkg, ...){
-	
-	if( !require(pkg, character.only=TRUE) ){
-		if( nargs() > 1L ) stop(..., " requires package(s) ", str_out(pkg))
-		else stop("Could not find required package(s) ", str_out(pkg))
-	}
-}
-
 
 #' Testing R Version
 #' 
