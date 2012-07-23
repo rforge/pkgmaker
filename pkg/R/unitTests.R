@@ -782,6 +782,7 @@ setMethod('utest', 'RUnitTestSuite',
 		
 		## Report to HTML file
 		printHTMLProtocol(tests, fileName=paste(pathReport, ".html", sep=""))
+		printHTMLProtocol(tests, fileName=paste(basename(pathReport), ".html", sep=""))
 		
 		## Return stop() to cause R CMD check stop in case of
 		##  - failures i.e. FALSE to unit tests or
