@@ -29,71 +29,85 @@ endif
 ## Everything below this should be generic and work for any package provided that
 ## they have the following directory inst/doc setting:
 ## - inst/vignettes/src: contains the Rnw files for normal vignettes
-## - inst/vignettes/unitTests: contains an R file <PKGNAME>-unitTests.R and an .Rnw file
-## that run the unit tests and generate the unit test vignette respectively
+## - tests: contains R code to run unit tests that are run if not checking and
+## produce the file <package>-unitTests.pdf  
 ##---------------------------------------------------------------------
 
 SRC_DIR=src
-whoami=$(shell whoami)
 RNW_SRCS = #%RNW_SRCS%#
 PDF_OBJS=$(RNW_SRCS:.Rnw=.pdf)
 
-# add unit tests if necessary
-#ifneq ("$(wildcard ../tests)","")
-#PDF_OBJS:=$(MAKE_R_PACKAGE)-unitTests.pdf $(PDF_OBJS)
-#endif
-
 TEX_OBJS=$(PDF_OBJS:.pdf=.tex)
 
-# Enabling local mode
+ifneq (${R_HOME},)
+R_CHECK=1
+else
+R_CHECK=0
+
+# Enabling local mode?
 #%LOCAL_MODE%#
-
-#ifneq (,$(findstring $(AUTHOR_USER),$(whoami)))
-#LOCAL_MODE=1
-#MAKEPDF=1
-#endif
-
-ifdef LOCAL_MODE
-MAKEPDF=1
-endif
-
-ifdef QUICK
-NO_INSTALL=1
-endif
-
-ifeq (${R_HOME},)
-NOT_CHECKING=1
 
 # in local mode: use pdflatex
 ifdef LOCAL_MODE
 USE_PDFLATEX=1
 endif
 
-# should the package be installed from source?
-ifndef NO_INSTALL
-DO_INSTALL=1
-endif
-
-TMP_INSTALL_DIR := $(shell mktemp -d)
 export R_LIBS=$(shell pwd)/../../lib
 export MAKE_R_PACKAGE
+
+ifdef LOCAL_MODE
+MAKEPDF=1
+endif
+
+# Type of pre-install:
+# for back-compatibility
+ifdef QUICK
+quick=1
+endif
+
+ifdef quick
+install=quick
+endif
+ifndef install
+install=yes
+endif
+
+ifeq ('$(install)','yes')
+# install in temporary directory at each run
+TMP_INSTALL_DIR:=$(shell mktemp -d)
+else
+ifeq ('$(install)','quick')
+QUICK=1
+$(shell mkdir -p tmplib)
+TMP_INSTALL_DIR:=tmplib
+endif
+endif
+
 endif
 
 
 # Define command for temporary installation (used when make is directly called,
 # i.e. when not in check/build/INSTALL)
-ifdef DO_INSTALL
+ifdef TMP_INSTALL_DIR
 define do_install
-	# Installing the package in temporary library directory $(TMP_INSTALL_DIR)
-	-$(RPROG) CMD INSTALL -l "$(TMP_INSTALL_DIR)" ../. >> Rinstall.log 2>> Rinstall.err
-	@if test ! -d "$(TMP_INSTALL_DIR)/$(MAKE_R_PACKAGE)"; then \
-	echo "ERROR: Temporary installation failed: see Rinstall.log"; \
-	echo "# Removing temporary library directory $(TMP_INSTALL_DIR)"; \
-	rm -rf $(TMP_INSTALL_DIR); \
-	exit 1; else \
-	echo "# Package successfully installed"; fi;
-	@echo "# Adding temporary library '$(TMP_INSTALL_DIR)' to R_LIBS"
-	$(eval R_LIBS := $(TMP_INSTALL_DIR):$(R_LIBS))
+  @if [ ! -d "$(TMP_INSTALL_DIR)" ]; then \
+  	echo "ERROR: installation directory '$(TMP_INSTALL_DIR)' does not exist."; \
+  	exit 1; \
+  fi
+  
+  @if [ ! -d "$(TMP_INSTALL_DIR)/$(MAKE_R_PACKAGE)" ]; then \
+		echo "# Installing the package in tempdir '$(TMP_INSTALL_DIR)'"; \
+  	$(eval R_LIBS := $(TMP_INSTALL_DIR):$(R_LIBS)) \
+  	echo "# Using R_LIBS: $(R_LIBS)"; \
+  	$(RSCRIPT) --vanilla --quiet -e "devtools::install('../', reload=FALSE, quick=TRUE)" >> Rinstall.log 2>> Rinstall.err; \
+  	if [ ! -d "$(TMP_INSTALL_DIR)/$(MAKE_R_PACKAGE)" ]; then \
+  		echo "ERROR: Temporary installation failed: see files Rinstall.log and Rinstall.err"; \
+  		echo "# Removing temporary library directory $(TMP_INSTALL_DIR)"; \
+  		exit 1; \
+  	else \
+  		echo "# Package successfully installed"; \
+  	fi \
+  fi
 endef
 else
 define do_install
@@ -124,7 +138,7 @@ endif
 	# Detected vignettes: $(PDF_OBJS)
 
 clean:
-	rm -fr *.bbl *.run.xml *.blg *.aux *.out *.log *.err *-blx.bib unitTests-results vignette_*.mk
+	rm -fr *.bbl *.run.xml *.blg *.aux *.out *.log *.err *-blx.bib unitTests-results vignette_*.mk vignette.mk tmplib
 ifndef LOCAL_MODE
 	rm -f $(TEX_OBJS)
 endif
@@ -142,8 +156,10 @@ RSCRIPT=$(R_HOME)/bin/Rscript
 .SECONDARY: %.tex
 
 do_clean:
+ifndef QUICK
 	# Removing temporary install directory '$(TMP_INSTALL_DIR)'
 	@-rm -rf $(TMP_INSTALL_DIR);
+endif
 
 # Generate .pdf from .Rnw
 %.pdf: ${SRC_DIR}/%.Rnw
@@ -180,15 +196,16 @@ endif
 	$(RSCRIPT) --vanilla -e "pkgmaker::makeFakeVignette('${SRC_DIR}/$*.Rnw', '$*.Rnw')"
 	$(update_inst_doc)
 
+# only run tests if not checking: CRAN check run the tests separately
 %-unitTests.pdf:
 	$(do_install)
 	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	# Generating vignette for unit tests: $@
 	# Using R_LIBS: $(R_LIBS)
 	# Make test vignette
-	$(RSCRIPT) --vanilla -e "pkgmaker::makeUnitVignette('package:$(MAKE_R_PACKAGE)')" >> unitTests.log
-ifndef LOCAL_MODE
-	# Cleanup latex file $(MAKE_R_PACKAGE)-unitTests.tex
-	rm -fr $(MAKE_R_PACKAGE)-unitTests.tex
+	$(RSCRIPT) --vanilla -e "pkgmaker::makeUnitVignette('package:$(MAKE_R_PACKAGE)', check=$(R_CHECK))" >> unitTests.log
+ifdef LOCAL_MODE
+	# Compact vignette file
+	$(RSCRIPT) --vanilla -e "tools::compactPDF('$(VIGNETTE_BASENAME).pdf')"
 endif
 	$(update_inst_doc)

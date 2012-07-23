@@ -17,7 +17,8 @@
     quiet = Sys.getenv("RCMDCHECK") != "FALSE",
     lib.loc = NULL)
 
-  \S4method{utest}{RUnitTestSuite}(x, ..., quiet = FALSE)
+  \S4method{utest}{RUnitTestSuite}(x, ..., quiet = FALSE,
+    outdir = NULL)
 }
 \arguments{
   \item{x}{object to which a unit test is attached}
@@ -44,6 +45,8 @@
   \item{lib.loc}{path to a library where installed packages
   are searched for. Used is of the form
   \code{x='package:*'}.}
+
+  \item{outdir}{output directory}
 }
 \description{
   Run unit tests in a variety of settings. This is still

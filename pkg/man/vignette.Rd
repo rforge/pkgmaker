@@ -25,7 +25,8 @@
   rnwChildren(x)
 
   vignetteMakefile(user = NULL, package = NULL,
-    skip = NULL, print = TRUE, template = NULL)
+    skip = NULL, print = TRUE, template = NULL,
+    temp = FALSE)
 }
 \arguments{
   \item{x}{vignette source file specification as a path or
@@ -68,7 +69,14 @@
   \item{print}{logical that specifies if the path should be
   printed or only returned.}
 
-  \item{template}{template Makefile to use}
+  \item{template}{template Makefile to use. The default is
+  to use the file \dQuote{vignette.mk} shipped with the
+  package \pkg{pkgmaker} and can be found in its install
+  root directory.}
+
+  \item{temp}{logical that indicates if the generated
+  makefile should using a temporary filename (\code{TRUE}),
+  or simply named \dQuote{vignette.mk}}
 }
 \description{
   \code{rnw} provides a unified interface to run vignettes

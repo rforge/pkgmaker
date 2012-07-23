@@ -17,8 +17,10 @@ NULL
 #' the command. 
 #' 
 #' @export
-R.exec <- function(...){	
-	system(paste(file.path(R.home(), 'bin', 'R'),' ', ..., sep=''))
+R.exec <- function(...){
+	cmd <- paste(file.path(R.home(), 'bin', 'R'),' ', ..., sep='')
+	print(cmd)
+	system(cmd)
 }
 
 #' \code{R.CMD} executes R CMD commands.
@@ -232,6 +234,11 @@ toppackage <- function(verbose=FALSE){
 #' @return a character string
 packageName <- function(envir=packageEnv(), .Global=FALSE, rm.prefix=TRUE){
 	
+	if( is.null(envir) ) envir <- packageEnv() 
+	if( is.character(envir) ){
+		return( sub("^package:", "", envir) )
+	}
+	
 	# retrieve package environment
 	e <- envir
 	
@@ -286,7 +293,7 @@ str_ns <- function(envir=packageEnv()){
 packagePath <- function(..., package=NULL, lib=NULL){
 	
 	# try to find the path from the package's environment (namespace)
-	pname <- if( !is.null(package) ) package else packageName()
+	pname <- packageName(package)
 	# try installed package
 	path <- if( !isNA(lib) ) system.file(package=pname, lib.loc=lib)		
 
@@ -368,7 +375,7 @@ as.package <- function(x, ..., quiet=FALSE){
 		}
 	}
 	res <- devtools::as.package(x)
-	if( !is.package(res) ) return()
+	if( !devtools::is.package(res) ) return()
 	res	
 }
 
