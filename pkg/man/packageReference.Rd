@@ -17,5 +17,4 @@
   looked in a file named REFERNCES.bib in the package's
   root directory (i.e. inst/ in development mode).
 }
-\keyword{internal}
 

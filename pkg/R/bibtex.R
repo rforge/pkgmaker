@@ -152,8 +152,9 @@ write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose 
 #' directory (i.e. inst/ in development mode).
 #'  
 #' @param key character vector of BibTex keys
-#' @return a character string containing the text formated BibTex entries 
-#' @keywords internal
+#' @return a character string containing the text formated BibTex entries
+#'  
+#' @export
 packageReference <- function(key, short=FALSE){
 	bibs <- bibtex::read.bib(file=packageReferenceFile())
 	k <- sapply(bibs, function(x) x$key)
