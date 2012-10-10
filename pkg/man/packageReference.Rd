@@ -6,6 +6,10 @@
 }
 \arguments{
   \item{key}{character vector of BibTex keys}
+
+  \item{short}{logical that indicates if the reference
+  should be shorten as First Author et al. if it has more
+  than one author.}
 }
 \value{
   a character string containing the text formated BibTex

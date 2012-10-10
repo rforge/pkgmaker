@@ -152,6 +152,8 @@ write.bib <- function(entry=NULL, file="Rpackages.bib", append = FALSE, verbose 
 #' directory (i.e. inst/ in development mode).
 #'  
 #' @param key character vector of BibTex keys
+#' @param short logical that indicates if the reference should be shorten as 
+#' First Author et al. if it has more than one author.
 #' @return a character string containing the text formated BibTex entries
 #'  
 #' @export

@@ -1,7 +1,7 @@
 Package: pkgmaker
 Type: Package
 Title: Package development utilities
-Version: 0.8.1
+Version: 0.8.2
 Date: 2012-05-23
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
@@ -28,7 +28,7 @@ Imports:
     xtable
 Suggests:
     registry,
-    devtools,
+    devtools (>= 0.8),
     bibtex,
     RUnit,
     testthat,
