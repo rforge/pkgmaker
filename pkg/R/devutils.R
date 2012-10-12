@@ -18,7 +18,7 @@ NULL
 #' 
 #' @export
 R.exec <- function(...){
-	cmd <- paste(file.path(R.home(), 'bin', 'R'), ' ', ..., collapse='')
+	cmd <- paste(file.path(R.home(), 'bin', 'R'), ' ', ..., sep='', collapse='')
 	message(cmd)
 	system(cmd)
 }
@@ -106,8 +106,15 @@ compile_src <- function(pkg=NULL, load=TRUE){
 		Sys.setenv(R_PACKAGE_DIR=path)
 		R.SHLIB(pkg, " *.cpp ")
 		message("## DONE")
-		if( load )
-			load_dll(pkg)
+		if( load ){
+			if( existsFunction('load_dll', where='package:devtools') ){ # post 0.8
+				f <- getFunction('load_dll', where='package:devtools')
+				f(pkg)
+			}else{ # prior 0.8
+				f <- getFunction('load_c', where='package:devtools')
+				f(pkg)
+			}
+		}
 	}
 }
 
