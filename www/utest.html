@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Running Unit Tests. pkgmaker 0.5.1</title>
+    <title>Running Unit Tests. pkgmaker </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,7 +28,7 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class = "container">
-          <a class="brand" href="index.html">pkgmaker 0.5.1</a>
+          <a class="brand" href="index.html">pkgmaker </a>
           <div class="nav">
             <ul class="nav">
               <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -46,12 +46,16 @@
           <h2>Usage</h2>
           <pre><span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
 
-<span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">run</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+<span class="comment"><span class="label label-important">S4</span> (function)</span>
+<span class="functioncall"><a href='NA'>`utest`</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">run</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
 
-<span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">filter</span> <span class="argument">=</span> <span class="string">"^runit.+\\.[rR]$"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="string">"^test\\."</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">testdir</span> <span class="argument">=</span> <span class="string">"tests"</span><span class="keyword">,</span> <span class="argument">framework</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"RUnit"</span><span class="keyword">,</span>
-  <span class="string">"testthat"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>Sys.getenv</a></span><span class="keyword">(</span><span class="string">"RCMDCHECK"</span><span class="keyword">)</span> <span class="keyword">!=</span> <span class="string">"FALSE"</span><span class="keyword">)</span>
+<span class="comment"><span class="label label-important">S4</span> (character)</span>
+<span class="functioncall"><a href='NA'>`utest`</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">filter</span> <span class="argument">=</span> <span class="string">"^runit.+\\.[rR]$"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="string">"^test\\."</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">testdir</span> <span class="argument">=</span> <span class="string">"tests"</span><span class="keyword">,</span>
+  <span class="argument">framework</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"RUnit"</span><span class="keyword">,</span> <span class="string">"testthat"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>Sys.getenv</a></span><span class="keyword">(</span><span class="string">"RCMDCHECK"</span><span class="keyword">)</span> <span class="keyword">!=</span> <span class="string">"FALSE"</span><span class="keyword">,</span>
+      <span class="argument">lib.loc</span> <span class="argument">=</span> NULL<span class="keyword">)</span>
 
-<span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+<span class="comment"><span class="label label-important">S4</span> (RUnitTestSuite)</span>
+<span class="functioncall"><a href='NA'>`utest`</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">outdir</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
           
           <h2>Arguments</h2>
           <dl>
@@ -76,6 +80,12 @@
             <dt>quiet</dt>
             <dd>a logical that indicates if the tests should
   be run silently</dd>
+            <dt>lib.loc</dt>
+            <dd>path to a library where installed packages
+  are searched for. Used is of the form
+  <code>x='package:*'</code>.</dd>
+            <dt>outdir</dt>
+            <dd>output directory</dd>
           </dl>
           
           <div class="Description">
@@ -107,7 +117,7 @@
         </div>
         <div class="span4">
           <!-- <ul>
-            <li>utest</li><li>utest,character-method</li><li>utest,function-method</li><li>utest-methods</li><li>utest,RUnitTestSuite-method</li>
+            <li>utest</li><li>utest,RUnitTestSuite-method</li><li>utest,character-method</li><li>utest,function-method</li><li>utest-methods</li>
           </ul>
           <ul>
             <li>methods</li>

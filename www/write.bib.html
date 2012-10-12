@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Generate a Bibtex File from Package Citations. pkgmaker 0.5.1</title>
+    <title>Generate a Bibtex File from Package Citations. pkgmaker </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="
@@ -32,7 +32,7 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class = "container">
-          <a class="brand" href="index.html">pkgmaker 0.5.1</a>
+          <a class="brand" href="index.html">pkgmaker </a>
           <div class="nav">
             <ul class="nav">
               <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -114,14 +114,14 @@
           </div>
       
           <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="functioncall"><a href='NA'>library</a></span><span class="keyword">(</span><span class="symbol">bibtex</span><span class="keyword">)</span>
-<span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span><span class="string">'references'</span><span class="keyword">)</span></div>
+          <pre class="examples"><div class='input'><span class="comment">#library(bibtex)</span>
+<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span><span class="string">'references'</span><span class="keyword">)</span></div>
 <strong class='message'>Converted 3 of 3 package citations to BibTeX</strong>
 <strong class='message'>Writing 3 Bibtex entries ... </strong>
 <strong class='message'>OK
 Results written to file 'references.bib'</strong>
-<div class='input'><span class="symbol">bibs</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>read.bib</a></span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">)</span>
-<span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="symbol">bibs</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span></div>
+<div class='input'><span class="symbol">bibs</span> <span class="assignement">&lt;-</span> <span class="package">bibtex</span><span class="keyword">::</span><span class="functioncall"><a href='NA'>read.bib</a></span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">)</span>
+<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="symbol">bibs</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span></div>
 <strong class='message'>Writing 3 Bibtex entries ... </strong>
 <strong class='message'>OK
 Results written to file 'references2.bib'</strong>
@@ -133,18 +133,18 @@ Results written to file 'references2.bib'</strong>
 <div class='input'>
 
 <span class="comment"># write to stdout()</span>
-<span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span>NULL<span class="keyword">)</span></div>
+<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span>NULL<span class="keyword">)</span></div>
 <div class='output'>@Manual{bibtex,
   title = {bibtex: bibtex parser},
   author = {Romain Francois},
-  year = {2011},
-  note = {R package version 0.3-0},
+  year = {2012},
+  note = {R package version 0.3-2},
   url = {http://CRAN.R-project.org/package=bibtex},
 }
 
 @Manual{utils,
   title = {R: A Language and Environment for Statistical Computing},
-  author = {{R Development Core Team}},
+  author = {{R Core Team}},
   organization = {R Foundation for Statistical Computing},
   address = {Vienna, Austria},
   year = {2012},
@@ -154,14 +154,15 @@ Results written to file 'references2.bib'</strong>
 
 @Manual{tools,
   title = {R: A Language and Environment for Statistical Computing},
-  author = {{R Development Core Team}},
+  author = {{R Core Team}},
   organization = {R Foundation for Statistical Computing},
   address = {Vienna, Austria},
   year = {2012},
   note = {{ISBN} 3-900051-07-0},
   url = {http://www.R-project.org/},
 }
-</div></pre>
+</div>
+<div class='input'></div></pre>
         </div>
         <div class="span4">
           <!-- <ul>
