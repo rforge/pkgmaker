@@ -69,7 +69,7 @@ quickinstall <- function(path, lib=NULL){
 	if( !file.exists(spkg) ) stop('Error in building package `', pkg$package,'`')
 	# install
 	message("# Installing package `", pkg$package, "`", if( !is.null(lib) ) str_c("in '", nlib, "'"))
-	R.CMD('INSTALL', if( !is.null(lib) ) paste('-l', nlib), ' --no-docs --no-multiarch --no-demo ', spkg)
+	R.CMD('INSTALL', if( !is.null(lib) ) paste('-l', nlib), ' --no-docs --no-multiarch --no-demo --with-keep.source ', spkg)
 }
 
 #' Compile Source Files from a Development Package
