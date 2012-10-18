@@ -152,3 +152,21 @@ setCRANMirror <- function(url=CRAN, unique=TRUE){
 #' install.packages('pkgmaker', repos=CRAN)
 #' }
 CRAN <- 'http://cran.r-project.org'
+
+
+#' Adding Package Libraries
+#' 
+#' Prepend/append paths to the library path list, using \code{\link{.libPaths}}.
+#' 
+#' @param ... paths to add to .libPath
+#' @param append logical that indicates that the paths should be appended
+#' rather than prepended.
+#' 
+#' @export
+add_lib <- function(..., append=FALSE){
+	
+	p <- 
+	if( append ) c(.libPaths(), ...)
+	else c(..., .libPaths())
+	.libPaths(p)
+}

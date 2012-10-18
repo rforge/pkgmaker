@@ -1,8 +1,8 @@
 Package: pkgmaker
 Type: Package
 Title: Package development utilities
-Version: 0.8.5
-Date: 2012-05-23
+Version: 0.8.6
+Date: 2012-10-18
 Author: Renaud Gaujoux
 Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
 Description: This package provides some low-level utilities to use for package
