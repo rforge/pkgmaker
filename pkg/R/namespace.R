@@ -74,7 +74,7 @@ getLoadingNamespace <- function(env=FALSE, info=FALSE, nodev=FALSE){
 			e <- sys.frame(i)
 			pkg <- e$pkg
 			# extract namespace
-			if( env ) asNamespace(pkg$pkgname)
+			if( env ) asNamespace(pkg$package)
 			else if( info ){
 				list(
 						pkgname = pkg$package
