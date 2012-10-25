@@ -544,3 +544,94 @@ hasArg2 <- function (name)
 	else eval(substitute(!missing(name)), sys.frame(sys.parent()))
 	##
 }
+
+#' Exposing Object Attributes
+#' 
+#' The function \code{ExposeAttribute} creates an S3 object that 
+#' exposes all attributes of any R object, by making them accessible via 
+#' methods \code{\link{$}} and/or \code{\link{$<-}}.
+#' 
+#' @param object any R object whose attributes need to be exposed
+#' @param mode access mode: 
+#' \describe{
+#' \item{\dQuote{r}:}{ (read-only) only method \code{$} is defined}
+#' \item{\dQuote{w}:}{ (write-only) only method \code{$<-} is defined}
+#' \item{\dQuote{rw}:}{ (read-write) both methods \code{$} and \code{$<-} 
+#' are defined}
+#' } 
+#' 
+#' @export
+ExposeAttribute <- function(object, mode="rw"){
+	class(object) <- c(class(object), 'ExposeAttribute')
+#	args <- c(...)
+#	if( length(args) ){
+#		stopifnot( is.character(args) )
+#		if( is.null(names) )
+#			args <- setNames(rep(mode, length(args)), args)  
+#	}
+	EAmode(object) <- mode
+	object
+}
+
+#' @importFrom utils .DollarNames
+#' @S3method .DollarNames ExposeAttribute 
+.DollarNames.ExposeAttribute <- function(x, pattern=""){ 
+	att <- grep(pattern, names(attributes(x)), value=TRUE)
+	att[att != '.EAmode']
+}
+
+#' @S3method $ ExposeAttribute
+`$.ExposeAttribute` <- function(x, name){
+	mode <- EAmode(x)
+	if( is.null(mode) ){
+		warning("Missing mode in ExposeAttribute object: assuming 'rw'.")
+		mode <- 'rw'
+	}
+	if( !grepl('r', mode) ){
+		stop("Cannot access attribute '", name, "': object not in read mode [", mode,"].")
+	}
+	attr(x, name)
+	
+}
+
+#' @S3method $<- ExposeAttribute
+`$<-.ExposeAttribute` <- function(x, name, value){
+	mode <- EAmode(x)
+	if( is.null(mode) ){
+		warning("Missing mode in ExposeAttribute object: assuming 'rw'.")
+		mode <- 'rw'
+	}
+	if( name == '.EAmode')
+		stop("Cannot directly set attribute '.EAmode'. Use `EAmode(x) <- value`.")
+	if( !grepl('w', mode) ){
+		stop("Cannot set attribute '", name, "': object not in write mode [", mode,"].")
+	}
+	attr(x, name) <- value
+	x
+}
+
+#' @S3method print ExposeAttribute
+print.ExposeAttribute <- function(x, ...){
+	# remove EA stuff 
+	EAmode(x) <- NULL
+	# call next print method
+	print(x, ...)
+}
+
+#' \code{EAmode} and \code{EAmode<-} get and sets the access mode of 
+#' \code{ExposeAttribute} objects.
+#' 
+#' @param x an \code{ExposeAttribute} object
+#' @param value replacement value for mode.
+#' @export
+#' @rdname ExposeAttribute
+EAmode <- function(x){
+	attr(x, '.EAmode')
+}
+#' @export
+#' @rdname ExposeAttribute
+`EAmode<-` <- function(x, value){
+	attr(x, '.EAmode') <- value
+	if( is.null(value) ) class(x) <- class(x)[!class(x) %in% "ExposeAttribute"]
+	x
+}

@@ -189,40 +189,6 @@ packageEnv <- function(pkg, skip=FALSE, verbose=FALSE){
 	}
 	if( verbose ) message("packageEnv - Detected ", str_ns(e))
 	return(e)
-		
-##   message("skip ns:")
-##	print(skipEnv)
-#	n <- 1
-##	i <- -1
-#	while (!identical(envir, emptyenv())) {
-##		i <- i + 1
-##		message("i=", i)
-##		print(envir)
-#		nm <- attributes(envir)[["names", exact = TRUE]]
-#		nm2 <- environmentName(envir)
-#		if ((is.character(nm) && length(grep("^package:", nm)))
-#				|| length(grep("^package:", nm2))
-#				|| identical(envir, matchThisEnv) || identical(envir, .GlobalEnv) 
-#				|| identical(envir, baseenv()) || isNamespace(envir) 
-#				|| exists(".packageName", envir = envir, inherits = FALSE)){
-#		
-#			# go through pkgmaker frames, and skip caller namespace if requested
-#			if( identical(envir, pkgmakerEnv) 
-#					|| (!is.null(skipEnv) && identical(envir, skipEnv)) ){
-#				n <- n + 1
-#				envir <- parent.frame(n)
-#			}else if( identical(envir, .BaseNamespaceEnv) ){
-#				# this means that top caller is within the pkgmaker package
-#				# as it is highly improbable to evaluated within the base namespace
-#				# except intentionally as evalq(packageEnv(), .BaseNamespaceEnv)
-#    			if( !is.null(skipEnv) ) return(skipEnv)
-#				else return(pkgmakerEnv)
-#			}else
-#				return(envir)
-#		
-#		}else envir <- parent.env(envir)
-#	}
-#	return(.GlobalEnv)
 }
 
 #' \code{topns_name} returns the name of the runtime sequence of top namespace(s), 
@@ -257,6 +223,17 @@ topns_name <- function(n=1L, strict=TRUE, unique=TRUE){
 			}
 		}
 		i <- i + 1
+	}
+	
+	if( !length(res) ){# try with packageEnv
+		e <- packageEnv(skip=TRUE)
+		if( isNamespace(e) ){
+			res <- getPackageName(e)
+#			print(res)
+		}else{
+			warning('Could not find top namespace.', immediate.=TRUE)
+			return('')
+		}
 	}
 	
 	if( unique || n==1L ) res <- match.fun('unique')(res)
