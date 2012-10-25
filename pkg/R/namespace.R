@@ -4,6 +4,44 @@
 # Creation: 30 Apr 2012
 ###############################################################################
 
+
+is_funcall <- function(fun){
+	
+	n <- sys.nframe()
+	i <- 1
+	dg <- digest(fun)
+	while( i <= n ){
+		f <- sys.function(i)
+		ca <- sys.call(i)
+#		cat(digest(f), dg, getPackageName(environment(f), FALSE), "\n")
+		if( digest(f) == dg ) return(i)
+		i <- i + 1
+	}
+	FALSE
+}
+
+is_pkgcall <- function(pkg){
+	
+	pkg %in% pkg_calls()
+	
+}
+
+pkg_calls <- function(){
+	n <- sys.nframe() - 1
+	i <- 1
+	res <- character()
+	while( i <= n ){
+		f <- sys.function(i)
+		e <- environment(f)
+		if( !is.null(e) ){
+			pkg <- getPackageName(e, create=FALSE)
+			if( pkg != '' ) res <- c(res, pkg)
+		}
+		i <- i + 1
+	}
+	res
+}
+
 #' Namespace Development Functions
 #' 
 #' \code{getLoadingNamespace} returns information about the loading namespace.
@@ -22,12 +60,28 @@
 #' @rdname namespace
 #' @export
 #' 
-getLoadingNamespace <- function(env=FALSE, info=FALSE){
+getLoadingNamespace <- function(env=FALSE, info=FALSE, nodev=FALSE){
 	is.loading <- try(nsInfo <- loadingNamespaceInfo(), silent=TRUE)
 	if( !is(is.loading, 'try-error') ){
 		if( env ) asNamespace(as.name(nsInfo$pkgname))
 		else if( info ) nsInfo 
 		else nsInfo$pkgname
+		
+	}else if( !nodev ){ # devtools namespaces are allowed
+		if( is_pkgcall('devtools') && (i <- is_funcall(devtools::load_all)) ){
+			# find out the package that is currently being loaded by load_all
+			e <- sys.frame(i)
+			pkg <- e$pkg
+			# extract namespace
+			if( env ) asNamespace(pkg$pkgname)
+			else if( info ){
+				list(
+						pkgname = pkg$package
+						, path = pkg$path
+						, libname = dirname(pkg$path)
+				)
+			}else pkg$package
+		}
 	}
 	else NULL
 }
@@ -36,12 +90,17 @@ getLoadingNamespace <- function(env=FALSE, info=FALSE){
 #' 
 #' @param name the name of a namespace whose loading state is tested.
 #' If missing \code{isLoadingNamespace} test if any namespace is being loaded.
+#' @param nodev logical that indicates if loading devtools namespace should 
+#' be discarded.
 #' 
 #' @rdname namespace
 #' @export
-isLoadingNamespace <- function(name){
-	ns <- getLoadingNamespace()
-	!is.null(ns) && (missing(name) || ns==name)
+isLoadingNamespace <- function(name, nodev=FALSE){
+	
+	nspkg <- getLoadingNamespace(nodev=nodev)
+	if( missing(name) ) !is.null(nspkg)
+	else if( is.null(nspkg) ) FALSE
+	else nspkg == name
 }
 
 #' \code{isNamespaceLoaded} tests if a given namespace is loaded, without loading it, 

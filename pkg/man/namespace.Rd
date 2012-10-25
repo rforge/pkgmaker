@@ -6,9 +6,10 @@
 \alias{isNamespaceLoaded}
 \title{Namespace Development Functions}
 \usage{
-  getLoadingNamespace(env = FALSE, info = FALSE)
+  getLoadingNamespace(env = FALSE, info = FALSE,
+    nodev = FALSE)
 
-  isLoadingNamespace(name)
+  isLoadingNamespace(name, nodev = FALSE)
 
   isNamespaceLoaded(name)
 
@@ -27,6 +28,9 @@
   \item{name}{the name of a namespace whose loading state
   is tested. If missing \code{isLoadingNamespace} test if
   any namespace is being loaded.}
+
+  \item{nodev}{logical that indicates if loading devtools
+  namespace should be discarded.}
 
   \item{x}{character vector containing the names of R
   objects to export in the loading namespace.}
