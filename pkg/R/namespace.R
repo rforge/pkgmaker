@@ -6,7 +6,8 @@
 
 
 is_funcall <- function(fun){
-	
+
+	library(digest)
 	n <- sys.nframe()
 	i <- 1
 	dg <- digest(fun)
