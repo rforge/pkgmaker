@@ -1,6 +1,7 @@
 \name{getLoadingNamespace}
 \alias{addNamespaceExport}
 \alias{getLoadingNamespace}
+\alias{isDevNamespace}
 \alias{isLoadingNamespace}
 \alias{isNamespaceLoaded}
 \title{Namespace Development Functions}
@@ -10,6 +11,8 @@
   isLoadingNamespace(name)
 
   isNamespaceLoaded(name)
+
+  isDevNamespace(name)
 
   addNamespaceExport(x)
 }
@@ -42,8 +45,12 @@
 
   Tests if a namespace is being loaded.
 
-  Tests if a given namespace is loaded, without loading it,
-  contrary to \code{\link{isNamespace}}.
+  \code{isNamespaceLoaded} tests if a given namespace is
+  loaded, without loading it, contrary to
+  \code{\link{isNamespace}}.
+
+  \code{isDevNamespace} tests the -- current -- namespace
+  is a devtools namespace.
 
   Dynamically adds exported objects into the loading
   namespace.

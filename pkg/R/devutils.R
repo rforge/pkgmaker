@@ -132,7 +132,7 @@ compile_src <- function(pkg=NULL, load=TRUE){
 #' @param verbose logical that toggles verbosity
 #' 
 #' @rdname devutils
-#' @return an environment
+#' @return \code{packageEnv} returns an environment
 #' @export
 packageEnv <- function(pkg, skip=FALSE, verbose=FALSE){
 	
@@ -152,12 +152,12 @@ packageEnv <- function(pkg, skip=FALSE, verbose=FALSE){
 	
 	envir = parent.frame()
 #	message("parent.frame: ", str_ns(envir))
-	pkgmakerEnv <- topdevenv()
+	pkgmakerEnv <- topenv()
 #	message("pkgmaker ns: ", str_ns(pkgmakerEnv))
 
 	n <- 1
 	skipEnv <- pkgmakerEnv
-	while( identical(e <- topdevenv(envir), skipEnv) 
+	while( identical(e <- topenv(envir), skipEnv) 
 			&& !identical(e, emptyenv()) 
 			&& !identical(e, .GlobalEnv) ){
 		if( verbose > 1 ) print(e)
@@ -176,7 +176,7 @@ packageEnv <- function(pkg, skip=FALSE, verbose=FALSE){
 	if( verbose > 1 ) message("Skipping ", str_ns(skipEnv))
 	# go up one extra namespace
 	skipEnv <- e
-	while( identical(e <- topdevenv(envir), skipEnv) 
+	while( identical(e <- topenv(envir), skipEnv) 
 			&& !identical(e, emptyenv()) 
 			&& !identical(e, .GlobalEnv) ){
 		if( verbose > 1 ) print(e)
@@ -225,34 +225,57 @@ packageEnv <- function(pkg, skip=FALSE, verbose=FALSE){
 #	return(.GlobalEnv)
 }
 
-topdevenv <- function (envir = parent.frame(), matchThisEnv = getOption("topLevelEnvironment")) {
-	
-	while (!identical(envir, emptyenv())) {
-		nm <- attributes(envir)[["names", exact = TRUE]]
-		nm2 <- environmentName(envir)
-		if ((is.character(nm) && length(grep("^package:", nm)))
-				|| length(grep("^package:", nm2))
-				|| identical(envir, matchThisEnv) || identical(envir, .GlobalEnv) 
-				|| identical(envir, baseenv()) || isNamespace(envir) 
-				|| exists(".packageName", envir = envir, inherits = FALSE)){
-			return(envir)
-		}else envir <- parent.env(envir)
-	}
-	return(.GlobalEnv)
-}
-
-#' \code{toppackage} returns the runtime top namespace, i.e. the namespace of 
-#' the top calling namespace, skipping the namespace where \code{toppackage} 
+#' \code{topns_name} returns the name of the runtime sequence of top namespace(s), 
+#' i.e. the name of the top calling package(s), from top to bottom.
+#' 
+#' \code{topns_name}: the top namespace is is not necessarily the namespace where \code{topns_name} 
 #' is effectively called.
 #' This is useful for packages that define functions that need to access the 
 #' calling namespace, even from calls nested into calls to another function from
 #' the same package -- in which case \code{topenv} would not give the desired 
 #' environment.   
+#' 
+#' @param n number of namespaces to return
+#' @param strict a logicical that indicates if the global environment should 
+#' be considered as a valid namespace.
+#' @param unique logical that indicates if the result should be reduced
+#' to contain only one occurence of each namespace. 
 #'  
 #' @rdname devutils
 #' @export
-toppackage <- function(verbose=FALSE){
-	packageEnv(skip=TRUE, verbose=verbose)
+topns_name <- function(n=1L, strict=TRUE, unique=TRUE){
+	
+	nf <- sys.nframe()
+	i <- 0
+	res <- character()
+	while( i <= nf && length(res) < n ){
+		e <- sys.frame(i)
+		if( !strict || !identical(e, .GlobalEnv) ){
+			pkg <- getPackageName(e, create=FALSE)
+			if( pkg != '' ){
+				res <- c(res, pkg)
+			}
+		}
+		i <- i + 1
+	}
+	
+	if( unique || n==1L ) res <- match.fun('unique')(res)
+	if( length(res) || n>1L ) res else ''
+}
+
+#' \code{topns} returns the runtime top namespace, i.e. the namespace of 
+#' the top calling package, possibly skipping the namespace where \code{topns} 
+#' is effectively called.
+#' This is useful for packages that define functions that need to access the 
+#' calling namespace, even from calls nested into calls to another function from
+#' the same package -- in which case \code{topenv} would not give the desired 
+#' environment.
+#'  
+#' @rdname devutils
+#' @export
+topns <- function(strict=TRUE){
+	asNamespace(topns_name(n=1L, strict=strict))
+	#packageEnv(skip=TRUE, verbose=verbose)
 }
 
 #' \code{packageName} returns the current package's name.

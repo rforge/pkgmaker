@@ -44,8 +44,8 @@ isLoadingNamespace <- function(name){
 	!is.null(ns) && (missing(name) || ns==name)
 }
 
-#' Tests if a given namespace is loaded, without loading it, contrary to 
-#' \code{\link{isNamespace}}.
+#' \code{isNamespaceLoaded} tests if a given namespace is loaded, without loading it, 
+#' contrary to \code{\link{isNamespace}}.
 #' 
 #' @rdname namespace
 #' @export
@@ -53,6 +53,22 @@ isNamespaceLoaded <- function(name){
 	name %in% loadedNamespaces()
 }
 
+#' \code{isDevNamespace} tests the -- current -- namespace is a devtools namespace.
+#' 
+#' @rdname namespace
+#' @export
+isDevNamespace <- function(name){
+	if( missing(name) ){
+		e <- parent.frame()
+		name <- getPackageName(topenv(e))
+	}
+	
+	if( isNamespaceLoaded(name) ) return( FALSE )
+	
+	ns <- asNamespace(name)
+	is.null(ns$.__DEVTOOLS__)
+	
+}
 
 #' Dynamically adds exported objects into the loading namespace.   
 #' 
