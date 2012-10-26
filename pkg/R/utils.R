@@ -4,6 +4,8 @@
 # Creation: 25 Apr 2012
 ###############################################################################
 
+library(digest)
+
 # or-NULL operator (borrowed from Hadley Wickham)
 '%||%' <- function(x, y) if( !is.null(x) ) x else y
 
@@ -552,43 +554,112 @@ hasArg2 <- function (name)
 #' methods \code{\link{$}} and/or \code{\link{$<-}}.
 #' 
 #' @param object any R object whose attributes need to be exposed
-#' @param mode access mode: 
+#' @param ... attributes, and optionally their respective values or
+#' access permissions.
+#' See argument \code{value} of \code{attr_mode} for details on the
+#' way of specifying these. 
+#' @param .MODE access mode:
 #' \describe{
 #' \item{\dQuote{r}:}{ (read-only) only method \code{$} is defined}
 #' \item{\dQuote{w}:}{ (write-only) only method \code{$<-} is defined}
 #' \item{\dQuote{rw}:}{ (read-write) both methods \code{$} and \code{$<-} 
 #' are defined}
 #' } 
+#' @param .VALUE logical that indicates if the values of named arguments 
+#' in \code{...} should be considered as attribute assignments, 
+#' i.e. that the result object has these attributes set with the specified values.
+#' In this case all these attributes will have the access permission
+#' as defined by argument \code{.MODE}.
 #' 
 #' @export
-ExposeAttribute <- function(object, mode="rw"){
+ExposeAttribute <- function(object, ..., .MODE='rw', .VALUE=FALSE){
+	
+	# setup exposed arguments
+	args <- list(...)
+	if( length(args) ){
+		# use the same mode for all attributes
+		if( isString(.MODE) == 1L )
+			.MODE <- rep(.MODE, length(args))
+		else if( length(.MODE) != length(args) ){
+			stop("Argument .MODE must provide an access mode for each argument in `...`.")
+		}
+		
+		if( is.null(names(args)) ) # add names if necessary
+			args <- setNames(args, rep('', length(args)))
+		un <- names(args)==''
+		if( any(!sapply(args[un], isString)) )
+			stop("All unnamed argument must be the name of an attribute, i.e. a character string.")
+		
+		# set attributes that have values if requested
+		if( .VALUE ){
+			sapply(names(args)[!un], function(x){
+				attr(object, x) <<- args[[x]]
+			})
+		}else{ # or use the values as access permission
+			.MODE[!un] <- args[!un]
+		}
+		#
+		
+		# store exposed attributes with names as regular expressions
+		eargs <- ifelse(un, args, names(args))
+		eargs <- as.list(setNames(.MODE, eargs))
+		# add ereg start-end
+		names(eargs) <- paste('^', names(eargs), '$', sep='')
+	}else{
+		eargs <- .MODE
+	}
+	
+	# store access rights
+	attr(object, '.ExposeAttribute') <- eargs
 	class(object) <- c(class(object), 'ExposeAttribute')
-#	args <- c(...)
-#	if( length(args) ){
-#		stopifnot( is.character(args) )
-#		if( is.null(names) )
-#			args <- setNames(rep(mode, length(args)), args)  
-#	}
-	EAmode(object) <- mode
 	object
+}
+
+.getEAmode <- function(x, name, ..., RAW..=FALSE){
+	ea <- attr(x, '.ExposeAttribute')
+	if( is.null(ea) ) return()
+	if( is.character(ea) && !RAW.. )
+		ea <- list(`^.*$`=ea)
+	if( missing(name) )	return(ea)
+
+	name <- name[name != '.ExposeAttribute']
+	# determine access mode
+	m <- lapply(names(ea), function(p){
+		m <- grep(p, name, value=TRUE)
+		setNames(rep(ea[[p]], length(m)), m)
+	})
+	unlist(m)
+	#
 }
 
 #' @importFrom utils .DollarNames
 #' @S3method .DollarNames ExposeAttribute 
 .DollarNames.ExposeAttribute <- function(x, pattern=""){ 
+	
 	att <- grep(pattern, names(attributes(x)), value=TRUE)
-	att[att != '.EAmode']
+	if( nchar(pattern) > 1 )
+		att <- unique(c(substring(pattern, 2), att))
+	# filter out based on the access permissions
+	mode <- .getEAmode(x, att)
+	if( !length(mode) ) return(character())
+	mode <- mode[mode != '']
+	# add `<-` suffix to write only attributes
+	if( length(wonly <- which(mode=='w')) )
+		names(mode)[wonly] <- paste(names(mode)[wonly], '<- ')
+	
+	names(mode)
 }
 
 #' @S3method $ ExposeAttribute
 `$.ExposeAttribute` <- function(x, name){
-	mode <- EAmode(x)
-	if( is.null(mode) ){
-		warning("Missing mode in ExposeAttribute object: assuming 'rw'.")
-		mode <- 'rw'
+	if( is.null(attr(x, name)) )
+		stop("Object `", deparse(substitute(x)),"` has no attribute '", name, "'.")
+	mode <- .getEAmode(x, name)
+	if( !length(mode) ){
+		stop("Could not access attribute via `$`: attribute '", name, "' is not exposed. Use `attr(x, '", name, "').")
 	}
-	if( !grepl('r', mode) ){
-		stop("Cannot access attribute '", name, "': object not in read mode [", mode,"].")
+	if( !any(grepl('r', mode)) ){
+		stop("Could not access exposed attribute '", name, "': permission denied [mode='", mode,"'].")
 	}
 	attr(x, name)
 	
@@ -596,15 +667,12 @@ ExposeAttribute <- function(object, mode="rw"){
 
 #' @S3method $<- ExposeAttribute
 `$<-.ExposeAttribute` <- function(x, name, value){
-	mode <- EAmode(x)
-	if( is.null(mode) ){
-		warning("Missing mode in ExposeAttribute object: assuming 'rw'.")
-		mode <- 'rw'
+	mode <- .getEAmode(x, name)
+	if( !length(mode) ){
+		stop("Could not write attribute via `$<-`: attribute '", name, "' is not exposed. Use `attr(x, '", name, "') <- value.")
 	}
-	if( name == '.EAmode')
-		stop("Cannot directly set attribute '.EAmode'. Use `EAmode(x) <- value`.")
-	if( !grepl('w', mode) ){
-		stop("Cannot set attribute '", name, "': object not in write mode [", mode,"].")
+	if( !any(grepl('w', mode)) ){
+		stop("Could not write attribute '", name, "': permission denied [mode='", mode,"'].")
 	}
 	attr(x, name) <- value
 	x
@@ -613,25 +681,42 @@ ExposeAttribute <- function(object, mode="rw"){
 #' @S3method print ExposeAttribute
 print.ExposeAttribute <- function(x, ...){
 	# remove EA stuff 
-	EAmode(x) <- NULL
+	attr_mode(x) <- NULL
 	# call next print method
 	print(x, ...)
 }
 
-#' \code{EAmode} and \code{EAmode<-} get and sets the access mode of 
+#' \code{attr_mode} and \code{attr_mode<-} get and sets the access mode of 
 #' \code{ExposeAttribute} objects.
 #' 
 #' @param x an \code{ExposeAttribute} object
 #' @param value replacement value for mode.
+#' It can be \code{NULL} to remove the ExposeAttribute wrapper, 
+#' a single character string to define a permission for all atributes
+#' (eg., \code{'rw'} or \code{'r'}), or a list specifying access permission 
+#' for specific attributes or classes of attributes defined by regular expressions.
+#' For example, \code{list(a='r', b='w', `blabla.*`='rw')} set attribute \code{'a'} 
+#' as read-only, attribute \code{'b'} as write-only, all attributes that start with 
+#' \code{'blabla'} in read-write access.
+#' 
 #' @export
 #' @rdname ExposeAttribute
-EAmode <- function(x){
-	attr(x, '.EAmode')
+attr_mode <- function(x){
+	.getEAmode(x, RAW..=TRUE)
 }
 #' @export
 #' @rdname ExposeAttribute
-`EAmode<-` <- function(x, value){
-	attr(x, '.EAmode') <- value
-	if( is.null(value) ) class(x) <- class(x)[!class(x) %in% "ExposeAttribute"]
+`attr_mode<-` <- function(x, value){
+	if( is.null(value) ){
+		attr(x, '.ExposeAttribute') <- NULL
+		class(x) <- class(x)[!class(x) %in% "ExposeAttribute"]
+	}else if( isString(value) ){
+		x <- ExposeAttribute(x, .MODE=value)
+	}else if( is.list(value) ){
+		args <- c(list(x), names(value), list(.MODE=setNames(value, NULL), .VALUE=FALSE))
+		x <- do.call('ExposeAttribute', args)
+	}else{
+		stop("Invalid value: a character string or a list is expected")
+	}
 	x
 }
