@@ -2,49 +2,45 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Testing Object Type. pkgmaker </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<title>is_something. pkgmaker 0.8.13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand" href="index.html">pkgmaker </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">pkgmaker 0.8.13</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>Testing Object Type</h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='is_something.html'>isNA</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='is_something.html'>isNA</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
 
 <span class="functioncall"><a href='is_something.html'>isFALSE</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
 
@@ -61,69 +57,69 @@
 <span class="functioncall"><a href='is_something.html'>is.file</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
 
 <span class="functioncall"><a href='is_something.html'>hasNames</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">all</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>x</dt>
-            <dd>an R object</dd>
-            <dt>all</dt>
-            <dd>logical that indicates if the object needs all
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>an R object</dd>
+      <dt>all</dt>
+      <dd>logical that indicates if the object needs all
   names non empty</dd>
-          </dl>
-          
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p><code>TRUE</code> or <code>FALSE</code></p>
-        
-          </div>
-
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Testing Object Type</p>
-        
-            <p>Tests if a variable is exactly NA (logical, character,
-  numeric or integer)</p>
-        
-            <p>Tests if a variable is exactly FALSE</p>
-        
-            <p>Tests if a variable is a single number</p>
-        
-            <p>Tests if a variable is a single real number</p>
-        
-            <p>Tests if an object is a single integer</p>
-        
-            <p>Test if an object is a single character string</p>
-        
-            <p>Tests if a filename is a directory</p>
-        
-            <p>Tests if a filename is a file</p>
-        
-            <p>Tests if an object has names</p>
-        
-          </div>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
       
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>hasNames</li><li>is.dir</li><li>is.file</li><li>isFALSE</li><li>isInteger</li><li>isNA</li><li>isNumber</li><li>isReal</li><li>isString</li><li>is_something</li>
-          </ul>
-          <ul>
-            
-          </ul> -->
-            
-          <h2>See also</h2>
-          
-  <code><a href='NA'>isTRUE</a></code>
+      <p><code>TRUE</code> or <code>FALSE</code></p>
+  
+    </div>
 
-                    
-        </div>
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Testing Object Type</p>
+  
+      <p>Tests if a variable is exactly NA (logical, character,
+  numeric or integer)</p>
+  
+      <p>Tests if a variable is exactly FALSE</p>
+  
+      <p>Tests if a variable is a single number</p>
+  
+      <p>Tests if a variable is a single real number</p>
+  
+      <p>Tests if an object is a single integer</p>
+  
+      <p>Test if an object is a single character string</p>
+  
+      <p>Tests if a filename is a directory</p>
+  
+      <p>Tests if a filename is a file</p>
+  
+      <p>Tests if an object has names</p>
+  
+    </div>
       </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+  <div class="span4">
+    <!-- <ul>
+      <li>hasNames</li><li>is.dir</li><li>isFALSE</li><li>is.file</li><li>isInteger</li><li>isNA</li><li>isNumber</li><li>isReal</li><li>is_something</li><li>isString</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='http://www.inside-r.org/r-doc/base/Logic'>isTRUE</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

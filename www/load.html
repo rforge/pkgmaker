@@ -2,78 +2,74 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Default Load/Unload Functions. pkgmaker </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<title>onLoad. pkgmaker 0.8.13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand" href="index.html">pkgmaker </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">pkgmaker 0.8.13</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>Default Load/Unload Functions</h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='load.html'>onLoad</a></span><span class="keyword">(</span><span class="argument">libname</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="symbol">pkgname</span><span class="keyword">,</span> <span class="argument">chname</span> <span class="argument">=</span> <span class="functioncall"><a href='devutils.html'>packageName</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='load.html'>onLoad</a></span><span class="keyword">(</span><span class="argument">libname</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="symbol">pkgname</span><span class="keyword">,</span> <span class="argument">chname</span> <span class="argument">=</span> <span class="functioncall"><a href='devutils.html'>packageName</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
 
 <span class="functioncall"><a href='load.html'>onUnload</a></span><span class="keyword">(</span><span class="symbol">libpath</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>libname</dt>
-            <dd>a character string giving the library
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>libname</dt>
+      <dd>a character string giving the library
   directory where the package defining the namespace was
   found.</dd>
-            <dt>pkgname</dt>
-            <dd>a character string giving the name of the
+      <dt>pkgname</dt>
+      <dd>a character string giving the name of the
   package.</dd>
-            <dt>libpath</dt>
-            <dd>a character string giving the complete
+      <dt>libpath</dt>
+      <dd>a character string giving the complete
   path to the package.</dd>
-            <dt>chname</dt>
-            <dd>a character string naming a DLL (also known
+      <dt>chname</dt>
+      <dd>a character string naming a DLL (also known
   as a dynamic shared object or library) to load.</dd>
-          </dl>
-          
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Default Load/Unload Functions</p>
-        
-          </div>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="comment"># in a package namespace:</span>
+      <p>Default Load/Unload Functions</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># in a package namespace:</span>
 <span class="symbol">.onLoad</span> <span class="assignement">&lt;-</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">libname</span><span class="eqformalargs">=</span>NULL<span class="keyword">,</span> <span class="formalargs">pkgname</span><span class="keyword">)</span><span class="keyword">{</span>
 
         <span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='load.html'>onLoad</a></span><span class="keyword">(</span><span class="symbol">libname</span><span class="keyword">,</span> <span class="symbol">pkgname</span><span class="keyword">)</span>
@@ -85,22 +81,23 @@
         <span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='load.html'>onUnload</a></span><span class="keyword">(</span><span class="symbol">libpath</span><span class="keyword">)</span>
 
 <span class="keyword">}</span></div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>onLoad</li><li>onUnload</li>
-          </ul>
-          <ul>
-            
-          </ul> -->
-            
-                    
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>onLoad</li><li>onUnload</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

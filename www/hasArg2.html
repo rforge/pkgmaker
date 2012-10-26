@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>hasArg2. pkgmaker 0.8.13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">pkgmaker 0.8.13</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Checking for Missing Arguments</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='hasArg2.html'>hasArg2</a></span><span class="keyword">(</span><span class="symbol">name</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>name</dt>
+      <dd>the name of an argument as a character
+  string.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This function is identical to <code><a href='http://www.inside-r.org/r-doc/methods/hasArg'>hasArg</a></code>,
+  except that it accepts the argument name as a character
+  string. This avoids to have a check NOTE about invisible
+  binding variable.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="symbol">f</span> <span class="assignement">&lt;-</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">...</span><span class="keyword">)</span><span class="keyword">{</span> <span class="functioncall"><a href='hasArg2.html'>hasArg2</a></span><span class="keyword">(</span><span class="string">'abc'</span><span class="keyword">)</span> <span class="keyword">}</span>
+<span class="functioncall">f</span><span class="keyword">(</span><span class="argument">a</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span></div>
+<div class='output'>[1] FALSE
+</div>
+<div class='input'><span class="functioncall">f</span><span class="keyword">(</span><span class="argument">abc</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall">f</span><span class="keyword">(</span><span class="argument">b</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span></div>
+<div class='output'>[1] FALSE
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>hasArg2</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

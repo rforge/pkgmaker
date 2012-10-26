@@ -2,49 +2,45 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Setting Mirrors and Repositories. pkgmaker </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<title>setBiocMirror. pkgmaker 0.8.13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand" href="index.html">pkgmaker </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">pkgmaker 0.8.13</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>Setting Mirrors and Repositories</h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='mirrors.html'>setBiocMirror</a></span><span class="keyword">(</span><span class="argument">url</span> <span class="argument">=</span> <span class="string">"http://www.bioconductor.org"</span><span class="keyword">,</span> <span class="argument">version</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">unique</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='mirrors.html'>setBiocMirror</a></span><span class="keyword">(</span><span class="argument">url</span> <span class="argument">=</span> <span class="string">"http://www.bioconductor.org"</span><span class="keyword">,</span> <span class="argument">version</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">unique</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
 
 <span class="functioncall"><a href='mirrors.html'>getBiocMirror</a></span><span class="keyword">(</span><span class="keyword">)</span>
 
@@ -53,68 +49,69 @@
 <span class="functioncall"><a href='mirrors.html'>setCRANMirror</a></span><span class="keyword">(</span><span class="argument">url</span> <span class="argument">=</span> <span class="symbol">CRAN</span><span class="keyword">,</span> <span class="argument">unique</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
 
 <span class="symbol">CRAN</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>url</dt>
-            <dd>or Bioconductor mirror url</dd>
-            <dt>version</dt>
-            <dd>version number</dd>
-            <dt>unique</dt>
-            <dd>logical that indicate if duplicated urls or
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>url</dt>
+      <dd>or Bioconductor mirror url</dd>
+      <dt>version</dt>
+      <dd>version number</dd>
+      <dt>unique</dt>
+      <dd>logical that indicate if duplicated urls or
   names should be removed.</dd>
-          </dl>
-          
-          <div class="Format">
-            <h2>Format</h2>
-            
-            <p>chr "http://cran.r-project.org"</p>
-        
-          </div>
+    </dl>
+    
+    <div class="Format">
+      <h2>Format</h2>
+      
+      <p>chr "http://cran.r-project.org"</p>
+  
+    </div>
 
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p><code>setBiocMirror</code> sets all Bioconductor repositories
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p><code>setBiocMirror</code> sets all Bioconductor repositories
   (software, data, annotation, etc.). so that they are
-  directly available to <code><a href='NA'>install.packages</a></code>. It
-  differs from <code><a href='NA'>chooseBioCmirror</a></code> in that it
+  directly available to <code><a href='http://www.inside-r.org/r-doc/utils/install.packages'>install.packages</a></code>. It
+  differs from <code><a href='http://www.inside-r.org/r-doc/utils/chooseBioCmirror'>chooseBioCmirror</a></code> in that it
   effectively enables the repositories.</p>
-        
-            <p><code>getBiocMirror</code> is a shortcut for
+  
+      <p><code>getBiocMirror</code> is a shortcut for
   <code>getOption('BioC_mirror')</code>, which returns the
   current Bioconductor mirror as used by <code>biocLite</code>.</p>
-        
-            <p><code>getBiocRepos</code> returns urls to all Bioconductor
+  
+      <p><code>getBiocRepos</code> returns urls to all Bioconductor
   repositories on a given mirror.</p>
-        
-            <p><code>setCRANMirror</code> sets the preferred CRAN mirror.</p>
-        
-            <p><code>CRAN</code> simply contains the url of CRAN main mirror
+  
+      <p><code>setCRANMirror</code> sets the preferred CRAN mirror.</p>
+  
+      <p><code>CRAN</code> simply contains the url of CRAN main mirror
   (<a href = 'http://cran.r-project.org'>http://cran.r-project.org</a>), and aims at
   simplifying its use, e.g., in calls to
-  <code><a href='NA'>install.packages</a></code>.</p>
-        
-          </div>
+  <code><a href='http://www.inside-r.org/r-doc/utils/install.packages'>install.packages</a></code>.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## <strong>Not run</strong>: # install.packages('pkgmaker', repos=CRAN)# ## <strong>End(Not run)</strong></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>CRAN</li><li>getBiocMirror</li><li>getBiocRepos</li><li>setBiocMirror</li><li>setCRANMirror</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'>## <strong>Not run</strong>: # install.packages('pkgmaker', repos=CRAN)# ## <strong>End(Not run)</strong></div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>CRAN</li><li>getBiocMirror</li><li>getBiocRepos</li><li>setBiocMirror</li><li>setCRANMirror</li>
-          </ul>
-          <ul>
-            <li>datasets</li>
-          </ul> -->
-            
-                    
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

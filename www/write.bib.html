@@ -2,130 +2,126 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Generate a Bibtex File from Package Citations. pkgmaker </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="
+<title>write.bib. pkgmaker 0.8.13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
   Renaud Gaujoux, based on the function
   &lt;code&gt;Rpackages.bib&lt;/code&gt; from Achim Zeileis (see
   &lt;em&gt;References&lt;/em&gt;).
 ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand" href="index.html">pkgmaker </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">pkgmaker 0.8.13</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>Generate a Bibtex File from Package Citations</h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="argument">entry</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">file</span> <span class="argument">=</span> <span class="string">"Rpackages.bib"</span><span class="keyword">,</span> <span class="argument">append</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>entry</dt>
-            <dd>a <code><a href='NA'>bibentry</a></code> object or a
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="argument">entry</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">file</span> <span class="argument">=</span> <span class="string">"Rpackages.bib"</span><span class="keyword">,</span> <span class="argument">append</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>entry</dt>
+      <dd>a <code><a href='http://www.inside-r.org/r-doc/utils/bibentry'>bibentry</a></code> object or a
   character vector of package names. If <code>NULL</code>, then
   the list of all installed packages is used.</dd>
-            <dt>file</dt>
-            <dd>output Bibtex file. It can be specified as a
+      <dt>file</dt>
+      <dd>output Bibtex file. It can be specified as a
   filename (as a single character string), NULL for
   <code>stdout</code>, or a <code>link{connection}</code> object. If
   <code>file</code> is a character string, an extension '.bib' is
   appended if not already present.</dd>
-            <dt>append</dt>
-            <dd>a logical that indicates that the Bibtex
+      <dt>append</dt>
+      <dd>a logical that indicates that the Bibtex
   entries should be added to the file. If <code>FALSE</code>
   (default), the file is overwritten.</dd>
-            <dt>verbose</dt>
-            <dd>a logical to toggle verbosity. If
+      <dt>verbose</dt>
+      <dd>a logical to toggle verbosity. If
   <code>file=NULL</code>, verbosity is forced off.</dd>
-          </dl>
-          
-          <div class="Generate a Bibtex File from Package Citations">
-            <h2>Generate a Bibtex File from Package Citations</h2>
-            
-          </div>
+    </dl>
+    
+    <div class="Generate a Bibtex File from Package Citations">
+      <h2>Generate a Bibtex File from Package Citations</h2>
+      
+    </div>
 
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>the list of Bibtex objects -- invisibly.</p>
-        
-          </div>
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>the list of Bibtex objects -- invisibly.</p>
+  
+    </div>
 
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Generates a Bibtex file from a list of packages or all
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Generates a Bibtex file from a list of packages or all
   the installed packages. It is useful for adding relevant
   citations in Sweave documents.</p>
-        
-          </div>
+  
+    </div>
 
-          <div class="Details">
-            <h2>Details</h2>
-            
-            <p>Multiple citations are handled by adding a numeric suffix
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Multiple citations are handled by adding a numeric suffix
   to the Bibtex key (other than the first/main citation) as
   <code>"<pkgname>%i"</code> (e.g. pkg, pkg2, pkg3).</p>
-        
-            <p>This function has now been integrated by Romain François
+  
+      <p>This function has now been integrated by Romain François
   in the bibtex package.</p>
-        
-          </div>
+  
+    </div>
 
-          <div class="References">
-            <h2>References</h2>
-            
-            <p><em>[R] Creating bibtex file of all installed
+    <div class="References">
+      <h2>References</h2>
+      
+      <p><em>[R] Creating bibtex file of all installed
   packages?</em> Achim Zeileis. R-help mailing list.
   <a href = 'https://stat.ethz.ch/pipermail/r-help/2009-December/222201.html'>https://stat.ethz.ch/pipermail/r-help/2009-December/222201.html</a></p>
-        
-          </div>
-      
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="comment">#library(bibtex)</span>
-<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span><span class="string">'references'</span><span class="keyword">)</span></div>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment">#library(bibtex)</span>
+<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span><span class="string">'references'</span><span class="keyword">)</span></div>
 <strong class='message'>Converted 3 of 3 package citations to BibTeX</strong>
 <strong class='message'>Writing 3 Bibtex entries ... </strong>
 <strong class='message'>OK
 Results written to file 'references.bib'</strong>
-<div class='input'><span class="symbol">bibs</span> <span class="assignement">&lt;-</span> <span class="package">bibtex</span><span class="keyword">::</span><span class="functioncall"><a href='NA'>read.bib</a></span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">)</span>
+<div class='input'><span class="symbol">bibs</span> <span class="assignement">&lt;-</span> <span class="package">bibtex</span><span class="keyword">::</span><span class="functioncall">read.bib</span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">)</span>
 <span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="symbol">bibs</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span></div>
 <strong class='message'>Writing 3 Bibtex entries ... </strong>
 <strong class='message'>OK
 Results written to file 'references2.bib'</strong>
-<div class='input'><span class="symbol">md5</span> <span class="assignement">&lt;-</span> <span class="package">tools</span><span class="keyword">::</span><span class="functioncall"><a href='NA'>md5sum</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span><span class="keyword">)</span>
+<div class='input'><span class="symbol">md5</span> <span class="assignement">&lt;-</span> <span class="package">tools</span><span class="keyword">::</span><span class="functioncall">md5sum</span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span><span class="keyword">)</span>
 <span class="symbol">md5</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">]</span> == <span class="symbol">md5</span><span class="keyword">[</span><span class="number">2</span><span class="keyword">]</span></div>
 <div class='output'>references.bib 
           TRUE 
@@ -133,12 +129,12 @@ Results written to file 'references2.bib'</strong>
 <div class='input'>
 
 <span class="comment"># write to stdout()</span>
-<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span>NULL<span class="keyword">)</span></div>
+<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span>NULL<span class="keyword">)</span></div>
 <div class='output'>@Manual{bibtex,
   title = {bibtex: bibtex parser},
   author = {Romain Francois},
   year = {2012},
-  note = {R package version 0.3-2},
+  note = {R package version 0.3-3},
   url = {http://CRAN.R-project.org/package=bibtex},
 }
 
@@ -163,33 +159,34 @@ Results written to file 'references2.bib'</strong>
 }
 </div>
 <div class='input'></div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>write.bib</li>
-          </ul>
-          <ul>
-            
-          </ul> -->
-            
-          <h2>See also</h2>
-          
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>write.bib</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
   <code>link{connection}</code>, <code>link{bibentry}</code>
 
-          
-          <h2>Author</h2>
-          
+    
+    <h2>Author</h2>
+    
   Renaud Gaujoux, based on the function
   <code>Rpackages.bib</code> from Achim Zeileis (see
   <em>References</em>).
 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>
