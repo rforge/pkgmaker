@@ -285,6 +285,25 @@ checkWarning <- function(expr, expected=NULL, msg=NULL){
 	TRUE
 }
 
+#' \code{checkIdenticalRNG} checks if two objects have the same RNG
+#' settings.
+#' 
+#' @param x,y objects from which RNG settings are extracted.
+#' 
+#' @export
+#' @rdname uchecks
+#' @examples 
+#' 
+#' # check for differences in RNG
+#' checkIdenticalRNG(123)
+#' try( checkIdenticalRNG(123, 123) )
+#' try( checkIdenticalRNG(123, 1:3) )
+#' 
+checkIdenticalRNG <- function(x, y=getRNG(), ...){	
+	checkTrue(rng.equal(x, y), ...)
+}
+
+
 #' Make Vignette for Unit Tests
 #' 
 #' Builds a vignette for unit tests in a package using the \code{\link{utest}} 
