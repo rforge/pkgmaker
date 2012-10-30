@@ -164,7 +164,6 @@ endif
 
 # Generate .pdf from .Rnw
 %.pdf: ${SRC_DIR}/%.Rnw
-	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	$(do_install)
 	# Generating vignette $@ from ${SRC_DIR}/$*.Rnw
 	# Using R_LIBS: $(R_LIBS)
@@ -173,6 +172,7 @@ endif
 	# Generating pdf $@ from $*.tex
 ifdef MAKEPDF
 ifdef USE_PDFLATEX
+	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	# Using pdflatex
 	@pdflatex $(VIGNETTE_BASENAME) >> $(VIGNETTE_BASENAME)-pdflatex.log
 	-bibtex $(VIGNETTE_BASENAME)
@@ -182,17 +182,18 @@ ifndef QUICK
 	# Compact vignettes
 	$(RSCRIPT) --vanilla -e "tools::compactPDF('$(VIGNETTE_BASENAME).pdf')"
 endif
-else
-	# Using tools::texi2dvi
-	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$(VIGNETTE_BASENAME).tex', pdf = TRUE, clean = FALSE )"
-	-bibtex $(VIGNETTE_BASENAME)
-	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$(VIGNETTE_BASENAME).tex', pdf = TRUE, clean = TRUE )"
-endif
-endif	
 	# Remove temporary LaTeX files (but keep the .tex)
 	rm -fr $(VIGNETTE_BASENAME).toc $(VIGNETTE_BASENAME).log \
 	$(VIGNETTE_BASENAME).bbl $(VIGNETTE_BASENAME).blg \
 	$(VIGNETTE_BASENAME).aux $(VIGNETTE_BASENAME).out $(VIGNETTE_BASENAME)-blx.bib	
+	
+else
+	# Using tools::texi2dvi
+	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$*.tex', pdf = TRUE, clean = FALSE )"
+	-bibtex $*
+	$(RSCRIPT) --vanilla -e "tools::texi2dvi( '$*.tex', pdf = TRUE, clean = TRUE )"
+endif
+endif	
 	# Update fake vignette file ./$*.Rnw
 	$(RSCRIPT) --vanilla -e "pkgmaker::makeFakeVignette('${SRC_DIR}/$*.Rnw', '$*.Rnw')"
 	$(update_inst_doc)
@@ -200,12 +201,12 @@ endif
 # only run tests if not checking: CRAN check run the tests separately
 %-unitTests.pdf:
 	$(do_install)
-	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	# Generating vignette for unit tests: $@
 	# Using R_LIBS: $(R_LIBS)
 	# Make test vignette
 	$(RSCRIPT) --vanilla -e "pkgmaker::makeUnitVignette('package:$(MAKE_R_PACKAGE)', check=$(R_CHECK))" >> unitTests.log
 ifdef LOCAL_MODE
+	$(eval VIGNETTE_BASENAME := $(shell basename $@ .pdf))
 	# Compact vignette file
 	$(RSCRIPT) --vanilla -e "tools::compactPDF('$(VIGNETTE_BASENAME).pdf')"
 endif

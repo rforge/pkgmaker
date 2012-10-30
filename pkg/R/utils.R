@@ -154,16 +154,25 @@ capwords <- function(s, strict = FALSE) {
 #' 
 #' @param x a single string
 #' @param y a single string
-#' @return an integer vector containing the index of the mis-matched character 
+#' @return an integer vector containing the index of all mis-matched characters
+#' in the first string.
 #' @export
 #' 
 #' @examples
 #' 
+#' # strings to compare
 #' x <- "once upon a time"
 #' y <- "once upon a time there was"
 #' z <- "once upon two times"
+#' 
+#' # diff: x - y
+#' d <- str_diff(x, y)
+#' d
+#' str(d)
+#' 
+#' # other comparisons 
+#' str_diff(y, x)
 #' str_diff(x, x)
-#' str_diff(x, y)
 #' str_diff(x, z)
 #' str_diff(y, z)
 #' 
@@ -173,6 +182,8 @@ str_diff <- function(x, y){
 	n <- min(length(sx), length(sy))
 	res <- mapply('!=', head(sx,n), head(sy,n))
 	wres <- which(res)
+	if( length(sx) > length(sy) )
+		wres <- c(wres, (n+1):length(sx))
 	attr(wres, 'str') <- list(x=x,y=y)
 	class(wres) <- 'str_diff'
 	wres
@@ -181,9 +192,11 @@ str_diff <- function(x, y){
 #' @S3method print str_diff
 print.str_diff <- function(x, ...){
 	s <- attr(x, 'str')
-	n <- min(length(s$x), length(s$y))
-	d <- head(s$x,n)
-	d[!x] <- '*'
+	n <- max(nchar(s$x), nchar(s$y))
+	d <- rep('.', n)
+	d[x] <- '*'
+	if( (n2 <- nchar(s$y)-nchar(s$x)) )
+		d[(n-abs(n2)+1):n] <- if( n2 > 0L ) '-' else '+'
 	cat(str_c(s$x, collapse=''), "\n")
 	cat(str_c(d, collapse=''), "\n")
 	cat(str_c(s$y, collapse=''), "\n")				
