@@ -116,6 +116,7 @@ str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", ")
 			if( isTRUE(quote) ) "'"
 			else if( is.character(quote) ) quote
 	if( !is.null(quote) ) x <- unlist(lapply(x, function(v) paste(quote,v,quote, sep='')))
+	else if( all(sapply(x, isInteger)) ) x <- unlist(lapply(x, function(v) str_c(v,'L')))
 	# add names if necessary
 	if( use.names && !is.null(names(x)) ){
 		nm <- str_c(names(x),'=')
