@@ -741,6 +741,13 @@ setMethod('utest', 'character',
 				file.remove(opath, recursive=TRUE) 
 			}
 			dir.create(opath, recursive=TRUE)
+			# copy results in working directory on exit
+			on.exit(
+				{ if( file.exists(opath) )
+					file.copy(opath, '.', recursive=TRUE)
+				}
+			, add=TRUE)
+			#
 			
 			if( is.dir(path) ){ # all tests in a directory
 				if( framework == 'RUnit' ){ # RUnit
