@@ -32,7 +32,8 @@ Suggests:
     bibtex,
     RUnit,
     testthat,
-    knitr
+    knitr,
+    rngtools
 Collate:
     'utils.R'
     'logging.R'

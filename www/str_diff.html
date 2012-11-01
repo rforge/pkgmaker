@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>str_diff. pkgmaker 0.8.13</title>
+<title>str_diff. pkgmaker 0.8.16</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.8.13</a>
+      <a class="brand" href="index.html">pkgmaker 0.8.16</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -53,8 +53,8 @@
     <div class="Value">
       <h2>Value</h2>
       
-      <p>an integer vector containing the index of the mis-matched
-  character</p>
+      <p>an integer vector containing the index of all mis-matched
+  characters in the first string.</p>
   
     </div>
 
@@ -66,27 +66,44 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="symbol">x</span> <span class="assignement">&lt;-</span> <span class="string">"once upon a time"</span>
+    <pre class="examples"><div class='input'><span class="comment"># strings to compare</span>
+<span class="symbol">x</span> <span class="assignement">&lt;-</span> <span class="string">"once upon a time"</span>
 <span class="symbol">y</span> <span class="assignement">&lt;-</span> <span class="string">"once upon a time there was"</span>
 <span class="symbol">z</span> <span class="assignement">&lt;-</span> <span class="string">"once upon two times"</span>
-<span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">x</span><span class="keyword">)</span></div>
+
+<span class="comment"># diff: x - y</span>
+<span class="symbol">d</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span>
+<span class="symbol">d</span></div>
 <div class='output'>once upon a time 
-once upon a time 
+................---------- 
+once upon a time there was 
+</div>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">d</span><span class="keyword">)</span></div>
+<div class='output'>Class 'str_diff'  atomic (0) 
+  ..- attr(*, "str")=List of 2
+  .. ..$ x: chr "once upon a time"
+  .. ..$ y: chr "once upon a time there was"
+</div>
+<div class='input'>
+<span class="comment"># other comparisons</span>
+<span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">y</span><span class="keyword">,</span> <span class="symbol">x</span><span class="keyword">)</span></div>
+<div class='output'>once upon a time there was 
+................++++++++++ 
 once upon a time 
 </div>
-<div class='input'><span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">y</span><span class="keyword">)</span></div>
+<div class='input'><span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">x</span><span class="keyword">)</span></div>
 <div class='output'>once upon a time 
+................ 
 once upon a time 
-once upon a time there was 
 </div>
 <div class='input'><span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">z</span><span class="keyword">)</span></div>
 <div class='output'>once upon a time 
-once upon a timeNANANANANA 
+..........******--- 
 once upon two times 
 </div>
 <div class='input'><span class="functioncall"><a href='str_diff.html'>str_diff</a></span><span class="keyword">(</span><span class="symbol">y</span><span class="keyword">,</span> <span class="symbol">z</span><span class="keyword">)</span></div>
 <div class='output'>once upon a time there was 
-once upon a time there wasNANANANANANANANA 
+..........*********+++++++ 
 once upon two times 
 </div></pre>
   </div>
