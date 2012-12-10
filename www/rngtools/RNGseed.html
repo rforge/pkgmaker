@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>RNGseed. rngtools 1.0</title>
+<title>RNGseed. rngtools 1.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">rngtools 1.0</a>
+      <a class="brand" href="index.html">rngtools 1.1</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,9 +40,9 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='RNGseed.html'>RNGseed</a></span><span class="keyword">(</span><span class="symbol">seed</span><span class="keyword">)</span>
+    <pre>RNGseed(seed)
 
-<span class="functioncall"><a href='RNGseed.html'>RNGrecovery</a></span><span class="keyword">(</span><span class="keyword">)</span></pre>
+RNGrecovery()</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -74,52 +74,7 @@
   defaults.</p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># get current seed</span>
-<span class="functioncall"><a href='RNGseed.html'>RNGseed</a></span><span class="keyword">(</span><span class="keyword">)</span>
-<span class="comment"># directly set seed</span>
-<span class="symbol">old</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='RNGseed.html'>RNGseed</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">401L</span><span class="keyword">,</span> <span class="number">1L</span><span class="keyword">,</span> <span class="number">1L</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="comment"># show old/new seed description</span>
-<span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="symbol">old</span><span class="keyword">)</span></div>
-<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, ..., 2099891502L [e38d032700af470a3a1013304e0fcab6] 
-</div>
-<div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
-<div class='output'># RNG kind:  Marsaglia-Multicarry / Inversion 
-# RNG state: 401L, 1L, 1L 
-</div>
-<div class='input'>
-<span class="comment"># set bad seed</span>
-<span class="functioncall"><a href='RNGseed.html'>RNGseed</a></span><span class="keyword">(</span><span class="number">2</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/try'>try</a></span><span class="keyword">(</span> <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="keyword">)</span>
-<span class="comment"># recover from bad state</span>
-<span class="functioncall"><a href='RNGseed.html'>RNGrecovery</a></span><span class="keyword">(</span><span class="keyword">)</span>
-<span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
-<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33] 
-</div>
-<div class='input'>
-<span class="comment"># example of backup/restore of RNG in functions</span>
-<span class="symbol">f</span> <span class="assignement">&lt;-</span> <span class="keyword">function</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">{</span>
-        <span class="symbol">orng</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='RNGseed.html'>RNGseed</a></span><span class="keyword">(</span><span class="keyword">)</span>
- <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/on.exit'>on.exit</a></span><span class="keyword">(</span><span class="functioncall"><a href='RNGseed.html'>RNGseed</a></span><span class="keyword">(</span><span class="symbol">orng</span><span class="keyword">)</span><span class="keyword">)</span>
-        <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>RNGkind</a></span><span class="keyword">(</span><span class="string">'Marsaglia'</span><span class="keyword">)</span>
-        <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/Uniform'>runif</a></span><span class="keyword">(</span><span class="number">10</span><span class="keyword">)</span>
-<span class="keyword">}</span>
-
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/sample'>sample</a></span><span class="keyword">(</span><span class="number">NA</span><span class="keyword">)</span></div>
-<div class='output'>[1] NA
-</div>
-<div class='input'><span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="symbol">.Random.seed</span>
-<span class="functioncall">f</span><span class="keyword">(</span><span class="keyword">)</span></div>
-<div class='output'> [1] 0.9465679 0.6266111 0.3896875 0.3947692 0.1071452 0.7840478 0.3223734 0.2288971 0.7144534 0.5210440
-</div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="symbol">.Random.seed</span><span class="keyword">)</span></div>
-<div class='output'>[1] TRUE
-</div>
-<div class='input'></div></pre>
-  </div>
+      </div>
   <div class="span4">
     <!-- <ul>
       <li>RNGrecovery</li><li>RNGseed</li>
