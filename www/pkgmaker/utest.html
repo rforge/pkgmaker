@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>utest. pkgmaker 0.9.2</title>
+<title>utest. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,18 +44,18 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='utest.html'>utest</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
+    <pre>utest(x, ...)
 
-<span class="comment"><span class="label label-important">S4</span> (function)</span>
-<span class="functioncall">`utest`</span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">run</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+<span class="label label-important">S4</span> (function)
+`utest`(x, run = TRUE)
 
-<span class="comment"><span class="label label-important">S4</span> (character)</span>
-<span class="functioncall">`utest`</span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">filter</span> <span class="argument">=</span> <span class="string">"^runit.+\\.[rR]$"</span><span class="keyword">,</span> <span class="argument">fun</span> <span class="argument">=</span> <span class="string">"^test\\."</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">testdir</span> <span class="argument">=</span> <span class="string">"tests"</span><span class="keyword">,</span>
-  <span class="argument">framework</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"RUnit"</span><span class="keyword">,</span> <span class="string">"testthat"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Sys.getenv'>Sys.getenv</a></span><span class="keyword">(</span><span class="string">"RCMDCHECK"</span><span class="keyword">)</span> <span class="keyword">!=</span> <span class="string">"FALSE"</span><span class="keyword">,</span>
-      <span class="argument">lib.loc</span> <span class="argument">=</span> NULL<span class="keyword">)</span>
+<span class="label label-important">S4</span> (character)
+`utest`(x, filter = "^runit.+\\.[rR]$", fun = "^test\\.", ..., testdir = "tests", 
+  framework = c("RUnit", "testthat"), quiet = Sys.getenv("RCMDCHECK") != "FALSE", 
+      lib.loc = NULL)
 
-<span class="comment"><span class="label label-important">S4</span> (RUnitTestSuite)</span>
-<span class="functioncall">`utest`</span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">outdir</span> <span class="argument">=</span> NULL<span class="keyword">)</span></pre>
+<span class="label label-important">S4</span> (RUnitTestSuite)
+`utest`(x, ..., quiet = FALSE, outdir = NULL)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -95,18 +99,22 @@
     <div class="Methods">
       <h2>Methods</h2>
       
-      <p><span class='describe'></p>
-  
-      <p>utest<code>signature(x = "function")</code>: Run the
+      <p><ol>
+<li>utest<code>signature(x = "function")</code>: Run the
   unit test assoicated to a function.</p>
   
-      <p>utest<code>signature(x = "character")</code>: Run a
+      <p></li>
+<li>utest<code>signature(x = "character")</code>: Run a
   package test suite</p>
   
-      <p>utest<code>signature(x = "RUnitTestSuite")</code>: Runs
+      <p></li>
+<li>utest<code>signature(x = "RUnitTestSuite")</code>: Runs
   a RUnit test suite</p>
   
-      <p></span></p>
+      <p></li>
+</ol></p>
+  
+      <p></p>
   
     </div>
       </div>

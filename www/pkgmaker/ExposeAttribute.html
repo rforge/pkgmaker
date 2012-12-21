@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>ExposeAttribute. pkgmaker 0.9.2</title>
+<title>ExposeAttribute. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,11 +44,11 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='ExposeAttribute.html'>ExposeAttribute</a></span><span class="keyword">(</span><span class="symbol">object</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">.MODE</span> <span class="argument">=</span> <span class="string">"rw"</span><span class="keyword">,</span> <span class="argument">.VALUE</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+    <pre>ExposeAttribute(object, ..., .MODE = "rw", .VALUE = FALSE)
 
-<span class="functioncall"><a href='ExposeAttribute.html'>attr_mode</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
+attr_mode(x)
 
-<span class="functioncall"><a href='ExposeAttribute.html'>attr_mode</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="symbol">value</span></pre>
+attr_mode(x) <- value</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -57,11 +61,16 @@
   of <code>attr_mode</code> for details on the way of specifying
   these.</dd>
       <dt>.MODE</dt>
-      <dd>access mode: <span class='describe'> &#147;r&#148;:
+      <dd>access mode: <ol>
+<li>&#147;r&#148;:
   (read-only) only method <code>$</code> is defined
-  &#147;w&#148;: (write-only) only method <code>$<-</code>
-  is defined &#147;rw&#148;: (read-write) both
-  methods <code>$</code> and <code>$<-</code> are defined </span></dd>
+  </li>
+<li>&#147;w&#148;: (write-only) only method <code>$<-</code>
+  is defined </li>
+<li>&#147;rw&#148;: (read-write) both
+  methods <code>$</code> and <code>$<-</code> are defined </li>
+</ol>
+</dd>
       <dt>.VALUE</dt>
       <dd>logical that indicates if the values of
   named arguments in <code>...</code> should be considered as

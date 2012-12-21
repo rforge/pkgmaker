@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>packageEnv. pkgmaker 0.9.2</title>
+<title>packageEnv. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,21 +44,21 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='devutils.html'>packageEnv</a></span><span class="keyword">(</span><span class="symbol">pkg</span><span class="keyword">,</span> <span class="argument">skip</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+    <pre>packageEnv(pkg, skip = FALSE, verbose = FALSE)
 
-<span class="functioncall"><a href='devutils.html'>topns_name</a></span><span class="keyword">(</span><span class="argument">n</span> <span class="argument">=</span> <span class="number">1L</span><span class="keyword">,</span> <span class="argument">strict</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">unique</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+topns_name(n = 1L, strict = TRUE, unique = TRUE)
 
-<span class="functioncall"><a href='devutils.html'>topns</a></span><span class="keyword">(</span><span class="argument">strict</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+topns(strict = TRUE)
 
-<span class="functioncall"><a href='devutils.html'>packageName</a></span><span class="keyword">(</span><span class="argument">envir</span> <span class="argument">=</span> <span class="functioncall"><a href='devutils.html'>packageEnv</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">.Global</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">rm.prefix</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span>
+packageName(envir = packageEnv(), .Global = FALSE, rm.prefix = TRUE)
 
-<span class="functioncall"><a href='devutils.html'>str_ns</a></span><span class="keyword">(</span><span class="argument">envir</span> <span class="argument">=</span> <span class="functioncall"><a href='devutils.html'>packageEnv</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+str_ns(envir = packageEnv())
 
-<span class="functioncall"><a href='devutils.html'>packagePath</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">package</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">lib</span> <span class="argument">=</span> NULL<span class="keyword">)</span>
+packagePath(..., package = NULL, lib.loc = NULL)
 
-<span class="functioncall"><a href='devutils.html'>isPackageInstalled</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">lib.loc</span> <span class="argument">=</span> NULL<span class="keyword">)</span>
+isPackageInstalled(..., lib.loc = NULL)
 
-<span class="functioncall"><a href='devutils.html'>as.package</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+as.package(x, ..., quiet = FALSE, extract = FALSE)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -89,14 +93,11 @@
   string.</dd>
       <dt>package</dt>
       <dd>optional name of an installed package</dd>
-      <dt>lib</dt>
-      <dd>path to a package library where to look. If
-  <code>NA</code>, then only development packages are looked up.</dd>
-      <dt>...</dt>
-      <dd>arguments passed to <code><a href='http://www.inside-r.org/r-doc/base/file.path'>file.path</a></code>.</dd>
       <dt>lib.loc</dt>
       <dd>path to a library of R packages where to
   search the package</dd>
+      <dt>...</dt>
+      <dd>arguments passed to <code><a href='http://www.inside-r.org/r-doc/base/file.path'>file.path</a></code>.</dd>
       <dt>x</dt>
       <dd>package specified by its
   installation/development path or its name as
@@ -105,6 +106,10 @@
       <dd>a logical that indicate if an error should
   be thrown if a package is not found. It is also passed to
   <code><a href='http://www.inside-r.org/r-doc/base/find.package'>find.package</a></code>.</dd>
+      <dt>extract</dt>
+      <dd>logical that indicates if DESCRIPTION of
+  package source files should be extracted. In this case
+  there will be no valid path.</dd>
     </dl>
     
     <div class="Value">
@@ -154,7 +159,8 @@
   the case of an installed package, or its source directory
   served by devtools.</p>
   
-      <p>Tests if a package is installed</p>
+      <p><code>isPackageInstalled</code> checks if a package is
+  installed.</p>
   
       <p><code>as.package</code> is enhanced version of
   <code><a href='http://www.inside-r.org/r-doc/devtools/as.package'>as.package</a></code>, that is not exported

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>write.bib. pkgmaker 0.9.2</title>
+<title>write.bib. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Renaud Gaujoux, based on the function
@@ -15,6 +15,10 @@
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
 
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -24,7 +28,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,7 +48,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="argument">entry</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">file</span> <span class="argument">=</span> <span class="string">"Rpackages.bib"</span><span class="keyword">,</span> <span class="argument">append</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">verbose</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span></pre>
+    <pre>write.bib(entry = NULL, file = "Rpackages.bib", prefix = "", append = FALSE, verbose = TRUE)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -58,6 +62,9 @@
   <code>stdout</code>, or a <code>link{connection}</code> object. If
   <code>file</code> is a character string, an extension '.bib' is
   appended if not already present.</dd>
+      <dt>prefix</dt>
+      <dd>character string to prepend to the
+  generated packages' Bibtex key.</dd>
       <dt>append</dt>
       <dd>a logical that indicates that the Bibtex
   entries should be added to the file. If <code>FALSE</code>
@@ -110,26 +117,23 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment">#library(bibtex)</span>
-<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span><span class="string">'references'</span><span class="keyword">)</span></div>
+    <pre class="examples"><div class='input'>#library(bibtex)</div><div class='input'>pkgmaker::write.bib(c('bibtex', 'utils', 'tools'), file='references')
+</div>
 <strong class='message'>Converted 3 of 3 package citations to BibTeX</strong>
 <strong class='message'>Writing 3 Bibtex entries ... </strong>
 <strong class='message'>OK
-Results written to file 'references.bib'</strong>
-<div class='input'><span class="symbol">bibs</span> <span class="assignement">&lt;-</span> <span class="package">bibtex</span><span class="keyword">::</span><span class="functioncall">read.bib</span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">)</span>
-<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="symbol">bibs</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span></div>
+Results written to file 'references.bib'</strong><div class='input'>bibs <- bibtex::read.bib('references.bib')
+</div><div class='input'>pkgmaker::write.bib(bibs, 'references2.bib')
+</div>
 <strong class='message'>Writing 3 Bibtex entries ... </strong>
 <strong class='message'>OK
-Results written to file 'references2.bib'</strong>
-<div class='input'><span class="symbol">md5</span> <span class="assignement">&lt;-</span> <span class="package">tools</span><span class="keyword">::</span><span class="functioncall">md5sum</span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">'references.bib'</span><span class="keyword">,</span> <span class="string">'references2.bib'</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="symbol">md5</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">]</span> == <span class="symbol">md5</span><span class="keyword">[</span><span class="number">2</span><span class="keyword">]</span></div>
+Results written to file 'references2.bib'</strong><div class='input'>md5 <- tools::md5sum(c('references.bib', 'references2.bib'))
+</div><div class='input'>md5[1] == md5[2]
+</div>
 <div class='output'>references.bib 
           TRUE 
+</div><div class='input'></div><div class='input'></div><div class='input'># write to stdout()</div><div class='input'>pkgmaker::write.bib(c('bibtex', 'utils', 'tools'), file=NULL)
 </div>
-<div class='input'>
-
-<span class="comment"># write to stdout()</span>
-<span class="package">pkgmaker</span><span class="keyword">::</span><span class="functioncall"><a href='write.bib.html'>write.bib</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">'bibtex'</span><span class="keyword">,</span> <span class="string">'utils'</span><span class="keyword">,</span> <span class="string">'tools'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">file</span><span class="argument">=</span>NULL<span class="keyword">)</span></div>
 <div class='output'>@Manual{bibtex,
   title = {bibtex: bibtex parser},
   author = {Romain Francois},
@@ -157,8 +161,7 @@ Results written to file 'references2.bib'</strong>
   note = {{ISBN} 3-900051-07-0},
   url = {http://www.R-project.org/},
 }
-</div>
-<div class='input'></div></pre>
+</div><div class='input'></div><div class='input'></div></pre>
   </div>
   <div class="span4">
     <!-- <ul>

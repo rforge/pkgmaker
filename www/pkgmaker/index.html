@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. pkgmaker 0.9.2</title>
+<title>Index. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href=""><i class="icon-home icon-white"></i> Index</a></li>
@@ -38,7 +42,8 @@
       
       <div class="row">
   <div class="span8">
-  
+  	<h2>Package development utilities</h2>
+  	
 	  
     <h1>Introduction</h1>
 
@@ -57,6 +62,9 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
 
     <h2>Help topics</h2>
 
+	<div id="cloud"></div>
+	
+	
     <h3></h3>
     
     
@@ -70,6 +78,9 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
             
       <li>
         <code><a href="addToLogger.html">addToLogger</a></code><br />Enhancing RUnit Logger</li>
+            
+      <li>
+        <code><a href="alphacol.html">alphacol</a></code><br />Colour utilities</li>
             
       <li>
         <code><a href="cgetAnywhere.html">cgetAnywhere</a></code><br />Get Anywhere</li>
@@ -87,6 +98,9 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
         <code><a href="exitCheck.html">exitCheck</a></code><br />Exit Error Checks</li>
             
       <li>
+        <code><a href="expand_list.html">expand_list</a></code>(expand_dots)<br />Expanding Lists</li>
+            
+      <li>
         <code><a href="ExposeAttribute.html">ExposeAttribute</a></code>(attr_mode, attr_mode&lt;-)<br />Exposing Object Attributes</li>
             
       <li>
@@ -99,7 +113,13 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
         <code><a href="namespace.html">getLoadingNamespace</a></code>(addNamespaceExport, isDevNamespace, isLoadingNamespace, isNamespaceLoaded)<br />Namespace Development Functions</li>
             
       <li>
+        <code><a href="graphics-utils.html">graphics-utils</a></code>(mfrow)<br />Utility Functions for Graphics</li>
+            
+      <li>
         <code><a href="hasArg2.html">hasArg2</a></code><br />Checking for Missing Arguments</li>
+            
+      <li>
+        <code><a href="install.dependencies.html">install.dependencies</a></code><br />Installing All Package Dependencies</li>
             
       <li>
         <code><a href="inSweave.html">inSweave</a></code><br />Identifying Sweave Run</li>
@@ -135,7 +155,13 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
         <code><a href="orderVersion.html">orderVersion</a></code>(sortVersion)<br />Ordering Version Numbers</li>
             
       <li>
+        <code><a href="packageData.html">packageData</a></code>(ldata)<br />Loading Package Data</li>
+            
+      <li>
         <code><a href="devutils.html">packageEnv</a></code>(as.package, isPackageInstalled, packageName, packagePath, str_ns, topns, topns_name)<br />Package Development Utilities</li>
+            
+      <li>
+        <code><a href="packageExtra.html">packageExtraHandler</a></code>(install.extrapackages, install.extras, packageExtra, packageExtraRunner)<br />Install/Run Extra Things After Standard Package Installation</li>
             
       <li>
         <code><a href="packageReference.html">packageReference</a></code><br />Package References</li>
@@ -192,11 +218,13 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
         <code><a href="source_files.html">source_files</a></code><br />Source Multiple Files</li>
             
       <li>
-        <code><a href="str_diff.html">str_diff</a></code><br />Differences between strings</li>
+        <code><a href="str_diff.html">str_diff</a></code><br />Finding Differences Between Strings</li>
             
       <li>
-        <code><a href="str_out.html">str_out</a></code>(str_desc)<br />Prints formatted list of values given as a character vector for use in show
-</li>
+        <code><a href="str_out.html">str_out</a></code>(str_desc, str_fun)<br />Formatting Utilities</li>
+            
+      <li>
+        <code><a href="sVariable.html">sVariable</a></code><br />Global Static Variable</li>
             
       <li>
         <code><a href="testRversion.html">testRversion</a></code><br />Testing R Version</li>
@@ -226,15 +254,11 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
   </div>
   
   <div class="span3 offset1">
-    <h2>Vignettes</h2>
-    <ul>
-      <li><a href="vignettes/pkgmaker-unitTests.pdf">pkgmaker-unitTests</a></li>
-    </ul>
         
     <h2>Dependencies</h2>
     <ul>
-      <li><strong>Depends</strong>: methods, stats, digest, stringr, codetools</li>
-      <li><strong>Imports</strong>: methods, xtable</li>
+      <li><strong>Depends</strong>: methods, stats</li>
+      <li><strong>Imports</strong>: codetools, digest, stringr, methods, xtable</li>
       <li><strong>Suggests</strong>: registry, devtools, bibtex, RUnit, testthat, knitr</li>
       <li><strong>Extends</strong>: </li>
     </ul>

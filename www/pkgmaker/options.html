@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>option_symlink. pkgmaker 0.9.2</title>
+<title>option_symlink. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,20 +44,20 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='options.html'>option_symlink</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
+    <pre>option_symlink(x)
 
-<span class="functioncall"><a href='options.html'>is_option_symlink</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">opts</span><span class="keyword">)</span>
+is_option_symlink(x, opts)
 
-<span class="functioncall"><a href='options.html'>option_symlink_target</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">opts</span><span class="keyword">)</span>
+option_symlink_target(x, opts)
 
-<span class="functioncall"><a href='options.html'>as.package_options</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">defaults</span> <span class="argument">=</span> NULL<span class="keyword">)</span>
+as.package_options(..., defaults = NULL)
 
-<span class="comment"><span class="label label-success">S3</span> (package_options)</span>
-<span class="functioncall">`[[`</span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
+<span class="label label-success">S3</span> (package_options)
+`[[`(x, ...)
 
-<span class="functioncall"><a href='options.html'>packageOptions</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">PACKAGE</span> <span class="argument">=</span> <span class="functioncall"><a href='devutils.html'>packageName</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span>
+packageOptions(..., PACKAGE = packageName())
 
-<span class="functioncall"><a href='options.html'>listPackageOptions</a></span><span class="keyword">(</span><span class="keyword">)</span></pre>
+listPackageOptions()</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -111,7 +115,8 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="functioncall"><a href='options.html'>listPackageOptions</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
+    <pre class="examples"><div class='input'>listPackageOptions()
+</div>
 <div class='output'>character(0)
 </div></pre>
   </div>

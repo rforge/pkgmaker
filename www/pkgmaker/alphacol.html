@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>requirePackage. pkgmaker 0.10.3</title>
+<title>alphacol. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -39,32 +39,54 @@
         
       </header>
       
-      <h1>Require a Package</h1>
+      <h1>Colour utilities</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>requirePackage(pkg, ...)</pre>
+    <pre>alphacol(col, alpha = FALSE)</pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>pkg</dt>
-      <dd>package name as a character string</dd>
-      <dt>...</dt>
-      <dd>extra arguments concatenated to for the header
-  of the error message</dd>
+      <dt>col</dt>
+      <dd>vector of any of the three kind of <span style="R">R</span> colors,
+  i.e., either a color name (an element of
+  <code><a href='http://www.inside-r.org/r-doc/grDevices/colors'>colors</a>()</code>), a hexadecimal string of the form
+  <code>"#rrggbb"</code> or <code>"#rrggbbaa"</code> (see
+  <code><a href='http://www.inside-r.org/r-doc/grDevices/rgb'>rgb</a></code>), or an integer <code>i</code> meaning
+  <code>palette()[i]</code>.  Non-string values are coerced to
+  integer.</dd>
+      <dt>alpha</dt>
+      <dd>logical value indicating whether alpha
+  channel (opacity) values should be returned.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
       
-      <p>Require a package with a custom error message</p>
+      <p><code>alphacol</code> adds an alpha value to a colour
+  specification and convert to a hexadecimal colour string.</p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># Alphas</div><div class='input'>alphacol('red') # do nothing
+</div>
+<div class='output'>[1] "#ff0000"
+</div><div class='input'>alphacol('red', 10)
+</div>
+<div class='output'>[1] "#ff0000ff"
+</div><div class='input'>alphacol('#aabbcc', 5)
+</div>
+<div class='output'>[1] "#aabbccff"
+</div><div class='input'>alphacol(4, 5)
+</div>
+<div class='output'>[1] "#0000ffff"
+</div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
-      <li>requirePackage</li>
+      <li>alphacol</li>
     </ul>
     <ul>
       

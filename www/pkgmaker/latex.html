@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>latex_preamble. pkgmaker 0.9.2</title>
+<title>latex_preamble. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,10 +44,10 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='latex.html'>latex_preamble</a></span><span class="keyword">(</span><span class="symbol">PACKAGE</span><span class="keyword">,</span> <span class="argument">R</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">CRAN</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">Bioconductor</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">GEO</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">ArrayExpress</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span>
-  <span class="argument">biblatex</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">only</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">file</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span>
+    <pre>latex_preamble(PACKAGE, R = TRUE, CRAN = TRUE, Bioconductor = TRUE, GEO = TRUE, ArrayExpress = TRUE, 
+  biblatex = FALSE, only = FALSE, file = "")
 
-<span class="functioncall"><a href='latex.html'>latex_bibliography</a></span><span class="keyword">(</span><span class="symbol">PACKAGE</span><span class="keyword">,</span> <span class="argument">file</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span></pre>
+latex_bibliography(PACKAGE, file = "")</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -103,7 +107,8 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="functioncall"><a href='latex.html'>latex_preamble</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
+    <pre class="examples"><div class='input'>latex_preamble()
+</div>
 <div class='output'>%%%% PKGMAKER COMMANDS %%%%%%
 \usepackage{xspace}
 
@@ -124,18 +129,22 @@
 \def\@@CRANpkg#1{\href{http://cran.r-project.org/package=#1}{\pkgname{#1}} package\footnote{\CRANurl{#1}}}
 \makeatother
 %% citeCRANpkg
-\newcommand{\citeCRANpkg}[1]{\CRANpkg{#1}~\cite{#1}}
+\makeatletter
+\def\citeCRANpkg{\@ifstar\@citeCRANpkg\@@citeCRANpkg}
+\def\@citeCRANpkg#1{\CRANpkg{#1}\cite*{Rpackage:#1}}
+\def\@@citeCRANpkg#1{\CRANpkg{#1}~\cite{Rpackage:#1}}
+\makeatother
 \newcommand{\CRANnmf}{\href{http://cran.r-project.org/package=NMF}{CRAN}}
 \newcommand{\CRANnmfURL}{\url{http://cran.r-project.org/package=NMF}}
 
 % Bioconductor
 \newcommand{\BioCurl}[1]{\url{http://www.bioconductor.org/packages/release/bioc/html/#1.html}}
 \newcommand{\BioCpkg}[1]{\href{http://www.bioconductor.org/packages/release/bioc/html/#1.html}{\pkgname{#1}} package\footnote{\BioCurl{#1}}}
-\newcommand{\citeBioCpkg}[1]{\BioCpkg{#1}~\cite{#1}}
+\newcommand{\citeBioCpkg}[1]{\BioCpkg{#1}~\cite{Rpackage:#1}}
 % Bioconductor annotation
 \newcommand{\BioCAnnurl}[1]{\url{http://www.bioconductor.org/packages/release/data/annotation/html/#1.html}}
 \newcommand{\BioCAnnpkg}[1]{\href{http://www.bioconductor.org/packages/release/data/annotation/html/#1.html}{\Rcode{#1}} annotation package\footnote{\BioCAnnurl{#1}}}
-\newcommand{\citeBioCAnnpkg}[1]{\BioCAnnpkg{#1}~\cite{#1}}
+\newcommand{\citeBioCAnnpkg}[1]{\BioCAnnpkg{#1}~\cite{Rpackage:#1}}
 
 % GEO
 \newcommand{\GEOurl}[1]{\href{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=#1}{#1}\xspace}
@@ -146,8 +155,8 @@
 \newcommand{\ArrayExpresshref}[1]{\ArrayExpressurl{#1}\footnote{\url{http://www.ebi.ac.uk/arrayexpress/experiments/#1}}}
 
 %%%% END: PKGMAKER COMMANDS %%%%%%
+</div><div class='input'>latex_preamble(R=TRUE, only=TRUE)
 </div>
-<div class='input'><span class="functioncall"><a href='latex.html'>latex_preamble</a></span><span class="keyword">(</span><span class="argument">R</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">only</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">)</span></div>
 <div class='output'>%%%% PKGMAKER COMMANDS %%%%%%
 \usepackage{xspace}
 
@@ -160,27 +169,27 @@
 \newcommand{\citepkg}[1]{\cite{#1}}
 
 %%%% END: PKGMAKER COMMANDS %%%%%%
+</div><div class='input'>latex_preamble(R=FALSE, CRAN=FALSE, GEO=FALSE)
 </div>
-<div class='input'><span class="functioncall"><a href='latex.html'>latex_preamble</a></span><span class="keyword">(</span><span class="argument">R</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">CRAN</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">GEO</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">)</span></div>
 <div class='output'>%%%% PKGMAKER COMMANDS %%%%%%
 \usepackage{xspace}
 
 % Bioconductor
 \newcommand{\BioCurl}[1]{\url{http://www.bioconductor.org/packages/release/bioc/html/#1.html}}
 \newcommand{\BioCpkg}[1]{\href{http://www.bioconductor.org/packages/release/bioc/html/#1.html}{\pkgname{#1}} package\footnote{\BioCurl{#1}}}
-\newcommand{\citeBioCpkg}[1]{\BioCpkg{#1}~\cite{#1}}
+\newcommand{\citeBioCpkg}[1]{\BioCpkg{#1}~\cite{Rpackage:#1}}
 % Bioconductor annotation
 \newcommand{\BioCAnnurl}[1]{\url{http://www.bioconductor.org/packages/release/data/annotation/html/#1.html}}
 \newcommand{\BioCAnnpkg}[1]{\href{http://www.bioconductor.org/packages/release/data/annotation/html/#1.html}{\Rcode{#1}} annotation package\footnote{\BioCAnnurl{#1}}}
-\newcommand{\citeBioCAnnpkg}[1]{\BioCAnnpkg{#1}~\cite{#1}}
+\newcommand{\citeBioCAnnpkg}[1]{\BioCAnnpkg{#1}~\cite{Rpackage:#1}}
 
 % ArrayExpress
 \newcommand{\ArrayExpressurl}[1]{\href{http://www.ebi.ac.uk/arrayexpress/experiments/#1}{#1}\xspace}
 \newcommand{\ArrayExpresshref}[1]{\ArrayExpressurl{#1}\footnote{\url{http://www.ebi.ac.uk/arrayexpress/experiments/#1}}}
 
 %%%% END: PKGMAKER COMMANDS %%%%%%
+</div><div class='input'>latex_preamble(GEO=TRUE, only=TRUE)
 </div>
-<div class='input'><span class="functioncall"><a href='latex.html'>latex_preamble</a></span><span class="keyword">(</span><span class="argument">GEO</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">only</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">)</span></div>
 <div class='output'>%%%% PKGMAKER COMMANDS %%%%%%
 \usepackage{xspace}
 

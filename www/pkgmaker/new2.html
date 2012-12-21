@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>new2. pkgmaker 0.9.2</title>
+<title>new2. pkgmaker 0.10.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.9.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,7 +44,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="symbol">class</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    <pre>new2(class, ...)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -60,29 +64,24 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/setClass'>setClass</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">contain</span><span class="argument">=</span><span class="string">'character'</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/representation'>representation</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="string">'numeric'</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'character'</span><span class="keyword">)</span><span class="keyword">)</span>
-
-<span class="comment"># identical behaviour with standard calls</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<div class='output'>[1] TRUE
+    <pre class="examples"><div class='input'>setClass('A', contain='character', representation(x='numeric', y='character'))
+</div><div class='input'></div><div class='input'># identical behaviour with standard calls</div><div class='input'>identical(new('A'), new2('A'))
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>[1] TRUE
+</div><div class='input'>identical(new('A', x=1), new2('A', x=1))
 </div>
-<div class='input'>
-<span class="comment"># but if passing that are names not slots</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">b</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>[1] TRUE
+</div><div class='input'></div><div class='input'># but if passing that are names not slots</div><div class='input'>identical(new('A'), new2('A', b=1))
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">b</span><span class="argument">=</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>[1] TRUE
+</div><div class='input'>identical(new('A', x=1), new2('A', x=1, b=3))
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">b</span><span class="argument">=</span><span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>[1] TRUE
+</div><div class='input'>identical(new('A', x=1), new2('A', x=1, b=3))
 </div>
-<div class='input'>
-<span class="comment"># standard `new` would coerce first unnamed argument into parent of 'A' (i.e. 'character')</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div><div class='input'></div><div class='input'># standard `new` would coerce first unnamed argument into parent of 'A' (i.e. 'character')</div><div class='input'>new('A', list(x=1))
+</div>
 <div class='output'>An object of class "A"
 [1] "1"
 Slot "x":
@@ -91,8 +90,8 @@ numeric(0)
 Slot "y":
 character(0)
 
+</div><div class='input'>new('A', list(x=1, y='other'))
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'other'</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>An object of class "A"
 [1] "1"     "other"
 Slot "x":
@@ -101,12 +100,11 @@ numeric(0)
 Slot "y":
 character(0)
 
+</div><div class='input'># `new2` rather use it to initialise the slots it can find in the list</div><div class='input'>identical(new('A', x=1), new2('A', list(x=1)))
 </div>
-<div class='input'><span class="comment"># `new2` rather use it to initialise the slots it can find in the list</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>[1] TRUE
+</div><div class='input'>identical(new('A', x=1, y='other'), new2('A', list(x=1, y='other')))
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/identical'>identical</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/new'>new</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'other'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='new2.html'>new2</a></span><span class="keyword">(</span><span class="string">'A'</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="argument">x</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">y</span><span class="argument">=</span><span class="string">'other'</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
 <div class='output'>[1] TRUE
 </div></pre>
   </div>
