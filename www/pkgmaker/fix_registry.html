@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>quickinstall. pkgmaker 0.11.1</title>
+<title>fix_registry. pkgmaker 0.11.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -39,61 +39,36 @@
         
       </header>
       
-      <h1>Quick Installation of a Source Package</h1>
+      <h1>Fix Registry Access Functions</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>quickinstall(path, destdir = NULL, vignettes = FALSE, force = TRUE, ..., lib.loc = if (!is.null(destdir)) TRUE)</pre>
+    <pre>fix_registry(regobj)</pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>path</dt>
-      <dd>path to the package source directory</dd>
-      <dt>destdir</dt>
-      <dd>installation directory. If <code>NULL</code>,
-  the package is installed in the default installation
-  library. If <code>NA</code>, the package is installed in a
-  temporary directory, whose path is returned as a value.</dd>
-      <dt>vignettes</dt>
-      <dd>logical that indicates if the vignettes
-  should be rebuilt and installed.</dd>
-      <dt>force</dt>
-      <dd>logical that indicates if the package should
-  be installed even if a previous installation exists in
-  the installation library.</dd>
-      <dt>...</dt>
-      <dd>extra arguments passed to <code><a href='R.exec.html'>R.CMD</a></code></dd>
-      <dt>lib.loc</dt>
-      <dd>library specification. If <code>TRUE</code> then
-  the installation directory <code>destdir</code> is added to the
-  default library paths. This can be usefull if
-  dependencies are installed in this directory. If
-  <code>NULL</code>, then the default library path is left
-  unchanged.</dd>
+      <dt>regobj</dt>
+      <dd>registry object</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
-      
-      <p>The path of the library where the package was installed.</p>
-  
-    </div>
-
     <div class="Description">
       <h2>Description</h2>
       
-      <p>Builds and install a minimal version of a package from
-  its source directory.</p>
+      <p>Fixes some of the member functions for registry objects,
+  as defined in the <span class = "pkg">registry</span> package. The main fixed
+  issue is due to the fact that key filtering does not
+  return the correct entry, when an entry key is a prefix
+  of another entry key, even when passed the exact key.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>quickinstall</li>
+      <li>fix_registry</li>
     </ul>
     <ul>
-      
+      <li>internal</li>
     </ul> -->
       
         

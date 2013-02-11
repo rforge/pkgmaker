@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>rnw. pkgmaker 0.10.3</title>
+<title>rnw. pkgmaker 0.11.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -58,8 +58,8 @@ rnwIncludes(x)
 
 rnwChildren(x)
 
-vignetteMakefile(user = NULL, package = NULL, skip = NULL, print = TRUE, template = NULL, 
-  temp = FALSE)</pre>
+vignetteMakefile(package = NULL, skip = NULL, print = TRUE, template = NULL, temp = FALSE, 
+  checkMode = isCRANcheck(), user = NULL)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -86,10 +86,6 @@ vignetteMakefile(user = NULL, package = NULL, skip = NULL, print = TRUE, templat
   file is looked for one directory up: this meant to work
   when building a vignette directly from a package's
   <code>'vignettes'</code> sub-directory.</dd>
-      <dt>user</dt>
-      <dd>username of the package's author. It is used
-  to compile the vignette differently when called locally
-  or on CRAN check machines.</dd>
       <dt>skip</dt>
       <dd>Vignette files to skip (basename).</dd>
       <dt>print</dt>
@@ -104,6 +100,16 @@ vignetteMakefile(user = NULL, package = NULL, skip = NULL, print = TRUE, templat
       <dd>logical that indicates if the generated
   makefile should using a temporary filename (<code>TRUE</code>),
   or simply named &#147;vignette.mk&#148;</dd>
+      <dt>checkMode</dt>
+      <dd>logical that indicates if the vignettes
+  should be generated as in a CRAN check (<code>TRUE</code>) or
+  in development mode, in which case <code>pdflatex</code>,
+  <code>bibtex</code>, and, optionally, <code>qpdf</code> are
+  required.</dd>
+      <dt>user</dt>
+      <dd>character vector containing usernames that
+  enforce <code>checkMode=TRUE</code>, if the function is called
+  from within their session.</dd>
     </dl>
     
     <div class="Description">

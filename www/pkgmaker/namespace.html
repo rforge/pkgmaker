@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>getLoadingNamespace. pkgmaker 0.10.3</title>
+<title>getLoadingNamespace. pkgmaker 0.11.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -46,11 +46,11 @@
     <h2>Usage</h2>
     <pre>getLoadingNamespace(env = FALSE, info = FALSE, nodev = FALSE)
 
-isLoadingNamespace(name, nodev = FALSE)
+isLoadingNamespace(ns, nodev = FALSE)
 
-isNamespaceLoaded(name)
+isNamespaceLoaded(ns)
 
-isDevNamespace(name)
+isDevNamespace(ns)
 
 addNamespaceExport(x)</pre>
     
@@ -63,10 +63,11 @@ addNamespaceExport(x)</pre>
       <dt>info</dt>
       <dd>logical that indicates that the complete
   information list should be returned</dd>
-      <dt>name</dt>
-      <dd>the name of a namespace whose loading state
-  is tested. If missing <code>isLoadingNamespace</code> test if
-  any namespace is being loaded.</dd>
+      <dt>ns</dt>
+      <dd>the name of a namespace or a namespace whose
+  loading state is tested. If missing
+  <code>isLoadingNamespace</code> test if any namespace is being
+  loaded.</dd>
       <dt>nodev</dt>
       <dd>logical that indicates if loading devtools
   namespace should be discarded.</dd>

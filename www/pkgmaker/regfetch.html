@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>regfetch. pkgmaker 0.10.3</title>
+<title>regfetch. pkgmaker 0.11.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.10.3</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,8 +44,10 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>regfetch(regobj, key = NULL, msg = NULL, all = FALSE, error = TRUE, exact = FALSE, 
-  verbose = FALSE)</pre>
+    <pre>regfetch(regobj, key = NULL, all = FALSE, error = TRUE, exact = FALSE, verbose = FALSE, 
+  entry = FALSE, msg = NULL)
+
+pkgregfetch(name, ..., msg = NULL, package = topenv(parent.frame()))</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -53,8 +55,6 @@
       <dd>a registry object</dd>
       <dt>key</dt>
       <dd>a key to match</dd>
-      <dt>msg</dt>
-      <dd>a header to use in case of error</dd>
       <dt>all</dt>
       <dd>logical to indicate if hidden keys (starting
   with a '.') should be returned and output in message.</dd>
@@ -67,18 +67,39 @@
       <dt>verbose</dt>
       <dd>a logical that indicates if verbosity
   should be toggle on</dd>
+      <dt>entry</dt>
+      <dd>a logical that indicates if the</dd>
+      <dt>msg</dt>
+      <dd>a header to use in case of error.</dd>
+      <dt>name</dt>
+      <dd>Name of a sub-registry, used as its
+  identifier.</dd>
+      <dt>...</dt>
+      <dd>named values used to set extra information
+  about the new registry, that are stored in the
+  corresponding fields of the meta-registry. Currently not
+  used, as no extra field other than <code>'description'</code>
+  is defined.</dd>
+      <dt>package</dt>
+      <dd>package where to store or look for the
+  registry.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
       
-      <p>Finds an entry in a registry.</p>
+      <p>This function provides extra control on how entries are
+  queried from a <code><a href='http://www.inside-r.org/r-doc/registry/regobj'>registry</a></code>
+  object.</p>
+  
+      <p><code>pkgregfetch</code> fetches entries in a package registry,
+  as set up by <code><a href='registry.html'>setPackageRegistry</a></code></p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>regfetch</li>
+      <li>pkgregfetch</li><li>regfetch</li>
     </ul>
     <ul>
       
