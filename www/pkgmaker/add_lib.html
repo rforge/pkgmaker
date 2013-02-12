@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>add_lib. pkgmaker 0.11.1</title>
+<title>add_lib. pkgmaker 0.11.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -90,12 +90,12 @@
 [4] "/usr/lib/R/library"                                   
 </div><div class='input'>show( .libPaths(tempdir()) )
 </div>
-<div class='output'>[1] "/tmp/Rtmpciqs0W"               "/usr/local/lib/R/site-library"
+<div class='output'>[1] "/tmp/RtmpgLmT46"               "/usr/local/lib/R/site-library"
 [3] "/usr/lib/R/site-library"       "/usr/lib/R/library"           
 </div><div class='input'># restore</div><div class='input'>.libPaths(ol)
 </div><div class='input'></div><div class='input'># .libPaths does not keep the standard user library</div><div class='input'>show( .libPaths() )
 </div>
-<div class='output'>[1] "/tmp/Rtmpciqs0W/file1ef374fb0679"                
+<div class='output'>[1] "/tmp/RtmpgLmT46/file2db712dad362"                
 [2] "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
 [3] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"   
 [4] "/usr/local/lib/R/site-library"                   
@@ -111,7 +111,7 @@
 </div><div class='input'></div><div class='input'># with add_lib</div><div class='input'>show( add_lib('.') )
 </div>
 <div class='output'>[1] "/home/renaud/Documents/projects/pkgmaker/pkg/pkgmaker"
-[2] "/tmp/Rtmpciqs0W/file1ef374fb0679"                     
+[2] "/tmp/RtmpgLmT46/file2db712dad362"                     
 [3] "/home/renaud/Documents/projects/pkgmaker/pkg/lib"     
 [4] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"        
 [5] "/usr/local/lib/R/site-library"                        
@@ -119,9 +119,9 @@
 [7] "/usr/lib/R/library"                                   
 </div><div class='input'>show( add_lib(tempdir()) )
 </div>
-<div class='output'>[1] "/tmp/Rtmpciqs0W"                                      
+<div class='output'>[1] "/tmp/RtmpgLmT46"                                      
 [2] "/home/renaud/Documents/projects/pkgmaker/pkg/pkgmaker"
-[3] "/tmp/Rtmpciqs0W/file1ef374fb0679"                     
+[3] "/tmp/RtmpgLmT46/file2db712dad362"                     
 [4] "/home/renaud/Documents/projects/pkgmaker/pkg/lib"     
 [5] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"        
 [6] "/usr/local/lib/R/site-library"                        
@@ -129,9 +129,9 @@
 [8] "/usr/lib/R/library"                                   
 </div><div class='input'>show( add_lib('..', append=TRUE) )
 </div>
-<div class='output'>[1] "/tmp/Rtmpciqs0W"                                      
+<div class='output'>[1] "/tmp/RtmpgLmT46"                                      
 [2] "/home/renaud/Documents/projects/pkgmaker/pkg/pkgmaker"
-[3] "/tmp/Rtmpciqs0W/file1ef374fb0679"                     
+[3] "/tmp/RtmpgLmT46/file2db712dad362"                     
 [4] "/home/renaud/Documents/projects/pkgmaker/pkg/lib"     
 [5] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"        
 [6] "/usr/local/lib/R/site-library"                        

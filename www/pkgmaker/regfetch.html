@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>regfetch. pkgmaker 0.11.1</title>
+<title>regfetch. pkgmaker 0.11.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,17 +44,18 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>regfetch(regobj, key = NULL, all = FALSE, error = TRUE, exact = FALSE, verbose = FALSE, 
+    <pre>regfetch(regobj, ..., all = FALSE, error = TRUE, exact = FALSE, KEYS = NULL, verbose = FALSE, 
   entry = FALSE, msg = NULL)
 
-pkgregfetch(name, ..., msg = NULL, package = topenv(parent.frame()))</pre>
+pkgregfetch(regname, ..., msg = NULL, where = topenv(parent.frame()))</pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>regobj</dt>
       <dd>a registry object</dd>
-      <dt>key</dt>
-      <dd>a key to match</dd>
+      <dt>...</dt>
+      <dd>key value(s) to look up. If multiple indexes
+  are used, then the primary key should come first.</dd>
       <dt>all</dt>
       <dd>logical to indicate if hidden keys (starting
   with a '.') should be returned and output in message.</dd>
@@ -64,6 +65,10 @@ pkgregfetch(name, ..., msg = NULL, package = topenv(parent.frame()))</pre>
       <dt>exact</dt>
       <dd>a logical that indicates if matching should
   be exact or partial</dd>
+      <dt>KEYS</dt>
+      <dd>alternative way of passing the key value(s).
+  If not missing, then arguments in <code>...</code> are
+  discarded.</dd>
       <dt>verbose</dt>
       <dd>a logical that indicates if verbosity
   should be toggle on</dd>
@@ -71,17 +76,11 @@ pkgregfetch(name, ..., msg = NULL, package = topenv(parent.frame()))</pre>
       <dd>a logical that indicates if the</dd>
       <dt>msg</dt>
       <dd>a header to use in case of error.</dd>
-      <dt>name</dt>
+      <dt>regname</dt>
       <dd>Name of a sub-registry, used as its
   identifier.</dd>
-      <dt>...</dt>
-      <dd>named values used to set extra information
-  about the new registry, that are stored in the
-  corresponding fields of the meta-registry. Currently not
-  used, as no extra field other than <code>'description'</code>
-  is defined.</dd>
-      <dt>package</dt>
-      <dd>package where to store or look for the
+      <dt>where</dt>
+      <dd>package name or namespace that owns the
   registry.</dd>
     </dl>
     
@@ -92,8 +91,8 @@ pkgregfetch(name, ..., msg = NULL, package = topenv(parent.frame()))</pre>
   queried from a <code><a href='http://www.inside-r.org/r-doc/registry/regobj'>registry</a></code>
   object.</p>
   
-      <p><code>pkgregfetch</code> fetches entries in a package registry,
-  as set up by <code><a href='registry.html'>setPackageRegistry</a></code></p>
+      <p><code>pkgregfetch</code> loads the requested package registry
+  and uses <code>regfetch</code> to retrieve data from it.</p>
   
     </div>
       </div>

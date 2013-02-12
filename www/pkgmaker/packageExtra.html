@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>packageExtraHandler. pkgmaker 0.11.1</title>
+<title>setPackageExtraHandler. pkgmaker 0.11.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,15 +44,19 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>packageExtraHandler(handler, fun, package = NULL)
+    <pre>setPackageExtraHandler(handler, fun, ...)
 
-packageExtra(handler, extra = NULL, ..., package = NULL, .wrap = FALSE)
+packageExtraHandler(handler = NULL, ...)
+
+setPackageExtra(handler, extra, ...)
+
+packageExtra(handler = NULL, extra = NULL, package = NULL, .wrap = FALSE)
 
 packageExtraRunner(handler)
 
-install.extras(package, extra = NULL, ..., .verbose = getOption("verbose"))
+install.extras(package, extra = NULL, handler = handler, ..., .verbose = getOption("verbose"))
 
-install.extrapackages(package, extra = NULL, ..., .verbose = getOption("verbose"))</pre>
+install.extrapackages(package, extra = NULL, handler = handler, ..., .verbose = getOption("verbose"))</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -67,16 +71,16 @@ install.extrapackages(package, extra = NULL, ..., .verbose = getOption("verbose"
       <dd>package name where to store/look for the
   internal registries. End users should not need to use
   this argument.</dd>
-      <dt>extra</dt>
-      <dd>name of the extra action. When registering
-  an action with <code></code>, it should be unique within the
-  package, or it will overwrite a previously registered
-  action.</dd>
       <dt>...</dt>
-      <dd>extra arguments passed to the actual call to
-  the handler. In <code>packageExtra</code>, these define default
-  arguments for the call, which can be overwritten by
-  arguments passed to the runner function.</dd>
+      <dd>extra arguments passed to internal function
+  calls. In <code>packageExtraHandler</code>, these are passed to
+  <code><a href='regfetch.html'>pkgregfetch</a></code>.
+
+  In <code>setPackageExtra</code>, these define default arguments
+  for the handler function. These are overwritten by
+  arguments in the call to runner function if any.</dd>
+      <dt>extra</dt>
+      <dd>name of the extra action.</dd>
       <dt>.wrap</dt>
       <dd>logical that indicates if a function that
   runs the extra action should be returned or only the
@@ -103,8 +107,26 @@ install.extrapackages(package, extra = NULL, ..., .verbose = getOption("verbose"
   (lazy-)loading a package, and run later on, e.g., after
   the package is installed using dedicated commands.</p>
   
-      <p><code>packageExtra</code> registers extra actions for a given
-  handler.</p>
+      <p><code>setPackageExtraHandler</code> defines main action handler
+  functions, for which actions are defined as a set of
+  arguments and registered using <code>setPackageExtra</code>.</p>
+  
+      <p><code>packageExtraHandler</code> retrieves a given handler from
+  the registry.</p>
+  
+      <p>For example, calling <code>setPackageExtra('install',
+  pkgs='non_CRAN_pkg', repos='http://non-standard-repo')</code>
+  in a source file of package 'myPkg' registers the call
+  <code>install.packages('non_CRAN_pkg',
+  repos='http://non-standard-repo', ...)</code> in a registry
+  internal to the package. All calls to
+  <code>setPackageExtra('install', ...)</code> can then be run by
+  the user, as a post installation step via
+  <code>install.extrapackages('myPkg', ..)</code>.</p>
+  
+      <p><code>packageExtra</code> retrieve a given extra action, either
+  as its registry entry, or as a function that would
+  perform the given action.</p>
   
       <p><code>packageExtraRunner</code> defines a function to run all
   or some of the actions registered for a given handler in
@@ -113,37 +135,23 @@ install.extrapackages(package, extra = NULL, ..., .verbose = getOption("verbose"
   the extra handler <code>'install'</code> via
   <code>packageExtraRunner('install')</code>.</p>
   
-      <p><code>install.extras</code> runs all extra actions registered
-  for a given package.</p>
+      <p><code>install.extrapackages</code> runs all extra actions
+  registered for a given package.</p>
   
-      <p><code>install.extrapackages</code> runs all extra
-  <code>'install'</code> actions, i.e. those registered for
-  handler <code>'install'</code>.</p>
-  
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-      
-      <p><code>packageExtraHandler</code> defines main action handler
-  functions, for which default arguments are registered
-  using <code>packageExtra</code>.</p>
-  
-      <p>For example, calling <code>packageExtra('install',
-  pkgs='non_CRAN_pkg', repos='http://non-standard-repo')</code>
-  in a source file of package 'myPkg' registers the call
-  <code>install.packages('non_CRAN_pkg',
-  repos='http://non-standard-repo', ...)</code> in a registry
-  internal to the package. All calls to
-  <code>packageExtra('install', ...)</code> can then be run by
-  the user, as a post installation step via
-  <code>install.extra('myPkg', ..)</code>.</p>
+      <p><code>install.extrapackages</code> is defined as the extra
+  handler for the extra action handler
+  <code>'install.packages'</code>. All arguments in <code>...</code>
+  are passed to <code><a href='http://www.inside-r.org/r-doc/utils/install.packages'>install.packages</a></code>. By default,
+  packages that are already installed are not re-installed.
+  An extra argument <code>force</code> allows to force their
+  installation. The packages are loaded if their
+  installation is successful.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>install.extrapackages</li><li>install.extras</li><li>packageExtra</li><li>packageExtraHandler</li><li>packageExtraRunner</li>
+      <li>install.extrapackages</li><li>install.extras</li><li>packageExtra</li><li>packageExtraHandler</li><li>packageExtraRunner</li><li>setPackageExtra</li><li>setPackageExtraHandler</li>
     </ul>
     <ul>
       

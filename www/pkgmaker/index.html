@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. pkgmaker 0.11.1</title>
+<title>Index. pkgmaker 0.11.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href=""><i class="icon-home icon-white"></i> Index</a></li>
@@ -164,9 +164,6 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
         <code><a href="devutils.html">packageEnv</a></code>(as.package, isPackageInstalled, packageName, packagePath, str_ns, topns, topns_name)<br />Package Development Utilities</li>
             
       <li>
-        <code><a href="packageExtra.html">packageExtraHandler</a></code>(install.extrapackages, install.extras, packageExtra, packageExtraRunner)<br />Install/Run Extra Things After Standard Package Installation</li>
-            
-      <li>
         <code><a href="packageReference.html">packageReference</a></code><br />Package References</li>
             
       <li>
@@ -210,6 +207,9 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
             
       <li>
         <code><a href="setClassRegistry.html">setClassRegistry</a></code><br />Automatic S4 Class for Registry Entries</li>
+            
+      <li>
+        <code><a href="packageExtra.html">setPackageExtraHandler</a></code>(install.extrapackages, install.extras, packageExtra, packageExtraHandler, packageExtraRunner, setPackageExtra)<br />Install/Run Extra Things After Standard Package Installation</li>
             
       <li>
         <code><a href="setupPackageOptions.html">setupPackageOptions</a></code><br />Package Specific Options</li>
@@ -264,15 +264,21 @@ The development project is hosted on <code>R-forge</code> at <a href="http://r-f
         
     <h2>Dependencies</h2>
     <ul>
-      <li><strong>Depends</strong>: methods, stats</li>
+      <li><strong>Depends</strong>: methods, stats, registry</li>
       <li><strong>Imports</strong>: codetools, digest, stringr, methods, xtable</li>
-      <li><strong>Suggests</strong>: registry, devtools, bibtex, RUnit, testthat, knitr</li>
-      <li><strong>Extends</strong>: </li>
+      <li><strong>Suggests</strong>: devtools, bibtex, RUnit, testthat, knitr</li>
+      
     </ul>
      
   	<h2>Authors</h2>
   	<ul>
   		<li>Renaud Gaujoux</li>
+  	</ul>
+	
+  	<h2>Web page(s)</h2>
+  	<ul>
+  		<li><a href="http://pkgmaker.r-forge.r-project.org/pkgmaker">http://pkgmaker.r-forge.r-project.org/pkgmaker<a/></li>
+  		<li><a href="http://r-forge.r-project.org/projects/pkgmaker">http://r-forge.r-project.org/projects/pkgmaker<a/></li>
   	</ul>
     
   </div>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>packageRegistry. pkgmaker 0.11.1</title>
+<title>packageRegistry. pkgmaker 0.11.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.11.1</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,21 +44,21 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>packageRegistry(name = NULL, quiet = FALSE, entry = FALSE, package = topenv(parent.frame()))
+    <pre>packageRegistry(regname = NULL, quiet = FALSE, entry = FALSE, update = !entry, package = topenv(parent.frame()))
 
-packageRegistries(name = NULL, package = NULL, primary = FALSE)
+packageRegistries(regname = NULL, package = NULL, primary = FALSE)
 
-hasPackageRegistry(name = NULL, package)
+hasPackageRegistry(regname = NULL, package)
 
-setPackageRegistry(name, regobj, description = "", entrydesc = NA, ..., package = topenv(parent.frame()), 
+setPackageRegistry(regname, regobj, description = "", entrydesc = NA, ..., package = topenv(parent.frame()), 
   overwrite = FALSE)
 
-setPackageRegistryEntry(key, name, ..., overwrite = FALSE, verbose = FALSE, where = topenv(parent.frame()), 
+setPackageRegistryEntry(regname, key, ..., overwrite = FALSE, verbose = FALSE, where = topenv(parent.frame()), 
       msg = NULL)</pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>name</dt>
+      <dt>regname</dt>
       <dd>Name of a sub-registry, used as its
   identifier.</dd>
       <dt>quiet</dt>
@@ -69,6 +69,10 @@ setPackageRegistryEntry(key, name, ..., overwrite = FALSE, verbose = FALSE, wher
       <dd>logical that indicates if the corresponding
   meta registry entry should be directly returned, without
   any other processing.</dd>
+      <dt>update</dt>
+      <dd>logical that indicates if the package
+  registry should be updated, by adding/removing entries
+  from other loaded/unloaded packages.</dd>
       <dt>package</dt>
       <dd>package where to store or look for the
   registry.</dd>
