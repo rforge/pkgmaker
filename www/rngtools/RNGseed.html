@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>RNGseed. rngtools 1.1</title>
+<title>RNGseed. rngtools 1.1.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">rngtools 1.1</a>
+      <a class="brand" href="index.html">rngtools 1.1.2</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -74,7 +78,44 @@ RNGrecovery()</pre>
   defaults.</p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># get current seed</div><div class='input'>RNGseed()
+</div><div class='input'># directly set seed</div><div class='input'>old <- RNGseed(c(401L, 1L, 1L))
+</div><div class='input'># show old/new seed description</div><div class='input'>showRNG(old)
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 624L, ..., 2099891502L [e38d032700af470a3a1013304e0fcab6] 
+</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Marsaglia-Multicarry / Inversion 
+# RNG state: 401L, 1L, 1L 
+</div><div class='input'></div><div class='input'># set bad seed</div><div class='input'>RNGseed(2:3)
+</div><div class='input'>try( showRNG() )
+</div><div class='input'># recover from bad state</div><div class='input'>RNGrecovery()
+</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33] 
+</div><div class='input'></div><div class='input'># example of backup/restore of RNG in functions</div><div class='input'>f <- function(){
+	orng <- RNGseed()
+ on.exit(RNGseed(orng))
+	RNGkind('Marsaglia')
+	runif(10)
+}
+</div><div class='input'></div><div class='input'>sample(NA)
+</div>
+<div class='output'>[1] NA
+</div><div class='input'>s <- .Random.seed
+</div><div class='input'>f()
+</div>
+<div class='output'> [1] 0.9465679 0.6266111 0.3896875 0.3947692 0.1071452 0.7840478 0.3223734
+ [8] 0.2288971 0.7144534 0.5210440
+</div><div class='input'>identical(s, .Random.seed)
+</div>
+<div class='output'>[1] TRUE
+</div><div class='input'></div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
       <li>RNGrecovery</li><li>RNGseed</li>

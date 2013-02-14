@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. rngtools 1.1</title>
+<title>Index. rngtools 1.1.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -10,6 +10,10 @@
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
 <link href="css/highlight.css" rel="stylesheet">
 <link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
 
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">rngtools 1.1</a>
+      <a class="brand" href="index.html">rngtools 1.1.2</a>
       <div class="nav">
         <ul class="nav">
         <li><a href=""><i class="icon-home icon-white"></i> Index</a></li>
@@ -38,7 +42,8 @@
       
       <div class="row">
   <div class="span8">
-  
+  	<h2>Utility functions for working with Random Number Generators</h2>
+  	
 	  
     This package contains a set of functions for working with
 Random Number Generators (RNGs). In particular, it defines a generic
@@ -49,6 +54,9 @@ RNG settings can be changed.
 
     <h2>Help topics</h2>
 
+	<div id="cloud"></div>
+	
+	
     <h3></h3>
     
     
@@ -89,12 +97,17 @@ RNG settings can be changed.
       <li><strong>Depends</strong>: methods, pkgmaker</li>
       <li><strong>Imports</strong>: stringr, digest</li>
       <li><strong>Suggests</strong>: parallel, RUnit</li>
-      <li><strong>Extends</strong>: </li>
+      
     </ul>
      
   	<h2>Authors</h2>
   	<ul>
   		<li>Renaud Gaujoux</li>
+  	</ul>
+	
+  	<h2>Web page(s)</h2>
+  	<ul>
+  		<li><a href="http://pkgmaker.r-forge.r-project.org/rngtools">http://pkgmaker.r-forge.r-project.org/rngtools<a/></li>
   	</ul>
     
   </div>
