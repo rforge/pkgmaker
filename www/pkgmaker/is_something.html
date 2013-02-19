@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>is_something. pkgmaker 0.11.3</title>
+<title>is_something. pkgmaker 0.11.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.11.3</a>
+      <a class="brand" href="index.html">pkgmaker 0.11.4</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -54,7 +54,7 @@ isReal(x)
 
 isInteger(x)
 
-isString(x)
+isString(x, y, ignore.case = FALSE)
 
 is.dir(x)
 
@@ -66,6 +66,11 @@ hasNames(x, all = FALSE)</pre>
     <dl>
       <dt>x</dt>
       <dd>an R object</dd>
+      <dt>y</dt>
+      <dd>character string to compare with.</dd>
+      <dt>ignore.case</dt>
+      <dd>logical that indicates if the
+  comparison should be case sensistive.</dd>
       <dt>all</dt>
       <dd>logical that indicates if the object needs all
   names non empty</dd>
@@ -94,7 +99,7 @@ hasNames(x, all = FALSE)</pre>
   
       <p>Tests if an object is a single integer</p>
   
-      <p>Test if an object is a single character string</p>
+      <p><code>isString</code> tests if an object is a character string.</p>
   
       <p>Tests if a filename is a directory</p>
   
