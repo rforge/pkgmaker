@@ -84,41 +84,41 @@
     <pre class="examples"><div class='input'>ol <- .libPaths()
 </div><div class='input'># called sequentially, .libPaths only add the last library</div><div class='input'>show( .libPaths('.') )
 </div>
-<div class='output'>[1] "/home/renaud/Documents/projects/pkgmaker/pkg" "/usr/local/lib/R/site-library"               
-[3] "/usr/lib/R/site-library"                      "/usr/lib/R/library"                          
+<div class='output'>[1] "/home/renaud/Documents/projects/NMF" "/usr/local/lib/R/site-library"       "/usr/lib/R/site-library"            
+[4] "/usr/lib/R/library"                 
 </div><div class='input'>show( .libPaths(tempdir()) )
 </div>
-<div class='output'>[1] "/tmp/Rtmp4te38t"               "/usr/local/lib/R/site-library" "/usr/lib/R/site-library"       "/usr/lib/R/library"           
+<div class='output'>[1] "/tmp/Rtmp0OWWUG"               "/usr/local/lib/R/site-library" "/usr/lib/R/site-library"       "/usr/lib/R/library"           
 </div><div class='input'># restore</div><div class='input'>.libPaths(ol)
 </div><div class='input'></div><div class='input'># .libPaths does not keep the standard user library</div><div class='input'>show( .libPaths() )
 </div>
-<div class='output'>[1] "/tmp/Rtmp4te38t/file4fa92e3440c4"                 "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
+<div class='output'>[1] "/tmp/Rtmp0OWWUG/file598b23511b4b"                 "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
 [3] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"    "/usr/local/lib/R/site-library"                   
 [5] "/usr/lib/R/site-library"                          "/usr/lib/R/library"                              
 </div><div class='input'>show( .libPaths('.') )
 </div>
-<div class='output'>[1] "/home/renaud/Documents/projects/pkgmaker/pkg" "/usr/local/lib/R/site-library"               
-[3] "/usr/lib/R/site-library"                      "/usr/lib/R/library"                          
+<div class='output'>[1] "/home/renaud/Documents/projects/NMF" "/usr/local/lib/R/site-library"       "/usr/lib/R/site-library"            
+[4] "/usr/lib/R/library"                 
 </div><div class='input'># restore</div><div class='input'>.libPaths(ol)
 </div><div class='input'></div><div class='input'># with add_lib</div><div class='input'>show( add_lib('.') )
 </div>
-<div class='output'>[1] "/home/renaud/Documents/projects/pkgmaker/pkg"     "/tmp/Rtmp4te38t/file4fa92e3440c4"                
+<div class='output'>[1] "/home/renaud/Documents/projects/NMF"              "/tmp/Rtmp0OWWUG/file598b23511b4b"                
 [3] "/home/renaud/Documents/projects/pkgmaker/pkg/lib" "/home/renaud/R/i686-pc-linux-gnu-library/2.15"   
 [5] "/usr/local/lib/R/site-library"                    "/usr/lib/R/site-library"                         
 [7] "/usr/lib/R/library"                              
 </div><div class='input'>show( add_lib(tempdir()) )
 </div>
-<div class='output'>[1] "/tmp/Rtmp4te38t"                                  "/home/renaud/Documents/projects/pkgmaker/pkg"    
-[3] "/tmp/Rtmp4te38t/file4fa92e3440c4"                 "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
+<div class='output'>[1] "/tmp/Rtmp0OWWUG"                                  "/home/renaud/Documents/projects/NMF"             
+[3] "/tmp/Rtmp0OWWUG/file598b23511b4b"                 "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
 [5] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"    "/usr/local/lib/R/site-library"                   
 [7] "/usr/lib/R/site-library"                          "/usr/lib/R/library"                              
 </div><div class='input'>show( add_lib('..', append=TRUE) )
 </div>
-<div class='output'>[1] "/tmp/Rtmp4te38t"                                  "/home/renaud/Documents/projects/pkgmaker/pkg"    
-[3] "/tmp/Rtmp4te38t/file4fa92e3440c4"                 "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
+<div class='output'>[1] "/tmp/Rtmp0OWWUG"                                  "/home/renaud/Documents/projects/NMF"             
+[3] "/tmp/Rtmp0OWWUG/file598b23511b4b"                 "/home/renaud/Documents/projects/pkgmaker/pkg/lib"
 [5] "/home/renaud/R/i686-pc-linux-gnu-library/2.15"    "/usr/local/lib/R/site-library"                   
 [7] "/usr/lib/R/site-library"                          "/usr/lib/R/library"                              
-[9] "/home/renaud/Documents/projects/pkgmaker"        
+[9] "/home/renaud/Documents/projects"                 
 </div><div class='input'></div><div class='input'># restore</div><div class='input'>.libPaths(ol)
 </div></pre>
   </div>
