@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>alphacol. pkgmaker 0.12</title>
+<title>alphacol. pkgmaker 0.12.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -24,7 +24,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.12</a>
+      <a class="brand" href="index.html">pkgmaker 0.12.1</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -49,13 +49,14 @@
     <h2>Arguments</h2>
     <dl>
       <dt>col</dt>
-      <dd>vector of any of the three kind of <span style="R">R</span> colors,
-  i.e., either a color name (an element of
+      <dd>vector of any of the three kinds of <span style="R">R</span> color
+  specifications, i.e., either a color name (as listed by
   <code><a href='http://www.inside-r.org/r-doc/grDevices/colors'>colors</a>()</code>), a hexadecimal string of the form
   <code>"#rrggbb"</code> or <code>"#rrggbbaa"</code> (see
-  <code><a href='http://www.inside-r.org/r-doc/grDevices/rgb'>rgb</a></code>), or an integer <code>i</code> meaning
-  <code>palette()[i]</code>.  Non-string values are coerced to
-  integer.</dd>
+  <code><a href='http://www.inside-r.org/r-doc/grDevices/rgb'>rgb</a></code>), or a positive integer <code>i</code>
+  meaning <code><a href='http://www.inside-r.org/r-doc/grDevices/palette'>palette</a>()[i]</code> or <code>0</code> (see
+  &#145;Details&#146;).  Non-character values are coerced to
+  integers.</dd>
       <dt>alpha</dt>
       <dd>logical value indicating whether alpha
   channel (opacity) values should be returned.</dd>
