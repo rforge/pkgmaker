@@ -6,11 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
+<!-- bootstrap css -->
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
 <link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
 
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <!-- d3 word cloud -->
 <script src="js/d3.v2.min.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
@@ -236,11 +242,11 @@ setRNG(object, ..., verbose = FALSE)
     <pre class="examples"><div class='input'># get current RNG settings</div><div class='input'>s <- getRNG()
 </div><div class='input'>head(s)
 </div>
-<div class='output'>[1]         403           1 -1485867762   874870649  -485996789   691939386
+<div class='output'>[1]         403           1 -1960213204   301835778  1566186717  1554589655
 </div><div class='input'>showRNG(s)
 </div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 1L, ..., 375284659L [aa3d3eb9dd1069ab1848ecec7faaf8bd] 
+# RNG state: 403L, 1L, ..., -1067682918L [a43ab46a828cb3e72ed9dacee333dd04] 
 </div><div class='input'></div><div class='input'># get RNG from a given single numeric seed</div><div class='input'>s1234 <- getRNG(1234)
 </div><div class='input'>head(s1234)
 </div>
@@ -292,8 +298,7 @@ setRNG(object, ..., verbose = FALSE)
 </div><div class='input'>rng <- getRNG()
 </div><div class='input'>runif(10)
 </div>
-<div class='output'> [1] 0.2875775 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565 0.5281055
- [8] 0.8924190 0.5514350 0.4566147
+<div class='output'> [1] 0.2875775 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565 0.5281055 0.8924190 0.5514350 0.4566147
 </div><div class='input'>set.seed(123)
 </div><div class='input'>rng.equal(rng)
 </div>
@@ -310,8 +315,7 @@ setRNG(object, ..., verbose = FALSE)
 </div><div class='input'>rng <- getRNG()
 </div><div class='input'>runif(10)
 </div>
-<div class='output'> [1] 0.2875775 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565 0.5281055
- [8] 0.8924190 0.5514350 0.4566147
+<div class='output'> [1] 0.2875775 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565 0.5281055 0.8924190 0.5514350 0.4566147
 </div><div class='input'>set.seed(123)
 </div><div class='input'>rng.equal(rng)
 </div>

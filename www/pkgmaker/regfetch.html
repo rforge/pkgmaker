@@ -2,15 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>regfetch. pkgmaker 0.13.2</title>
+<title>regfetch. pkgmaker 0.14</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
+<!-- bootstrap css -->
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
 <link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
 
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <!-- d3 word cloud -->
 <script src="js/d3.v2.min.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
@@ -24,7 +30,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.13.2</a>
+      <a class="brand" href="index.html">pkgmaker 0.14</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -47,7 +53,9 @@
     <pre>regfetch(regobj, ..., all = FALSE, error = TRUE, exact = FALSE, KEYS = NULL, verbose = FALSE, 
   entry = FALSE, msg = NULL)
 
-pkgregfetch(regname, ..., msg = NULL, where = topenv(parent.frame()))</pre>
+pkgreg_fetch(regname, ..., msg = NULL, where = topenv(parent.frame()))
+
+pkgreg_remove(regname, ..., msg = NULL, where = topenv(parent.frame()), quiet = FALSE)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -64,7 +72,9 @@ pkgregfetch(regname, ..., msg = NULL, where = topenv(parent.frame()))</pre>
   be thrown if the key has no match or multiple matches</dd>
       <dt>exact</dt>
       <dd>a logical that indicates if matching should
-  be exact or partial</dd>
+  be exact or partial. Note that if exact matches exist
+  then they are returned, independently of the value of
+  <code>exact</code>.</dd>
       <dt>KEYS</dt>
       <dd>alternative way of passing the key value(s).
   If not missing, then arguments in <code>...</code> are
@@ -76,6 +86,10 @@ pkgregfetch(regname, ..., msg = NULL, where = topenv(parent.frame()))</pre>
       <dd>a logical that indicates if the</dd>
       <dt>msg</dt>
       <dd>a header to use in case of error.</dd>
+      <dt>quiet</dt>
+      <dd>a logical that indicates if the operation
+  should be performed quietly, without throwing errors or
+  warnings.</dd>
       <dt>regname</dt>
       <dd>Name of a sub-registry, used as its
   identifier.</dd>
@@ -91,14 +105,17 @@ pkgregfetch(regname, ..., msg = NULL, where = topenv(parent.frame()))</pre>
   queried from a <code><a href='http://www.inside-r.org/r-doc/registry/regobj'>registry</a></code>
   object.</p>
   
-      <p><code>pkgregfetch</code> loads the requested package registry
+      <p><code>pkgreg_fetch</code> loads the requested package registry
   and uses <code>regfetch</code> to retrieve data from it.</p>
+  
+      <p><code>pkgreg_remove</code> removes an entry from a package
+  registry.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>pkgregfetch</li><li>regfetch</li>
+      <li>pkgreg_fetch</li><li>pkgreg_remove</li><li>regfetch</li>
     </ul>
     <ul>
       

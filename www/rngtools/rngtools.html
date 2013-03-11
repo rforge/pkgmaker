@@ -6,11 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
+<!-- bootstrap css -->
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
 <link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
 
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <!-- d3 word cloud -->
 <script src="js/d3.v2.min.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
@@ -100,7 +106,7 @@
 </div><div class='input'>showRNG()
 </div>
 <div class='output'># RNG kind:  Marsaglia-Multicarry / Kinderman-Ramage 
-# RNG state: 501L, 441989000L, 509421556L 
+# RNG state: 501L, 1245198166L, 848437761L 
 </div><div class='input'></div><div class='input'># use as set seed</div><div class='input'>setRNG(1234)
 </div><div class='input'>showRNG()
 </div>
@@ -109,8 +115,7 @@
 </div><div class='input'>r <- getRNG()
 </div><div class='input'></div><div class='input'># extract embedded RNG specifications</div><div class='input'>runif(10)
 </div>
-<div class='output'> [1] 0.02611692 0.29453091 0.31486926 0.41448683 0.88493737 0.33931239
- [7] 0.43921381 0.30835479 0.62447131 0.05536673
+<div class='output'> [1] 0.02611692 0.29453091 0.31486926 0.41448683 0.88493737 0.33931239 0.43921381 0.30835479 0.62447131 0.05536673
 </div><div class='input'>setRNG(list(1, rng=1234))
 </div><div class='input'>rng.equal(r)
 </div>
