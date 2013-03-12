@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>getRNG. rngtools 1.1.2</title>
+<title>getRNG. rngtools 1.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -30,7 +30,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">rngtools 1.1.2</a>
+      <a class="brand" href="index.html">rngtools 1.2</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -242,11 +242,11 @@ setRNG(object, ..., verbose = FALSE)
     <pre class="examples"><div class='input'># get current RNG settings</div><div class='input'>s <- getRNG()
 </div><div class='input'>head(s)
 </div>
-<div class='output'>[1]         403           1 -1960213204   301835778  1566186717  1554589655
+<div class='output'>[1]        403          1   23081109 -438644945 1816876598 1704940128
 </div><div class='input'>showRNG(s)
 </div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 1L, ..., -1067682918L [a43ab46a828cb3e72ed9dacee333dd04] 
+# RNG state: 403L, 1L, ..., 629228039L [71bb91a50169a0c4d2ea6d90193d7997] 
 </div><div class='input'></div><div class='input'># get RNG from a given single numeric seed</div><div class='input'>s1234 <- getRNG(1234)
 </div><div class='input'>head(s1234)
 </div>
