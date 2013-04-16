@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>packageData. pkgmaker 0.15.4</title>
+<title>hasEnvar. pkgmaker 0.15.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -45,56 +45,41 @@
         
       </header>
       
-      <h1>Loading Package Data</h1>
+      <h1>Check Environment Variables</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>packageData(list, envir = .GlobalEnv, ...)
-
-ldata(list, ...)</pre>
+    <pre>hasEnvar(x)</pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>list</dt>
-      <dd>character vector containing the names of the
-  data to load.</dd>
-      <dt>...</dt>
-      <dd>other arguments eventually passed to
-  <code><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></code>.</dd>
-      <dt>envir</dt>
-      <dd>the <a href='http://www.inside-r.org/r-doc/base/environment'>environment</a> where the data should
-  be loaded.</dd>
+      <dt>x</dt>
+      <dd>environment variable name, as a character
+  vector.</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
-      
-      <p>the loaded data.</p>
-  
-    </div>
-
     <div class="Description">
       <h2>Description</h2>
       
-      <p>Loads package data using <code><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></code>, but
-  allows the user to avoid NOTEs for a &#145;non visible
-  binding variable&#146; to be thrown when checking a package.
-  This is possible because this function returns the loaded
-  data.</p>
-  
-      <p><code>ldata</code> loads a package data in the parent frame. It
-  is a shortcut for <code>packageData(list, ...,
-  envir=parent.frame())</code>.</p>
+      <p>Tells if some environment variable(s) are defined.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>## <strong>Not run</strong>:  mydata <- packageData('mydata') </div><div class='input'>## <strong>Not run</strong>: </div><div class='input'># # in a package' source => won't issue a NOTE</div><div class='input'># myfunction function(){</div><div class='input'># 	mydata <- ldata('mydata')</div><div class='input'># }</div><div class='input'># ## <strong>End(Not run)</strong></div><div class='input'></div></pre>
+    <pre class="examples"><div class='input'>hasEnvar('_R_CHECK_TIMINGS_')
+</div>
+<div class='output'><NA> 
+TRUE 
+</div><div class='input'>hasEnvar('ABCD')
+</div>
+<div class='output'><NA> 
+TRUE 
+</div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
-      <li>ldata</li><li>packageData</li>
+      <li>hasEnvar</li>
     </ul>
     <ul>
       

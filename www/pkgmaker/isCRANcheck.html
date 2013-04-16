@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>isCRANcheck. pkgmaker 0.15.1</title>
+<title>isCRANcheck. pkgmaker 0.15.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -30,7 +30,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.15.1</a>
+      <a class="brand" href="index.html">pkgmaker 0.15.4</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -52,7 +52,9 @@
     <h2>Usage</h2>
     <pre>isCRANcheck(...)
 
-isCRAN_timing()</pre>
+isCRAN_timing()
+
+isCHECK()</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -61,11 +63,11 @@ isCRAN_timing()</pre>
   using an AND operator. The final result tests if any of
   the test set is true. Possible values are: <ol>
 <li><code>'timing'</code>Check if the environment variable
-  '_R_CHECK_TIMINGS_' is set, as with the flag
+  <code>_R_CHECK_TIMINGS_</code> is set, as with the flag
   <code>'--timing'</code> was set. </li>
 <li><code>'cran'</code>Check if
-  the environment variable '_R_CHECK_CRAN_INCOMING_' is
-  set, as with the flag <code>'--as-cran'</code> was set. </li>
+  the environment variable <code>_R_CHECK_CRAN_INCOMING_</code>
+  is set, as with the flag <code>'--as-cran'</code> was set. </li>
 </ol>
 </dd>
     </dl>
@@ -73,10 +75,40 @@ isCRAN_timing()</pre>
     <div class="Description">
       <h2>Description</h2>
       
-      <p><code>isCRANcheck</code> tells if one is running CRAN check.</p>
+      <p><code>isCRANcheck</code> tries to identify if one is running
+  CRAN checks.</p>
   
       <p><code>isCRAN_timing</code> tells if one is running CRAN check
   with flag <code>'--timing'</code>.</p>
+  
+      <p><code>isCHECK</code> checks both CRAN expected flags and the
+  value of environment variable
+  <code>_R_CHECK_RUNNING_UTESTS_</code>. It will return
+  <code>TRUE</code> if such variable is set to anything not
+  equivalent to <code>FALSE</code>. For example, the function
+  <code><a href='utest.html'>utest</a></code> sets it to the name of the package
+  being checked
+  (<code>_R_CHECK_RUNNING_UTESTS_=<pkgname></code>), but unit
+  tests run as part of unit tests vignettes are run with
+  <code>_R_CHECK_RUNNING_UTESTS_=FALSE</code>, so that developers
+  cann run all tests.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Currently <code>isCRANcheck</code> returns <code>TRUE</code> if the
+  check is run with either environment variable
+  <code>_R_CHECK_TIMINGS_</code> (as set by flag
+  <code>'--timings'</code>) or <code>_R_CHECK_CRAN_INCOMINGS_</code>
+  (as set by flag <code>'--as-cran'</code>).</p>
+  
+      <p>Note that the checks performed on CRAN farms are not
+  always run with such flags, so there is no guarantee this
+  function identifies such runs, and one should rely custom
+  environment variables to enable specific tests or
+  examples.</p>
   
     </div>
 
@@ -87,10 +119,16 @@ isCRAN_timing()</pre>
   package.</p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>isCHECK()
+</div>
+<div class='output'>[1] FALSE
+</div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
-      <li>isCRANcheck</li><li>isCRAN_timing</li>
+      <li>isCHECK</li><li>isCRANcheck</li><li>isCRAN_timing</li>
     </ul>
     <ul>
       
