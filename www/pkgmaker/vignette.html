@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>rnw. pkgmaker 0.15.4</title>
+<title>rnw. pkgmaker 0.15.5</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -30,7 +30,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">pkgmaker 0.15.4</a>
+      <a class="brand" href="index.html">pkgmaker 0.15.5</a>
       <div class="nav">
         <ul class="nav">
         <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -65,7 +65,9 @@ rnwIncludes(x)
 rnwChildren(x)
 
 vignetteMakefile(package = NULL, skip = NULL, print = TRUE, template = NULL, temp = FALSE, 
-  checkMode = isCRANcheck(), user = NULL, tests = TRUE)</pre>
+  checkMode = isCRANcheck(), user = NULL, tests = TRUE)
+
+compactVignettes(paths, ...)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -123,6 +125,10 @@ vignetteMakefile(package = NULL, skip = NULL, print = TRUE, template = NULL, tem
   the vignette. However, unit tests are not (re)-run at
   this stage when the vignettes are built when checking the
   package with <code>R CMD check</code>.</dd>
+      <dt>paths</dt>
+      <dd>A character vector of paths to PDF files, or
+  a length-one character vector naming a directory, when
+  all &#145;<span class = "file">.pdf</span>&#146; files in that directory will be used.</dd>
     </dl>
     
     <div class="Description">
@@ -158,11 +164,15 @@ vignetteMakefile(package = NULL, skip = NULL, print = TRUE, template = NULL, tem
       <p><code>vignetteMakefile</code> returns the path to a generic
   makefile used to make vignettes.</p>
   
+      <p>Compact PDFs using either <code>gs_quality='none'</code> or
+  <code>'ebook'</code>, depending on which compacts best (as per
+  CRAN check criteria).</p>
+  
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>as.rnw</li><li>rnw</li><li>rnwChildren</li><li>rnwCompiler</li><li>rnwDriver</li><li>rnwIncludes</li><li>rnwWrapper</li><li>vignetteMakefile</li>
+      <li>as.rnw</li><li>compactVignettes</li><li>rnw</li><li>rnwChildren</li><li>rnwCompiler</li><li>rnwDriver</li><li>rnwIncludes</li><li>rnwWrapper</li><li>vignetteMakefile</li>
     </ul>
     <ul>
       
