@@ -8,8 +8,7 @@
 ##
 ## Copyright (C) 2011 Renaud Gaujoux
 
-# The version set here will propagate to other files from here
-AC_INIT([RcppOctave], 0.11)
+AC_INIT([RcppOctave], 0.13.5)
 
 # Checks for common programs using default macros
 AC_PROG_CC
@@ -60,9 +59,9 @@ AC_MSG_CHECKING([whether OS is Mac OS (Darwin)])
 if test "$OStype" == "Darwin" ; then
   darwin="yes"
   
-  ## adapt R_LDFLAGS aimed at mkoctfile: substitute -F/-framework it with -L/-l flags
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-F\([[^ ]]*\)/-L\1\/Libraries/'`
-  R_LDFLAGS=`echo $R_LDFLAGS | sed 's/-framework \([[^ ]]*\)/-l\1/'`
+  ## adapt R_LDFLAGS aimed at mkoctfile: pass them via flag -Wl
+  ## multiple options must be separated by commas
+  R_LDFLAGS=-Wl,"\"$R_LDFLAGS\""
   
   ## we want the *build* cputype and not the host one.
   cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
@@ -108,33 +107,52 @@ AC_PATH_PROG([OCTAVE_CONFIG], [octave-config])
 AC_PATH_PROG([OCTAVE_MKOCTFILE], [mkoctfile])
 
 ## If octave-config was found, let's use it
-if test "${OCTAVE_CONFIG}" != ""; then	
-    # Use octave-config for header and linker arguments
-    AC_MSG_CHECKING([Octave include directory])
-    OCTINCLUDEDIR=`${OCTAVE_CONFIG} -p OCTINCLUDEDIR`
-    AC_MSG_RESULT([${OCTINCLUDEDIR}])
+if test "${OCTAVE_MKOCTFILE}" != ""; then	
+
+	AC_DEFUN([AC_OCTAVE_MKCONFIG],[ 
+		AC_MSG_CHECKING([Octave $3])
+		ac_mkoct_var_$2=`${OCTAVE_MKOCTFILE} --print $2`
+		AC_SUBST([$1], [$ac_mkoct_var_$2])
+		AC_MSG_RESULT([$$1])
+	])
+	
+	AC_DEFUN([AC_OCTAVE_CONFIG],[ 
+		AC_MSG_CHECKING([Octave $3])
+		ac_octave_var_$2=`${OCTAVE_CONFIG} --print $2`
+		AC_SUBST([$1], [$ac_octave_var_$2])
+		AC_MSG_RESULT([$$1])
+	])
+	
+	AC_OCTAVE_CONFIG([OCTAVE_BINDIR], [BINDIR], [Octave bin directory])
     
-    AC_MSG_CHECKING([Octave library directory])
-    OCTLIBDIR=`${OCTAVE_CONFIG} -p OCTLIBDIR`
-    AC_MSG_RESULT([${OCTLIBDIR}])
+	# Use mkoctfile for compiler and linker arguments
+    AC_OCTAVE_MKCONFIG([OCT_CPPFLAGS], [INCFLAGS], [include flags])
+    AC_OCTAVE_MKCONFIG([OCTAVE_LFLAGS], [LFLAGS], [-L flags])
+    AC_OCTAVE_MKCONFIG([OCTAVE_LIBS], [OCTAVE_LIBS], [libraries])
+    # add to LDFLAGS
+    OCT_LDFLAGS=" ${OCTAVE_LFLAGS} ${OCTAVE_LIBS}"
     
-    AC_MSG_CHECKING([Octave system library directory])
-    OCT_SYSLIBDIR=`${OCTAVE_CONFIG} -p LIBDIR`
-    AC_MSG_RESULT([${OCT_SYSLIBDIR}])
-        
+    # check Octave compilers
+    AC_OCTAVE_MKCONFIG([OCTAVE_CC], [CC], [C compiler])
+    AC_OCTAVE_MKCONFIG([OCTAVE_F77], [F77], [Fortran compiler])
+    
+    # Octave config info
+    AC_OCTAVE_CONFIG([OCTAVE_PLATFORM], [CANONICAL_HOST_TYPE], [platform])
+    AC_OCTAVE_CONFIG([OCTAVE_API_VERSION], [API_VERSION], [API version])
+    
     # check Octave version to know whether one should infer output names:
     # it works for Octave >= 3.4.3
-    AC_MSG_CHECKING([Octave version])
-    OCTVERSION=`${OCTAVE_CONFIG} -p VERSION`
-    AC_MSG_RESULT([${OCTVERSION}])
+    AC_OCTAVE_CONFIG([OCTAVE_VERSION], [VERSION], [version])
     
     CMPV="3.4.3"
     AC_MSG_CHECKING([whether to infer output names for Octave function (>= ${CMPV})])
-    AS_VERSION_COMPARE(${OCTVERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
+    AS_VERSION_COMPARE(${OCTAVE_VERSION}, ${CMPV}, [OCT_POST_3_4_0=-1], [OCT_POST_3_4_0=0], [OCT_POST_3_4_0=1])    
     AS_IF([test "${OCT_POST_3_4_0}" != "-1"], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
-    
-else
-    AC_MSG_ERROR([octave-config not found, is Octave installed?
+    # add to CPPFLAGS
+    OCT_CPPFLAGS+=" -DOCT_POST_3_4_0=${OCT_POST_3_4_0}"
+
+elif test "$darwin" == "no" ; then
+    AC_MSG_ERROR([mkoctfile not found, is Octave installed?
     
     -> On Debian/Ubuntu please check that the required packages are installed:
     
@@ -150,13 +168,24 @@ else
         # install as usual in R
         install.packages('RcppOctave')
     ])
+else
+	AC_MSG_ERROR([mkoctfile not found, is Octave installed?
+    
+    -> On Mac OS please check that the required packages are installed:
+    
+      * octave package from homebrew (works out of the box):
+        $ brew install gfortran octave
+        
+        # install as usual in R
+        > install.packages('RcppOctave')
+    ])
 fi
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_SUBST(OCTINCLUDEDIR)
-AC_SUBST(OCTLIBDIR)
-AC_SUBST(OCT_SYSLIBDIR)
-AC_SUBST(OCT_POST_3_4_0)
+AC_MSG_RESULT([Using Octave LDFLAGS: ${OCT_LDFLAGS}])
+AC_SUBST(OCT_LDFLAGS)
+AC_MSG_RESULT([Using Octave CPPFLAGS: ${OCT_CPPFLAGS}])
+AC_SUBST(OCT_CPPFLAGS)
 
 # Module path
 AC_MSG_CHECKING([RcppOctave Octave module directory])
@@ -167,5 +196,7 @@ AC_SUBST(OCT_MODULES_PATH)
 # Configure libRrng
 #AC_CONFIG_SUBDIRS([src/modules])
 
+AC_OUTPUT(R/config-vars.R)
 AC_OUTPUT(src/Makevars)
 AC_OUTPUT(src/modules/Makefile)
+
