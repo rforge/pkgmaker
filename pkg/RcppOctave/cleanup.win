@@ -1,2 +1,0 @@
-# Windows cleanup script: calls Linux cleanup script
-. cleanup 
