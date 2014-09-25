@@ -2,18 +2,18 @@
 \alias{packageReference}
 \title{Package References}
 \usage{
-  packageReference(key, short = FALSE)
+  packageReference(key, short = FALSE, PACKAGE = NULL)
 }
 \arguments{
   \item{key}{character vector of BibTex keys}
 
-  \item{short}{logical that indicates if the reference
-  should be shorten as First Author et al. if it has more
-  than one author.}
+  \item{short}{logical that indicates if the reference should be shorten as
+First Author et al. if it has more than one author.}
+
+  \item{PACKAGE}{package in which the BiBTeX entry is defined.}
 }
 \value{
-  a character string containing the text formated BibTex
-  entries
+  a character string containing the text formated BibTex entries
 }
 \description{
   Create a citation string from package specific BibTex

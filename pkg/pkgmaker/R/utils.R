@@ -18,25 +18,85 @@ cgetAnywhere <- function(x){
 	do.call("getAnywhere", list(x))
 }
 
-#' Silent Require
-#' 
-#' Silently require a package.
-#' 
-#' @inheritParams base::require
-#' @param ... extra arguments passed to \code{\link{require}}.
-#' 
-#' @export
-require.quiet <- function(package, character.only = FALSE, ...){
-	
-	if( !character.only )
-		package <- as.character(substitute(package))
-	utils::capture.output(suppressMessages(suppressWarnings(
-	 res <- do.call('require', 
-			 list(package=package, ..., character.only=TRUE, quietly=TRUE))
-	)))
-	res
-}
 
+#' Silencing Functions
+#' 
+#' Generates a wrapper function that silences the output, messages, and/or warnings of a given function.
+#' 
+#' @param f function to silence
+#' @param level a single numeric (integer) that indicates the silencing level, which encodes the set of 
+#' output to be silenced.
+#' 
+#' It is interpreted like unix permission bit system, where each bit of the binary expression of the silencing 
+#' level corresponds to a given type of output: 
+#' \itemize{
+#' \item 0: nothing silenced;
+#' \item 1: \emph{stdout};
+#' \item 2: \emph{stderr} messages;
+#' \item 4: \emph{stderr} warnings.
+#' }
+#' 
+#' For example, level \code{3 = 2 + 1} means silencing \emph{stdout} and \emph{stderr}, while 
+#' \code{5 = 3 + 2} means silencing \emph{stderr} messages and warnings, but not outputs to \emph{stdout}.
+#' The default value is \code{7 = 4 + 2 + 1}, which silences all output.
+#'  
+#' Negative values are supported and mean \emph{"silence everything except the corresponding type"}, 
+#' e.g., \code{level = -1} silences all except \emph{stdout} (computed as the binary complementary of 7, i.e. \code{7 - 1 = 5 = 3 + 2}).
+#' See examples. 
+#' @return a function 
+#' @export 
+#' @examples 
+#' 
+#' f <- function(){
+#' 	cat("stdout message\n")
+#'  message("stderr message")
+#' 	warning("stderr warning", immediate. = TRUE)
+#' }
+#' 
+#' # example of generated wrapper
+#' g <- .silenceF(f)
+#' g
+#' 
+#' # use of silencing level
+#' for(l in 7:-7){ message("\nLevel: ", l); .silenceF(f, l)() }
+#' 
+#' # inline functions
+#' ifun <- .silenceF(function(){ f(); invisible(1) })
+#' ifun()
+#' ifun <- .silenceF(function(){ f(); 1 })
+#' ifun()
+#' ifun <- .silenceF(function(){ f(); 1 }, 2L)
+#' ifun()
+#' 
+.silenceF <- function(f, level = 7L){
+    
+    # switch inverse level specification
+    if( level < 0 ) level <- 7L + level
+    # early exit if not silencing
+    if( !level ) return(f)
+                
+    silencer <- c('utils::capture.output(', 'suppressPackageStartupMessages(suppressMessages(', 'suppressWarnings(')
+    wrapper <- character()
+    for( i in 1:3 ){
+        if( bitwAnd(level, 2^(i-1)) ) wrapper <- c(wrapper, silencer[i])
+    }
+    wrapper <- paste0(wrapper, collapse = "")
+    npar <- length(gregexpr("(", wrapper, fixed = TRUE)[[1]])
+    
+    # build source code of wrapper function 
+    f_str <- paste0(as.character(substitute(f)), collapse = "")
+	ca <- match.call()
+    use_env <- languageEl(ca$f, 1) == as.symbol('function')
+    if( use_env ) f_str <- 'f'
+    txt <- sprintf("function(...){ %s res <- withVisible(%s(...))%s; if( res$visible ) res$value else invisible(res$value) }", wrapper, f_str, paste0(rep(")", npar), collapse = ""))
+    
+    e <- parent.frame()
+    if( use_env ){
+        e <- new.env(parent = e)
+        e$f <- f
+    }
+    force(eval(parse(text = txt), e))
+}
 
 #' Testing R Version
 #' 
@@ -563,17 +623,24 @@ exitCheck <- function(){
 #' order(v)
 #' orderVersion(v)
 #' 
-orderVersion <- function(x, decreasing=FALSE){
+orderVersion <- function(x, ..., decreasing=FALSE){
+    
+    NAs <- which(is.na(x))
 	tx <- gsub("[^0-9]+",".", paste('_', x, sep=''))
 	stx <- strsplit(tx, ".", fixed=TRUE)
 	mtx <- max(sapply(stx, length))
 	tx <- sapply(stx, 
 			function(v) paste(sprintf("%06i", c(as.integer(v[-1]),rep(0, mtx-length(v)+1))), collapse='.')
 	)	
-	order(tx, decreasing=decreasing)
+	res <- order(tx, ..., decreasing = decreasing)
+    # put NAs at the end
+    if( length(NAs) ){
+        res <- c(setdiff(res, NAs), NAs)
+    }
+    res
 }
 
-#' @param ... extra parameters passed to \code{orderVersion}
+#' @param ... extra parameters passed to \code{orderVersion} and \code{\link{order}}
 #' 
 #' @export
 #' @rdname orderVersion
@@ -939,6 +1006,5 @@ expand_dots <- function(..., .exclude=NULL){
 #' hasEnvar('ABCD')
 #' 
 hasEnvar <- function(x){
-	ev <- Sys.getenv()[x]
-	is.na(ev)
+	is.na(Sys.getenv(x, unset = NA, names = FALSE))
 }
